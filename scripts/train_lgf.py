@@ -10,8 +10,7 @@ from collections import Counter
 
 from palmrec.datasets.palm_dataset import PalmDataset
 from palmrec.datasets.samplers import RandomIdentitySampler
-from palmrec.models.baselines import ResNet18Baseline
-from palmrec.losses.combined import CombinedLoss
+from palmrec.losses import build_loss
 
 def set_seed(seed):
     import random
@@ -129,11 +128,17 @@ def train():
     train_cfg = config.get("training", {})
     lambda_supcon = train_cfg.get("lambda_supcon", 0.10)
     temperature = train_cfg.get("temperature", 0.07)
-    criterion = CombinedLoss(lambda_supcon=lambda_supcon, temperature=temperature)
+    embedding_dim = model_cfg.get("embedding_dim", 256)
+    criterion = build_loss(config, num_classes=num_classes, embedding_dim=embedding_dim)
+    criterion = criterion.to(device)
     
     lr = train_cfg.get("lr", 0.001)
     weight_decay = train_cfg.get("weight_decay", 0.0001)
-    optimizer = torch.optim.AdamW(model.parameters(), lr=lr, weight_decay=weight_decay)
+    optimizer = torch.optim.AdamW(
+        list(model.parameters()) + list(criterion.parameters()),
+        lr=lr,
+        weight_decay=weight_decay,
+    )
     
     # AMP and Gradient Accumulation
     use_amp = train_cfg.get("amp", True)
@@ -271,6 +276,7 @@ def train():
             "epoch": epoch,
             "model_state_dict": model.state_dict(),
             "optimizer_state_dict": optimizer.state_dict(),
+            "criterion_state_dict": criterion.state_dict(),
             "class_mapping": train_dataset.class_mapping,
             "config": config
         }

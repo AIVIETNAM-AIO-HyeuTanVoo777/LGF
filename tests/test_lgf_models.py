@@ -1,6 +1,7 @@
 import torch
 import pytest
 from palmrec.models.learnable_gabor import LearnableGaborStem
+from palmrec.models.baselines import ResNet18BNNeck
 from palmrec.models.lgf_net import LGFNetSmall, LGFNetNoGabor, FixedGaborResNet18
 
 def test_learnable_gabor_stem_forward():
@@ -69,3 +70,23 @@ def test_fixed_gabor_resnet18_forward():
     
     norm = torch.norm(embedding, p=2, dim=1)
     assert torch.allclose(norm, torch.ones_like(norm), atol=1e-5)
+
+
+def test_resnet18_bnneck_forward_and_embedding_modes():
+    num_classes = 100
+    embedding_dim = 256
+    model = ResNet18BNNeck(num_classes=num_classes, embedding_dim=embedding_dim, pretrained=False)
+    x = torch.randn(2, 3, 224, 224)
+
+    logits, embedding = model(x)
+    pre_bn_embedding = model.extract_embedding(x, embedding_mode="pre_bn")
+    post_bn_embedding = model.extract_embedding(x, embedding_mode="post_bn")
+
+    assert logits.shape == (2, num_classes)
+    assert embedding.shape == (2, embedding_dim)
+    assert pre_bn_embedding.shape == (2, embedding_dim)
+    assert post_bn_embedding.shape == (2, embedding_dim)
+
+    assert torch.allclose(torch.norm(embedding, p=2, dim=1), torch.ones(2), atol=1e-5)
+    assert torch.allclose(torch.norm(pre_bn_embedding, p=2, dim=1), torch.ones(2), atol=1e-5)
+    assert torch.allclose(torch.norm(post_bn_embedding, p=2, dim=1), torch.ones(2), atol=1e-5)

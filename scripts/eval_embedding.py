@@ -21,7 +21,7 @@ def parse_args():
     parser.add_argument("--output_dir", type=str, default="", help="Override output directory.")
     return parser.parse_args()
 
-def extract_embeddings(model, dataloader, device):
+def extract_embeddings(model, dataloader, device, embedding_mode="post_bn"):
     model.eval()
     embeddings_list = []
     labels_list = []
@@ -33,7 +33,10 @@ def extract_embeddings(model, dataloader, device):
             labels = batch["label"] # use label (original class_id as remap_classes=False)
             paths = batch["path"]
             
-            _, embeddings = model(images)
+            if hasattr(model, "extract_embedding"):
+                embeddings = model.extract_embedding(images, embedding_mode=embedding_mode)
+            else:
+                _, embeddings = model(images)
             
             embeddings_list.append(embeddings.cpu())
             labels_list.append(labels)
@@ -82,6 +85,11 @@ def main():
 
     model.load_state_dict(checkpoint["model_state_dict"])
     model = model.to(device)
+    eval_cfg = config.get("eval", {})
+    embedding_mode = eval_cfg.get(
+        "embedding",
+        model_cfg.get("eval_embedding", model_cfg.get("embedding_mode", "post_bn")),
+    )
     
     # Measure Resource Efficiency
     print("Measuring model resource efficiency...")
@@ -140,10 +148,14 @@ def main():
     
     # Extract features
     print("Extracting gallery embeddings...")
-    gallery_embeds, gallery_labels, gallery_paths = extract_embeddings(model, gallery_loader, device)
+    gallery_embeds, gallery_labels, gallery_paths = extract_embeddings(
+        model, gallery_loader, device, embedding_mode=embedding_mode
+    )
     
     print("Extracting probe embeddings...")
-    probe_embeds, probe_labels, probe_paths = extract_embeddings(model, probe_loader, device)
+    probe_embeds, probe_labels, probe_paths = extract_embeddings(
+        model, probe_loader, device, embedding_mode=embedding_mode
+    )
     
     # Compute similarity matrix
     print("Computing cosine similarity matrix...")
@@ -259,6 +271,7 @@ def main():
 
 ## Evaluation Summary
 - **Model**: {model_name}
+- **Embedding Mode**: {embedding_mode}
 - **Gallery Size**: {N_g}
 - **Probe Size**: {N_p}
 - **Split File**: `{os.path.basename(split_file)}`

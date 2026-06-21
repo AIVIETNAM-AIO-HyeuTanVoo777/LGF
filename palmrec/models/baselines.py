@@ -49,3 +49,54 @@ class ResNet18Baseline(nn.Module):
         logits = self.classifier(normalized_embedding)
         
         return logits, normalized_embedding
+
+
+class ResNet18BNNeck(nn.Module):
+    """
+    ResNet18 baseline with a BNNeck layer after the embedding projection.
+
+    The model keeps the same forward contract as the other recognition models:
+    it returns ``(logits, embedding)``. The default returned embedding is the
+    post-BN L2-normalized representation, which is also the default evaluation
+    embedding for verification.
+    """
+    def __init__(self, num_classes: int, embedding_dim: int = 256, pretrained: bool = True):
+        super().__init__()
+
+        if pretrained:
+            try:
+                from torchvision.models import ResNet18_Weights
+                self.backbone = models.resnet18(weights=ResNet18_Weights.DEFAULT)
+            except ImportError:
+                self.backbone = models.resnet18(pretrained=True)
+        else:
+            self.backbone = models.resnet18(pretrained=False)
+
+        num_features = self.backbone.fc.in_features
+        self.backbone.fc = nn.Identity()
+
+        self.fc_embedding = nn.Linear(num_features, embedding_dim)
+        self.bnneck = nn.BatchNorm1d(embedding_dim)
+        self.bnneck.bias.requires_grad_(False)
+        self.classifier = nn.Linear(embedding_dim, num_classes)
+
+    def _features(self, x):
+        features = self.backbone(x)
+        pre_bn = self.fc_embedding(features)
+        post_bn = self.bnneck(pre_bn)
+        return pre_bn, post_bn
+
+    def extract_embedding(self, x, embedding_mode: str = "post_bn"):
+        pre_bn, post_bn = self._features(x)
+        if embedding_mode == "pre_bn":
+            embedding = pre_bn
+        elif embedding_mode == "post_bn":
+            embedding = post_bn
+        else:
+            raise ValueError(f"Unknown BNNeck embedding mode: {embedding_mode}")
+        return F.normalize(embedding, p=2, dim=1)
+
+    def forward(self, x):
+        embedding = self.extract_embedding(x, embedding_mode="post_bn")
+        logits = self.classifier(embedding)
+        return logits, embedding
