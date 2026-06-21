@@ -2,7 +2,7 @@
 
 \subsection{Baseline and Proposed Model}
 
-The B1 baseline uses a ResNet18 backbone with a 256-D embedding head trained with cross entropy and supervised contrastive learning. The proposed B6 model keeps the same ResNet18 backbone family and 256-D embedding size, but changes the embedding head and classifier supervision. B6 consists of:
+The B1 baseline uses a ResNet18 backbone with a 256-D embedding head trained with cross entropy and supervised contrastive learning \cite{khosla2020supervised}. The proposed B6 model keeps the same ResNet18 backbone family and 256-D embedding size, but changes the embedding head and classifier supervision. B6 consists of:
 \begin{itemize}
     \item a ResNet18 backbone;
     \item a linear projection to a 256-D embedding;
@@ -15,7 +15,7 @@ The evaluation embedding is the post-BN representation. Gallery and probe embedd
 
 \subsection{BNNeck Embedding}
 
-Let $h_i$ denote the output feature of the ResNet18 backbone for sample $i$. A linear projection maps this feature to a 256-D vector:
+BNNeck was proposed as a normalization neck for separating the feature space used for metric comparison from the feature space optimized by classification supervision \cite{luo2019strong}. Let $h_i$ denote the output feature of the ResNet18 backbone for sample $i$. A linear projection maps this feature to a 256-D vector:
 \begin{equation}
     z_i = W_e h_i + b_e.
 \end{equation}
@@ -30,7 +30,7 @@ The evaluation embedding is
 
 \subsection{ArcFace Supervision}
 
-ArcFace uses normalized features and normalized class weights. Let $W_j$ be the normalized classifier weight for class $j$, and let $\theta_j$ be the angle between the normalized embedding $f_i$ and $W_j$. For the ground-truth class $y_i$, ArcFace adds an angular margin $m$ and scales logits by $s$:
+ArcFace uses normalized features and normalized class weights to impose an additive angular margin \cite{deng2019arcface}. Let $W_j$ be the normalized classifier weight for class $j$, and let $\theta_j$ be the angle between the normalized embedding $f_i$ and $W_j$. For the ground-truth class $y_i$, ArcFace adds an angular margin $m$ and scales logits by $s$:
 \begin{equation}
     \ell_i =
     -\log
@@ -45,4 +45,4 @@ In the current B6 configuration, $s=30.0$ and $m=0.5$. This objective encourages
 
 \subsection{What Is Not the Main Method}
 
-Earlier Gabor variants remain useful baselines and ablations, but they are not the main supported method direction in this paper. The current evidence supports B6, not a fixed-Gabor or learnable-Gabor superiority claim.
+Earlier Gabor variants remain useful baselines and ablations, but they are not the main supported method direction in this paper. The current evidence supports B6, not a fixed-Gabor or learnable-Gabor dominance claim.

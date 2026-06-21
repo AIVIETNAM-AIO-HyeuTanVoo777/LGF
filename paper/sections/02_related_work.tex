@@ -2,12 +2,18 @@
 
 \subsection{Palmprint Recognition}
 
-TODO: Add a literature-backed review of palmprint recognition methods after a dedicated Deep Research or literature-review pass. This section should cover traditional texture features, CNN-based recognition, and recent embedding-based palmprint systems. Do not add citations until they have been verified.
+Palmprint recognition has historically relied on local texture structure, including line, orientation, and filter-bank representations. Recent survey evidence describes the field's transition toward deep feature learning, with learned representations increasingly used for ROI processing, feature extraction, matching, and robustness analysis \cite{gao2025deeplearning}. This paper follows the embedding-learning direction rather than presenting a new ROI detector or a handcrafted texture descriptor.
 
-\subsection{Metric Learning for Biometrics}
+Gabor and other texture filters remain important context for palmprint recognition because they encode local ridge and crease patterns. However, the current project evidence does not support a Gabor-centered paper claim: the fixed-Gabor B2 variant is a useful baseline, but B6 provides the stronger final result on the Tongji multi-seed cross-session protocol. Accordingly, this work does not claim that Gabor filtering is the source of the final improvement.
 
-TODO: Add verified literature on metric learning objectives used in biometric recognition, including cross entropy, supervised contrastive learning, and margin-based normalized classifiers such as ArcFace-style objectives. This project currently has evidence for CE + SupCon, ArcFace, BNNeck + ArcFace, and BNNeck + ArcFace + light SupCon, but this section still needs external citations.
+\subsection{Metric Learning for Biometric Embeddings}
+
+Biometric recognition systems depend on embedding geometry: genuine pairs should remain close while impostor pairs should be separated, especially at strict false-acceptance operating points. Supervised contrastive learning explicitly pulls same-class examples together and pushes different-class examples apart \cite{khosla2020supervised}. The B1 baseline in this project uses this idea together with cross entropy, forming a strong baseline for the Tongji cross-session protocol.
+
+Margin-based normalized classifiers provide another route to discriminative embeddings. ArcFace adds an angular margin to normalized features and class weights, encouraging separation in angular space \cite{deng2019arcface}. BNNeck was introduced in person re-identification as a normalization neck that separates feature spaces used for metric comparison and classification supervision \cite{luo2019strong}. B6 adapts these two ideas to the palmprint setting: ArcFace shapes the angular classifier geometry, while BNNeck provides the post-BN embedding used for cosine verification.
 
 \subsection{Cross-Session and Cross-Domain Robustness}
 
-TODO: Add verified work on session shift, cross-domain robustness, and low-FAR verification in palmprint or related biometric recognition tasks. The current paper should not claim broad state-of-the-art status until this comparison is completed.
+Cross-session and cross-domain robustness are central issues for deployable biometric systems. The report reviewed for this draft mentions several palmprint domain-adaptation, style-transfer, and synthetic-data works, but many of those entries still need full author-title-venue-year verification before they are added to the bibliography. For this reason, the present draft uses them only as motivation for future literature expansion, not as cited evidence.
+
+This paper focuses on a narrower and directly measured setting: Tongji cross-session recognition with S1->S2 and S2->S1 protocols. The results should therefore be read as evidence for cross-session Tongji verification, not as a broad cross-domain benchmark claim. External datasets and verified cross-domain comparisons remain future work.
