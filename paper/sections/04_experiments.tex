@@ -7,7 +7,7 @@ The primary evaluation uses the segmented Tongji palmprint dataset. The reposito
     \item S1$\rightarrow$S2: training, validation, and gallery data from session 1; probe data from session 2.
     \item S2$\rightarrow$S1: training, validation, and gallery data from session 2; probe data from session 1.
 \end{itemize}
-The main reported Tongji numbers are bidirectional averages over S1->S2 and S2->S1 with seeds 42, 2026, and 2705.
+The main reported Tongji numbers are bidirectional averages over S1$\rightarrow$S2 and S2$\rightarrow$S1 with seeds 42, 2026, and 2705.
 
 IITD within split is used as a secondary validation. The repository manifest contains 2,601 IITD images from 460 palms/classes, with all samples recorded as session 1 and image size $150 \times 150$. The B6 IITD result is a seed42 secondary check rather than a multi-seed IITD claim. IITD is treated as a near-saturated within-dataset setting, not as the primary contribution evidence.
 

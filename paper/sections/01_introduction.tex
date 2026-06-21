@@ -1,6 +1,6 @@
 \section{Introduction}
 
-Palmprint recognition is commonly evaluated as an identification and verification problem, and recent deep-learning surveys describe a broad shift from handcrafted texture descriptors toward learned feature representations \cite{gao2025deeplearning}. Cross-session recognition is the setting that most directly stresses whether a learned embedding remains stable under acquisition changes. In the PALM\_CGK\_BASE project, the Tongji protocol separates session directions into S1->S2 and S2->S1, making it possible to measure whether a model generalizes across session shift rather than only memorizing within-session texture and capture conditions.
+Palmprint recognition is commonly evaluated as an identification and verification problem, and recent deep-learning surveys describe a broad shift from handcrafted texture descriptors toward learned feature representations \cite{gao2025deeplearning}. Cross-session recognition is the setting that most directly stresses whether a learned embedding remains stable under acquisition changes. In the PALM\_CGK\_BASE project, the Tongji protocol separates session directions into S1$\rightarrow$S2 and S2$\rightarrow$S1, making it possible to measure whether a model generalizes across session shift rather than only memorizing within-session texture and capture conditions.
 
 The current strong baseline is B1, a ResNet18 model trained with cross entropy and supervised contrastive learning \cite{khosla2020supervised}. This baseline is already effective: its Tongji bidirectional 3-seed average reaches 94.37\% Rank-1 and 91.56\% TAR@FAR=1e-3. However, the low-FAR verification metrics show that embedding geometry can still be improved. In particular, strict-FAR verification requires features that are not only class-discriminative, but also angularly separated enough to keep impostor scores low.
 
@@ -13,7 +13,7 @@ This paper makes a scoped claim. B6 is strongly supported on Tongji cross-sessio
 The contributions of this paper are:
 \begin{itemize}
     \item A margin-aware BNNeck embedding model for cross-session palmprint recognition.
-    \item A multi-seed bidirectional Tongji evaluation over S1->S2 and S2->S1 protocols.
+    \item A multi-seed bidirectional Tongji evaluation over S1$\rightarrow$S2 and S2$\rightarrow$S1 protocols.
     \item An ablation sequence comparing B1, B4, B6, and B7 to isolate the effect of ArcFace, BNNeck, and light SupCon.
     \item An IITD secondary validation showing that B6 is competitive while B1 remains stronger on that within split.
 \end{itemize}
