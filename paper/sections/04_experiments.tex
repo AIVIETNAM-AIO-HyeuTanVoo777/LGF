@@ -2,14 +2,29 @@
 
 \subsection{Datasets and Protocols}
 
-The primary evaluation uses the Tongji cross-session protocol in two directions:
+The primary evaluation uses the segmented Tongji palmprint dataset. The repository manifest contains 12,000 Tongji images from 600 palms/classes, with 6,000 images in session 1 and 6,000 images in session 2. The recorded image size is $128 \times 128$. We evaluate two cross-session directions:
 \begin{itemize}
-    \item S1->S2: training/gallery data from session 1 and probe data from session 2.
-    \item S2->S1: training/gallery data from session 2 and probe data from session 1.
+    \item S1$\rightarrow$S2: training, validation, and gallery data from session 1; probe data from session 2.
+    \item S2$\rightarrow$S1: training, validation, and gallery data from session 2; probe data from session 1.
 \end{itemize}
 The main reported Tongji numbers are bidirectional averages over S1->S2 and S2->S1 with seeds 42, 2026, and 2705.
 
-IITD within split is used as a secondary validation. The IITD result is treated as a scope and saturation check, not as the primary claim evidence.
+IITD within split is used as a secondary validation. The repository manifest contains 2,601 IITD images from 460 palms/classes, with all samples recorded as session 1 and image size $150 \times 150$. The B6 IITD result is a seed42 secondary check rather than a multi-seed IITD claim. IITD is treated as a near-saturated within-dataset setting, not as the primary contribution evidence.
+
+\begin{table}[t]
+\centering
+\caption{Dataset split sizes used by the paper experiments.}
+\label{tab:split_sizes}
+\begin{tabular}{lrrrrr}
+\hline
+Protocol & Train & Val & Gallery & Probe & Support \\
+\hline
+Tongji S1$\rightarrow$S2 & 4,800 & 1,200 & 6,000 & 6,000 & 0 \\
+Tongji S2$\rightarrow$S1 & 4,800 & 1,200 & 6,000 & 6,000 & 0 \\
+IITD within & 1,681 & 460 & 1,681 & 460 & 0 \\
+\hline
+\end{tabular}
+\end{table}
 
 \subsection{Compared Methods}
 
@@ -24,20 +39,29 @@ The paper compares the following methods:
 
 \subsection{Training Recipe}
 
-The common training recipe used by the final compared runs is:
+The common training recipe used by the final compared Tongji runs is:
 \begin{itemize}
     \item epochs: 60;
     \item learning rate: $1 \times 10^{-4}$;
     \item weight decay: $1 \times 10^{-4}$;
     \item embedding dimension: 256;
+    \item automatic mixed precision: enabled;
+    \item gradient accumulation steps: 4;
+    \item identity sampler: 8 identities and 2 instances per identity, with fallback identities set to 4;
+    \item data loader workers: 0;
     \item Tongji seeds: 42, 2026, 2705.
 \end{itemize}
-B6 uses ArcFace with scale $s=30.0$ and margin $m=0.5$. B7 adds a light supervised contrastive term for ablation.
 
-\subsection{Metrics}
+B1 uses a ResNet18 baseline trained with cross entropy and supervised contrastive learning, with $\lambda_{\mathrm{supcon}}=0.10$ and temperature 0.07. B6 uses ResNet18 + BNNeck + ArcFace, with ArcFace scale $s=30.0$, margin $m=0.5$, $\lambda_{\mathrm{supcon}}=0.0$, and temperature 0.07 retained in the config for compatibility. B7 adds a light supervised contrastive term for the ablation comparison.
 
-The reported metrics are Rank-1, Rank-5, Macro-F1, EER, TAR@FAR=1e-2, TAR@FAR=1e-3, parameter count, FLOPs, and average inference latency. TAR@FAR=1e-3 is emphasized because it measures strict low-FAR verification behavior.
+\subsection{Checkpoint and Evaluation Protocol}
 
-\subsection{Hardware}
+Evaluation uses the \texttt{best.pt} checkpoint produced by the training script. For B6, the config selects the post-BN embedding for evaluation. Matching is performed with cosine similarity over normalized embeddings. The reported metrics are Rank-1, Rank-5, Macro-F1, EER, TAR@FAR=1e-2, TAR@FAR=1e-3, parameter count, FLOPs, and average inference latency. TAR@FAR=1e-3 is emphasized because it measures strict low-FAR verification behavior.
 
-The exact hardware and software environment should be filled in after a verified environment record is available. The current evidence files report latency values, but the current draft does not yet include a verified full hardware description.
+\subsection{Hardware and Software Evidence}
+
+The verified local evidence records CUDA execution on an NVIDIA GeForce RTX 4050 Laptop GPU with 6GB VRAM, PyTorch 2.12.0+cu126, and the Conda environment \texttt{palm\_lgf}. The current repository evidence does not track OS, CPU, or RAM details for the final B6 runs, so those fields are omitted from the paper draft.
+
+\subsection{Reproducibility}
+
+The experiments are configured through YAML files and scripts in the repository. The relevant entry points are \texttt{scripts/train\_lgf.py}, \texttt{scripts/eval\_embedding.py}, and \texttt{scripts/aggregate\_b6\_multiseed.py}. The B6 Tongji multi-seed configs follow \texttt{configs/b6\_resnet18\_bnneck\_arcface\_tongji\_*\_seed*.yaml}, and the aggregate evidence is recorded in \texttt{docs/results/b6\_multiseed\_summary.md}. Raw segmented data, experiment directories, and checkpoint tensors are not committed; the repository tracks configs, split JSON files, metadata, scripts, and saved result summaries.

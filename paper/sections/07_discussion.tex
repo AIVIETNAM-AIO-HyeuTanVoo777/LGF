@@ -4,8 +4,8 @@ The main result indicates that margin-aware BNNeck embeddings improve cross-sess
 
 The claim is intentionally scoped. B6 does not dominate all datasets in the current evidence. On IITD within split, B6 remains competitive and improves over B2, but B1 remains best. The IITD setting appears near saturation, so it is useful as a secondary sanity check rather than as primary contribution evidence.
 
-B6 also has a latency tradeoff. The recorded bidirectional average shows a +3.14 ms overhead relative to B1, even though the parameter count and FLOPs are effectively matched to B1 in the reported tables. This should be reported transparently.
+B6 also has a latency tradeoff. The recorded bidirectional average shows a +3.14 ms overhead relative to B1, even though the parameter count and FLOPs are effectively matched to B1 in the reported tables. This should be reported transparently, and latency should be interpreted as implementation- and hardware-dependent.
 
-No external benchmark-leadership claim is made in this paper. Related work and literature comparison are still pending, and verified citations should be added only after a dedicated literature-review pass.
+No external benchmark-leadership claim is made in this paper. Related work and literature comparison are still pending, and verified citations should be added only after a dedicated literature-review pass. The Tongji dataset citation also needs full bibliographic verification before submission because it is not currently included in \texttt{paper/references.bib}.
 
 Future work should evaluate session-robust metric learning variants, external datasets, and stronger cross-domain benchmarks. These directions are needed before making broader claims about general palmprint recognition robustness.
