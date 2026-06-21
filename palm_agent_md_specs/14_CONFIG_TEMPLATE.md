@@ -1,0 +1,172 @@
+# YAML Config Template
+
+```yaml
+project:
+  name: palm_gabor_conformer
+  seed: 42
+  output_dir: outputs
+  device: cuda
+  deterministic: true
+
+dataset:
+  name: CASIA
+  raw_dir: data/raw/CASIA
+  processed_dir: data/processed/CASIA
+  metadata_csv: data/metadata/casia_metadata.csv
+  split_json: data/splits/casia_split_seed42.json
+  image_size: [224, 224]
+  class_target: palm_id
+
+  # Paper-specified split protocol:
+  split_ratio: 0.5
+  drop_odd_sample: true
+  split_per_class: true
+
+  # IMPLEMENTATION ASSUMPTION:
+  defective_policy: metadata_or_all_valid
+  manual_exclusion_file: null
+  gender_mapping_file: null
+
+preprocessing:
+  # IMPLEMENTATION ASSUMPTION:
+  assume_roi: true
+  roi_extractor: identity
+
+  # Paper-compatible:
+  resize: [224, 224]
+  gabor_grayscale: true
+  conformer_rgb: true
+
+  # IMPLEMENTATION ASSUMPTION:
+  normalize_conformer:
+    mean: [0.485, 0.456, 0.406]
+    std: [0.229, 0.224, 0.225]
+
+gabor:
+  # Paper-specified:
+  image_size: [224, 224]
+  num_scales: 7
+  orientations_deg: [0, 30, 60, 90, 120, 150]
+  orientation_fusion: max
+  fixed_filters: true
+
+  # IMPLEMENTATION ASSUMPTIONS:
+  formulation: spatial
+  response_mode: magnitude
+  scale_fusion: concat
+  kernel_size: 31
+  sigma: 4.0
+  gamma: 0.5
+  phase_offset: 0.0
+  kmax: 1.57079632679
+  spacing_factor: 1.41421356237
+  padding: same
+
+  pooling:
+    enabled: false
+    type: adaptive_avg
+    output_size: [28, 28]
+
+  normalize:
+    standardize: true
+    l2: true
+
+conformer:
+  # Paper-specified:
+  image_size: 224
+  in_channels: 3
+  architecture_family: visual_conformer_resnet_vit_fcu
+  num_classes: auto
+
+  # IMPLEMENTATION ASSUMPTIONS:
+  conv_stem_channels: 64
+  embed_dim: 384
+  depth: 12
+  num_heads: 6
+  mlp_ratio: 4.0
+  patch_size: 16
+  feature_dim: 512
+  fcu_stages: [3, 6, 9, 12]
+  dropout: 0.0
+  attn_dropout: 0.0
+  drop_path: 0.0
+  pretrained: false
+  checkpoint_path: outputs/checkpoints/CASIA/best_conformer.pt
+
+training:
+  # Paper-specified:
+  batch_size: 16
+  optimizer: adam
+  lr: 1.0e-5
+  scheduler: cosine_annealing
+  min_lr: 5.0e-7
+
+  # IMPLEMENTATION ASSUMPTIONS:
+  epochs: 100
+  weight_decay: 0.0
+  loss: cross_entropy
+  num_workers: 4
+  mixed_precision: true
+  save_best_by: val_accuracy
+
+features:
+  cache_dir: outputs/features
+  save_format: npz
+  l2_normalize: true
+
+kcca:
+  # Paper-specified:
+  supported_kernels: [cosine, rbf, laplacian]
+  kernel: cosine
+
+  # IMPLEMENTATION ASSUMPTIONS:
+  n_components: 256
+  reg: 1.0e-3
+  center_kernels: true
+  pre_reduce: true
+  reducer: pca
+  x_reduce_dim: 1024
+  y_reduce_dim: 512
+  fusion_strategy: sum
+  l2_normalize_output: true
+  save_path: outputs/kcca/CASIA/kcca_cosine_seed42.pkl
+
+graph:
+  # Paper-specified:
+  enabled: true
+  structure: gender_hand_palmid
+  use_gender: true
+  use_hand_side: true
+
+  # IMPLEMENTATION ASSUMPTIONS:
+  use_age: false
+  unknown_policy: fallback
+  graph_walk_mode: exhaustive_partition_search
+  save_path: outputs/graphs/CASIA_graph.pkl
+
+matcher:
+  # Paper-specified for final recognition:
+  type: cosine
+
+  # IMPLEMENTATION ASSUMPTIONS:
+  threshold: null
+  fallback_global: true
+  one_stage: false
+
+evaluation:
+  # Paper-specified:
+  metrics: [accuracy, precision, recall, f1]
+
+  # IMPLEMENTATION DETAILS:
+  average: macro
+  save_confusion_matrix: true
+  timing: true
+  report_dir: outputs/reports
+
+experiment:
+  name: casia_fused_cosine_kcca_two_stage
+  mode: full_pipeline
+  compare_features: [gabor, conformer, fused]
+  compare_kernels: [laplacian, rbf, cosine]
+  matcher_for_feature_comparison: euclidean
+```

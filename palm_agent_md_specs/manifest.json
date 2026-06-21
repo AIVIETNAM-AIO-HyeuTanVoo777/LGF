@@ -1,0 +1,21 @@
+{
+  "created_at": "2026-06-20T07:22:38.158212",
+  "folder": "/mnt/data/palm_agent_md_specs",
+  "files": [
+    "00_INDEX.md",
+    "01_PAPER_FIDELITY_AUDIT.md",
+    "02_AGENT_MASTER_PROMPT.md",
+    "03_PIPELINE_SPEC.md",
+    "04_DATA_PREPROCESSING_SPEC.md",
+    "05_GABOR_SPEC.md",
+    "06_CONFORMER_SPEC.md",
+    "07_KCCA_SPEC.md",
+    "08_KNOWLEDGE_GRAPH_MATCHING_SPEC.md",
+    "09_EVALUATION_EXPERIMENTS_SPEC.md",
+    "10_PROJECT_STRUCTURE_CLI_SPEC.md",
+    "11_TASK_BREAKDOWN.md",
+    "12_TESTING_ACCEPTANCE.md",
+    "13_ASSUMPTIONS_OPEN_POINTS.md",
+    "14_CONFIG_TEMPLATE.md"
+  ]
+}

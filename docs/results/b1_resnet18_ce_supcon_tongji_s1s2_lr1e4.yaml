@@ -1,0 +1,30 @@
+# B1: ResNet18 + CE + SupCon on Tongji S1 -> S2, lr=1e-4
+seed: 42
+device: cuda
+save_dir: experiments/b1_resnet18_ce_supcon_tongji_s1s2_lr1e4
+
+dataset:
+  name: Tongji
+  split_file: data/splits/tongji_s1_to_s2.json
+
+sampler:
+  num_identities: 8
+  num_instances: 2
+  fallback_identities: 4
+
+loader:
+  num_workers: 0
+
+model:
+  name: ResNet18Baseline
+  embedding_dim: 256
+  pretrained: true
+
+training:
+  epochs: 60
+  lr: 0.0001
+  weight_decay: 0.0001
+  grad_accumulation_steps: 4
+  lambda_supcon: 0.10
+  temperature: 0.07
+  amp: true

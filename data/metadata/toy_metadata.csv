@@ -1,0 +1,17 @@
+sample_id,dataset,image_path,subject_id,palm_id,class_id,gender,hand_side,session,image_index,is_valid,notes,split
+TOY_001_left_1_sub_001_l_1,TOY,D:\0.Research\PALM_CGK_BASE\PALM_CGK_BASE\data\toy\sub_001_l_1.jpg,001,001_left,0,female,left,1,1,True,Parsed successfully,test
+TOY_001_left_1_sub_001_l_2,TOY,D:\0.Research\PALM_CGK_BASE\PALM_CGK_BASE\data\toy\sub_001_l_2.jpg,001,001_left,0,female,left,1,2,True,Parsed successfully,train
+TOY_001_left_1_sub_001_l_3,TOY,D:\0.Research\PALM_CGK_BASE\PALM_CGK_BASE\data\toy\sub_001_l_3.jpg,001,001_left,0,female,left,1,3,True,Parsed successfully,test
+TOY_001_left_1_sub_001_l_4,TOY,D:\0.Research\PALM_CGK_BASE\PALM_CGK_BASE\data\toy\sub_001_l_4.jpg,001,001_left,0,female,left,1,4,True,Parsed successfully,train
+TOY_001_right_1_sub_001_r_1,TOY,D:\0.Research\PALM_CGK_BASE\PALM_CGK_BASE\data\toy\sub_001_r_1.jpg,001,001_right,1,female,right,1,1,True,Parsed successfully,test
+TOY_001_right_1_sub_001_r_2,TOY,D:\0.Research\PALM_CGK_BASE\PALM_CGK_BASE\data\toy\sub_001_r_2.jpg,001,001_right,1,female,right,1,2,True,Parsed successfully,train
+TOY_001_right_1_sub_001_r_3,TOY,D:\0.Research\PALM_CGK_BASE\PALM_CGK_BASE\data\toy\sub_001_r_3.jpg,001,001_right,1,female,right,1,3,True,Parsed successfully,test
+TOY_001_right_1_sub_001_r_4,TOY,D:\0.Research\PALM_CGK_BASE\PALM_CGK_BASE\data\toy\sub_001_r_4.jpg,001,001_right,1,female,right,1,4,True,Parsed successfully,train
+TOY_002_left_1_sub_002_l_1,TOY,D:\0.Research\PALM_CGK_BASE\PALM_CGK_BASE\data\toy\sub_002_l_1.jpg,002,002_left,2,male,left,1,1,True,Parsed successfully,train
+TOY_002_left_1_sub_002_l_2,TOY,D:\0.Research\PALM_CGK_BASE\PALM_CGK_BASE\data\toy\sub_002_l_2.jpg,002,002_left,2,male,left,1,2,True,Parsed successfully,test
+TOY_002_left_1_sub_002_l_3,TOY,D:\0.Research\PALM_CGK_BASE\PALM_CGK_BASE\data\toy\sub_002_l_3.jpg,002,002_left,2,male,left,1,3,True,Parsed successfully,test
+TOY_002_left_1_sub_002_l_4,TOY,D:\0.Research\PALM_CGK_BASE\PALM_CGK_BASE\data\toy\sub_002_l_4.jpg,002,002_left,2,male,left,1,4,True,Parsed successfully,train
+TOY_002_right_1_sub_002_r_1,TOY,D:\0.Research\PALM_CGK_BASE\PALM_CGK_BASE\data\toy\sub_002_r_1.jpg,002,002_right,3,male,right,1,1,True,Parsed successfully,train
+TOY_002_right_1_sub_002_r_2,TOY,D:\0.Research\PALM_CGK_BASE\PALM_CGK_BASE\data\toy\sub_002_r_2.jpg,002,002_right,3,male,right,1,2,True,Parsed successfully,train
+TOY_002_right_1_sub_002_r_3,TOY,D:\0.Research\PALM_CGK_BASE\PALM_CGK_BASE\data\toy\sub_002_r_3.jpg,002,002_right,3,male,right,1,3,True,Parsed successfully,test
+TOY_002_right_1_sub_002_r_4,TOY,D:\0.Research\PALM_CGK_BASE\PALM_CGK_BASE\data\toy\sub_002_r_4.jpg,002,002_right,3,male,right,1,4,True,Parsed successfully,test

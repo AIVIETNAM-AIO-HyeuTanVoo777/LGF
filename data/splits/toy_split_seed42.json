@@ -1,0 +1,24 @@
+{
+    "train": [
+        "TOY_001_left_1_sub_001_l_2",
+        "TOY_001_left_1_sub_001_l_4",
+        "TOY_001_right_1_sub_001_r_2",
+        "TOY_001_right_1_sub_001_r_4",
+        "TOY_002_left_1_sub_002_l_4",
+        "TOY_002_left_1_sub_002_l_1",
+        "TOY_002_right_1_sub_002_r_2",
+        "TOY_002_right_1_sub_002_r_1"
+    ],
+    "test": [
+        "TOY_001_left_1_sub_001_l_1",
+        "TOY_001_left_1_sub_001_l_3",
+        "TOY_001_right_1_sub_001_r_1",
+        "TOY_001_right_1_sub_001_r_3",
+        "TOY_002_left_1_sub_002_l_2",
+        "TOY_002_left_1_sub_002_l_3",
+        "TOY_002_right_1_sub_002_r_4",
+        "TOY_002_right_1_sub_002_r_3"
+    ],
+    "dropped": [],
+    "seed": 42
+}
