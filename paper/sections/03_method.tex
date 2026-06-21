@@ -1,0 +1,48 @@
+\section{Method}
+
+\subsection{Baseline and Proposed Model}
+
+The B1 baseline uses a ResNet18 backbone with a 256-D embedding head trained with cross entropy and supervised contrastive learning. The proposed B6 model keeps the same ResNet18 backbone family and 256-D embedding size, but changes the embedding head and classifier supervision. B6 consists of:
+\begin{itemize}
+    \item a ResNet18 backbone;
+    \item a linear projection to a 256-D embedding;
+    \item a BNNeck layer after the embedding projection;
+    \item an ArcFace normalized classifier during training;
+    \item a post-BN, L2-normalized embedding for evaluation.
+\end{itemize}
+
+The evaluation embedding is the post-BN representation. Gallery and probe embeddings are L2-normalized, and verification/identification scores are computed by cosine similarity. This keeps the evaluation protocol aligned with the metric geometry induced by the normalized classifier.
+
+\subsection{BNNeck Embedding}
+
+Let $h_i$ denote the output feature of the ResNet18 backbone for sample $i$. A linear projection maps this feature to a 256-D vector:
+\begin{equation}
+    z_i = W_e h_i + b_e.
+\end{equation}
+BNNeck applies batch normalization to this projected vector:
+\begin{equation}
+    \tilde{z}_i = \mathrm{BN}(z_i).
+\end{equation}
+The evaluation embedding is
+\begin{equation}
+    f_i = \frac{\tilde{z}_i}{\lVert \tilde{z}_i \rVert_2}.
+\end{equation}
+
+\subsection{ArcFace Supervision}
+
+ArcFace uses normalized features and normalized class weights. Let $W_j$ be the normalized classifier weight for class $j$, and let $\theta_j$ be the angle between the normalized embedding $f_i$ and $W_j$. For the ground-truth class $y_i$, ArcFace adds an angular margin $m$ and scales logits by $s$:
+\begin{equation}
+    \ell_i =
+    -\log
+    \frac{
+        \exp \left(s \cos(\theta_{y_i} + m)\right)
+    }{
+        \exp \left(s \cos(\theta_{y_i} + m)\right)
+        + \sum_{j \ne y_i} \exp \left(s \cos(\theta_j)\right)
+    }.
+\end{equation}
+In the current B6 configuration, $s=30.0$ and $m=0.5$. This objective encourages angular separation between classes, which directly targets the embedding geometry used by cosine verification.
+
+\subsection{What Is Not the Main Method}
+
+Earlier Gabor variants remain useful baselines and ablations, but they are not the main supported method direction in this paper. The current evidence supports B6, not a fixed-Gabor or learnable-Gabor superiority claim.

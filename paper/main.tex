@@ -1,0 +1,34 @@
+\documentclass[10pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{multirow}
+
+\title{Margin-Aware BNNeck Embeddings for Cross-Session Palmprint Recognition}
+\author{PALM\_CGK\_BASE Project Team}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Cross-session palmprint recognition requires embeddings that remain discriminative under session shift and reliable at strict false-acceptance operating points. This paper reports the current evidence from the PALM\_CGK\_BASE project for a margin-aware ResNet18 embedding model with BNNeck and ArcFace supervision. Under bidirectional 3-seed Tongji evaluation, the proposed B6 model improves over a strong ResNet18 + CE + SupCon baseline by +1.70 percentage points in Rank-1, -0.51 percentage points in EER, and +3.63 percentage points in TAR@FAR=1e-3. The method also outperforms the fixed-Gabor B2 variant on the same multi-seed Tongji protocol while using fewer parameters and FLOPs than B2. On IITD within split, B6 remains competitive but does not universally outperform the CE + SupCon baseline. We therefore make a scoped claim: BNNeck + ArcFace improves cross-session Tongji palmprint verification over the current strong baseline, without claiming state-of-the-art or universal superiority.
+\end{abstract}
+
+\input{sections/01_introduction}
+\input{sections/02_related_work}
+\input{sections/03_method}
+\input{sections/04_experiments}
+\input{sections/05_results}
+\input{sections/06_ablation}
+\input{sections/07_discussion}
+\input{sections/08_conclusion}
+
+\bibliographystyle{plain}
+\bibliography{references}
+
+\end{document}

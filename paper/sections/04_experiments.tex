@@ -1,0 +1,43 @@
+\section{Experimental Setup}
+
+\subsection{Datasets and Protocols}
+
+The primary evaluation uses the Tongji cross-session protocol in two directions:
+\begin{itemize}
+    \item S1->S2: training/gallery data from session 1 and probe data from session 2.
+    \item S2->S1: training/gallery data from session 2 and probe data from session 1.
+\end{itemize}
+The main reported Tongji numbers are bidirectional averages over S1->S2 and S2->S1 with seeds 42, 2026, and 2705.
+
+IITD within split is used as a secondary validation. The IITD result is treated as a scope and saturation check, not as the primary claim evidence.
+
+\subsection{Compared Methods}
+
+The paper compares the following methods:
+\begin{itemize}
+    \item B1: ResNet18 + cross entropy + supervised contrastive learning.
+    \item B2: FixedGaborResNet18.
+    \item B4: ResNet18 + ArcFace.
+    \item B6: ResNet18 + BNNeck + ArcFace.
+    \item B7: ResNet18 + BNNeck + ArcFace + light SupCon.
+\end{itemize}
+
+\subsection{Training Recipe}
+
+The common training recipe used by the final compared runs is:
+\begin{itemize}
+    \item epochs: 60;
+    \item learning rate: $1 \times 10^{-4}$;
+    \item weight decay: $1 \times 10^{-4}$;
+    \item embedding dimension: 256;
+    \item Tongji seeds: 42, 2026, 2705.
+\end{itemize}
+B6 uses ArcFace with scale $s=30.0$ and margin $m=0.5$. B7 adds a light supervised contrastive term for ablation.
+
+\subsection{Metrics}
+
+The reported metrics are Rank-1, Rank-5, Macro-F1, EER, TAR@FAR=1e-2, TAR@FAR=1e-3, parameter count, FLOPs, and average inference latency. TAR@FAR=1e-3 is emphasized because it measures strict low-FAR verification behavior.
+
+\subsection{Hardware}
+
+TODO: Add exact hardware and software environment if a verified hardware record is available. The current evidence files report latency values, but the current draft does not yet include a verified full hardware description.

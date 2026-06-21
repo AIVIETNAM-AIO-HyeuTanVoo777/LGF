@@ -1,0 +1,19 @@
+\section{Introduction}
+
+Palmprint recognition is commonly evaluated as an identification and verification problem, but cross-session recognition is the setting that most directly stresses whether a learned embedding remains stable under acquisition changes. In the PALM\_CGK\_BASE project, the Tongji protocol separates session directions into S1->S2 and S2->S1, making it possible to measure whether a model generalizes across session shift rather than only memorizing within-session texture and capture conditions.
+
+The current strong baseline is B1, a ResNet18 model trained with cross entropy and supervised contrastive learning. This baseline is already effective: its Tongji bidirectional 3-seed average reaches 94.37\% Rank-1 and 91.56\% TAR@FAR=1e-3. However, the low-FAR verification metrics show that embedding geometry can still be improved. In particular, strict-FAR verification requires features that are not only class-discriminative, but also angularly separated enough to keep impostor scores low.
+
+We study a margin-aware embedding variant, B6, that combines a ResNet18 backbone, a 256-D embedding projection, BNNeck, and an ArcFace normalized classifier. During evaluation, the post-BN embedding is L2-normalized and compared with cosine similarity. This design targets the geometry of the verification embedding directly while keeping the backbone simple and comparable to the B1 baseline.
+
+The main evidence is a bidirectional, 3-seed Tongji evaluation using seeds 42, 2026, and 2705. Compared with B1, B6 improves Rank-1 by +1.70 percentage points, EER by -0.51 percentage points, and TAR@FAR=1e-3 by +3.63 percentage points. Compared with the fixed-Gabor B2 variant, B6 improves Rank-1 by +2.36 percentage points and TAR@FAR=1e-3 by +3.41 percentage points while using fewer parameters and lower FLOPs than B2.
+
+This paper makes a scoped claim. B6 is strongly supported on Tongji cross-session evaluation, but it is not claimed to be universally superior. On IITD within split, B6 remains competitive and improves over B2, but B1 remains best on the recorded IITD metrics. We therefore use IITD as a secondary validation and limitation check rather than as universal-superiority evidence.
+
+The contributions of this paper are:
+\begin{itemize}
+    \item A margin-aware BNNeck embedding model for cross-session palmprint recognition.
+    \item A multi-seed bidirectional Tongji evaluation over S1->S2 and S2->S1 protocols.
+    \item An ablation sequence comparing B1, B4, B6, and B7 to isolate the effect of ArcFace, BNNeck, and light SupCon.
+    \item An IITD secondary validation showing that B6 is competitive but not universally better than the CE + SupCon baseline.
+\end{itemize}
