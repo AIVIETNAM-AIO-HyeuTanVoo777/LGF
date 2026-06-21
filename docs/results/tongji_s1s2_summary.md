@@ -328,7 +328,7 @@ The fair B1 rerun changes the earlier conclusion.
 
 \* The most important B2 advantage is strict verification robustness: `TAR@FAR=1e-3` is 91.89% for B2 vs 89.62% for B1.
 
-\* The original claim “learnable Gabor fusion improves recognition” is not supported because M1 is weaker than B1, B2, and B3.
+\* The original claim "learnable Gabor fusion improves recognition" is not supported because M1 is weaker than B1, B2, and B3.
 
 
 
