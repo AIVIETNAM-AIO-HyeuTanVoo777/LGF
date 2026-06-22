@@ -1,11 +1,12 @@
-\section{Discussion and Limitations}
+\section{Discussion}
 
-The main result indicates that margin-aware BNNeck embeddings improve cross-session Tongji recognition over a strong CE + SupCon baseline. The improvement is clearest in strict low-FAR verification, where B6 improves TAR@FAR=1e-3 by +3.63 percentage points over B1 under bidirectional 3-seed averaging. This supports the hypothesis that angular-margin supervision and BNNeck improve embedding geometry for verification.
+The subject-disjoint results change the interpretation of the BNNeck + ArcFace variant. In the original seen-identity Tongji protocol, B6 appears favorable. However, when development and test identities are made subject-disjoint, B6 does not outperform the B1 CE + SupCon baseline overall. This difference shows that the evaluation protocol is a first-order determinant of the empirical conclusion.
 
-The claim is intentionally scoped. B6 does not dominate all datasets in the current evidence. On IITD within split, B6 remains competitive and improves over B2, but B1 remains best. The IITD setting appears near saturation, so it is useful as a secondary sanity check rather than as primary contribution evidence.
+The main failure mode is not uniform across session directions. B6 has a limited gain at the strict TAR@FAR=$10^{-3}$ operating point in the S1$\rightarrow$S2 direction, but it trails B1 on most other S1$\rightarrow$S2 metrics and underperforms B1 across all reported metrics in S2$\rightarrow$S1. This indicates that angular-margin supervision and BNNeck can shape useful embedding geometry in some settings, but that the effect does not translate reliably to held-out subjects under both session directions.
 
-B6 also has a latency tradeoff. The recorded bidirectional average shows a +3.14 ms overhead relative to B1, even though the parameter count and FLOPs are effectively matched to B1 in the reported tables. This should be reported transparently, and latency should be interpreted as implementation- and hardware-dependent.
+The IITD within-dataset subject-disjoint result also supports a conservative claim. It is a mixed near-tie result: B6 slightly improves the average Rank-1, Rank-5, EER, and TAR@FAR=$10^{-2}$ metrics, but it loses Macro-F1 and strict TAR@FAR=$10^{-3}$. Because IITD is recorded as a single-session dataset in the manifest, it should be read as within-dataset secondary validation, not as cross-session evidence.
 
-No external benchmark-leadership claim is made in this paper. Related work and literature comparison are still pending, and verified citations should be added only after a dedicated literature-review pass. The Tongji dataset citation also needs full bibliographic verification before submission because it is not currently included in \texttt{paper/references.bib}.
+These results do not imply that BNNeck or ArcFace are ineffective for palmprint embeddings. They indicate that their benefit is conditioned on protocol design, identity overlap, and session direction. A fair report must therefore distinguish seen-identity evidence from held-out subject evidence and should avoid claims of dataset-independent dominance.
 
-Future work should evaluate session-robust metric learning variants, external datasets, and stronger cross-domain benchmarks. These directions are needed before making broader claims about general palmprint recognition robustness.
+External benchmark leadership and cross-dataset robustness are not claimed. Future work should evaluate additional datasets, add verified cross-dataset protocols, and test whether the direction-specific failure observed on Tongji is due to session image characteristics, split design, or training objective mismatch.
+
