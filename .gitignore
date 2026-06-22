@@ -181,3 +181,16 @@ experiments/
 *.pth
 *.ckpt
 *.onnx
+*.zip
+*.npy
+*.npz
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.out
+*.synctex.gz
+*.toc
+review_bundle/
+paper_overleaf*.zip

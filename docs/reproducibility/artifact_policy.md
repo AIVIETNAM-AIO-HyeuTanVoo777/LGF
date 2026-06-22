@@ -1,30 +1,20 @@
 # Artifact Policy
 
-Raw biometric images, trained checkpoints, and extracted embeddings/templates are not included in the public repository.
+Do not commit or redistribute:
 
-The repository may include:
+- raw biometric images
+- model checkpoints (`*.pt`, `*.pth`, `*.ckpt`, `*.onnx`)
+- embeddings or biometric templates (`*.npy`, `*.npz`)
+- local experiment directories (`experiments/`)
+- generated zip bundles
 
-```text
-code
-configuration YAML files
-split JSON files
-metadata manifests when license-safe
-aggregate result summaries
-raw per-seed metric CSV files
-plotting scripts
-reproducibility commands
-environment summaries
-```
+Allowed in Git:
 
-The repository must not include:
+- source code
+- configs
+- split JSON files
+- audit summaries
+- aggregated result summaries
+- paper source files
 
-```text
-raw biometric images
-experiments/
-*.pt
-*.pth
-*.ckpt
-*.onnx
-extracted biometric embeddings/templates
-large tensor dumps
-```
+Rationale: biometric data and templates may be sensitive; experiment artifacts are large and machine-specific.

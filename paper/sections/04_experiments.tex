@@ -2,26 +2,28 @@
 
 \subsection{Datasets and Protocols}
 
-The primary evaluation uses the segmented Tongji palmprint dataset. The repository manifest contains 12,000 Tongji images from 600 palms/classes, with 6,000 images in session 1 and 6,000 images in session 2. The recorded image size is $128 \times 128$. We evaluate two cross-session directions:
+The primary evaluation uses the segmented Tongji palmprint dataset \cite{zhang2017tongji}. The repository manifest contains 12,000 Tongji images from 600 palms/classes, with 6,000 images in session 1 and 6,000 images in session 2. The recorded image size is $128 \times 128$. We evaluate two cross-session directions:
 \begin{itemize}
     \item S1$\rightarrow$S2: training, validation, and gallery data from session 1; probe data from session 2.
     \item S2$\rightarrow$S1: training, validation, and gallery data from session 2; probe data from session 1.
 \end{itemize}
 The main reported Tongji numbers are bidirectional averages over S1$\rightarrow$S2 and S2$\rightarrow$S1 with seeds 42, 2026, and 2705.
 
-IITD within split is used as a secondary validation. The repository manifest contains 2,601 IITD images from 460 palms/classes, with all samples recorded as session 1 and image size $150 \times 150$. The B6 IITD result is a seed42 secondary check rather than a multi-seed IITD claim. IITD is treated as a near-saturated within-dataset setting, not as the primary contribution evidence.
+IITD within split is used as a secondary validation. The repository manifest contains 2,601 IITD images from 460 palms/classes \cite{iitd_touchless_palmprint}, with all samples recorded as session 1 and image size $150 \times 150$. IITD subject-disjoint validation is reported over seeds 42, 2026, and 2705. IITD is treated as a near-saturated within-dataset setting, not as the primary contribution evidence.
 
 \begin{table}[t]
 \centering
-\caption{Dataset split sizes used by the paper experiments.}
+\scriptsize
+\setlength{\tabcolsep}{4pt}
+\caption{Dataset split sizes and classes/subjects partitioning used by the experiments. For IITD, split sizes vary slightly across seeds; values for Seed 42 are reported.}
 \label{tab:split_sizes}
-\begin{tabular}{lrrrrr}
+\begin{tabular}{lrrrrcc}
 \hline
-Protocol & Train & Val & Gallery & Probe & Support \\
+Protocol & Train (Images) & Val (Images) & Gallery (Images) & Probe (Images) & Dev Classes & Test Classes \\
 \hline
-Tongji S1$\rightarrow$S2 & 4,800 & 1,200 & 6,000 & 6,000 & 0 \\
-Tongji S2$\rightarrow$S1 & 4,800 & 1,200 & 6,000 & 6,000 & 0 \\
-IITD within & 1,681 & 460 & 1,681 & 460 & 0 \\
+Tongji S1$\rightarrow$S2 (Disjoint) & 3,840 & 960 & 1,200 & 1,200 & 480 & 120 \\
+Tongji S2$\rightarrow$S1 (Disjoint) & 3,840 & 960 & 1,200 & 1,200 & 480 & 120 \\
+IITD within (Disjoint) & 1,670 & 417 & 257 & 257 & 368 & 92 \\
 \hline
 \end{tabular}
 \end{table}
@@ -57,6 +59,25 @@ B1 uses a ResNet18 baseline trained with cross entropy and supervised contrastiv
 \subsection{Checkpoint and Evaluation Protocol}
 
 Evaluation uses the \texttt{best.pt} checkpoint produced by the training script. For B6, the config selects the post-BN embedding for evaluation. Matching is performed with cosine similarity over normalized embeddings. The reported metrics are Rank-1, Rank-5, Macro-F1, EER, TAR@FAR=1e-2, TAR@FAR=1e-3, parameter count, FLOPs, and average inference latency. TAR@FAR=1e-3 is emphasized because it measures strict low-FAR verification behavior.
+
+\subsection{Evaluation Metrics}
+
+Let $x_i \in \mathbb{R}^d$ be the embedding vector extracted for image $i$. Embeddings are $L_2$-normalized: $\hat{x}_i = x_i / \lVert x_i \rVert_2$. The similarity between two images is computed using cosine similarity: $S(\hat{x}_1, \hat{x}_2) = \hat{x}_1^T \hat{x}_2$. The following evaluation metrics are defined:
+\begin{itemize}
+    \item \textbf{Rank-$k$ Accuracy}: The percentage of probe images for which the true matching identity is within the top-$k$ most similar gallery templates. We report Rank-1 and Rank-5 accuracies.
+    \item \textbf{Macro-F1}: For each probe image, the predicted identity is the identity of the nearest gallery template under cosine similarity. Macro-F1 is computed over probe identities from these nearest-gallery predictions to summarize class-balanced identification performance.
+    \item \textbf{False Accept Rate (FAR(t))} at similarity threshold $t$: The ratio of impostor pairs incorrectly accepted as genuine matches:
+    \begin{equation}
+        \mathrm{FAR}(t) = \frac{\#\{\text{Impostor Similarities} \ge t\}}{\#\text{Total Impostor Pairs}}
+    \end{equation}
+    \item \textbf{False Reject Rate (FRR(t))} at similarity threshold $t$: The ratio of genuine pairs incorrectly rejected:
+    \begin{equation}
+        \mathrm{FRR}(t) = \frac{\#\{\text{Genuine Similarities} < t\}}{\#\text{Total Genuine Pairs}}
+    \end{equation}
+    \item \textbf{True Accept Rate (TAR(t))}: The verification rate defined as $1 - \mathrm{FRR}(t)$.
+    \item \textbf{Equal Error Rate (EER)}: The error rate at the threshold $t_{\mathrm{EER}}$ where FAR and FRR are equal: $\mathrm{FAR}(t_{\mathrm{EER}}) = \mathrm{FRR}(t_{\mathrm{EER}}) = \mathrm{EER}$.
+    \item \textbf{TAR @ FAR}: The True Accept Rate at specific false acceptance rate constraints: $\mathrm{TAR@FAR}=10^{-2}$ and $\mathrm{TAR@FAR}=10^{-3}$.
+\end{itemize}
 
 \subsection{Hardware and Software Evidence}
 
