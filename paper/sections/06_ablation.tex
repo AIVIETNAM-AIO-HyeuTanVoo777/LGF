@@ -1,12 +1,12 @@
-\section{Ablation Study}
+\section{Ablation Scope}
 
-The seed42 ablation compares B1, B4, B6, and B7 under Tongji bidirectional averaging. This isolates the effect of replacing CE + SupCon with ArcFace, adding BNNeck, and adding a light SupCon term on top of BNNeck + ArcFace.
+The B1, B4, B6, and B7 ablation results are used as diagnostic evidence for interpreting the effect of ArcFace, BNNeck, and light SupCon supervision. These results are not used as the final basis for a general improvement claim because the final Tongji results are reported under the stricter development/test subject-disjoint protocol.
 
 \begin{table}[t]
 \centering
-\caption{Tongji seed42 bidirectional ablation.}
-\label{tab:ablation}
-\resizebox{\columnwidth}{!}{%
+\caption{Diagnostic Tongji seed42 ablation under the original seen-identity protocol. These results are not the final subject-disjoint evidence.}
+\label{tab:ablation_scope}
+\resizebox{\columnwidth}{!}{
 \begin{tabular}{llcccccc}
 \toprule
 Method & Description & Rank-1 & Rank-5 & Macro-F1 & EER & TAR@1e-2 & TAR@1e-3 \\
@@ -20,6 +20,6 @@ B7 & ResNet18 + BNNeck + ArcFace + light SupCon & 96.97 & 97.98 & 96.60 & 1.13 &
 }
 \end{table}
 
-The ablation supports three conclusions. First, ArcFace alone improves over the B1 baseline: B4 improves Rank-1 from 93.39\% to 94.35\% and TAR@FAR=1e-3 from 89.75\% to 91.86\%. Second, BNNeck + ArcFace gives the main gain: B6 reaches 96.80\% Rank-1 and 96.53\% TAR@FAR=1e-3. Third, adding light SupCon in B7 does not materially improve over B6. B7 has similar Rank-1 and EER, but its TAR@FAR=1e-3 is 96.50\%, slightly below B6's 96.53\%.
+The diagnostic ablation shows why B6 was worth evaluating under a stricter protocol. ArcFace and BNNeck improved the reported seen-identity ablation metrics, and light SupCon in B7 did not materially change the result relative to B6. However, this ablation should be read as hyperparameter and architectural evidence, not as proof that B6 is universally superior.
 
-Based on this evidence, B6 is selected as the final method rather than B7.
+The subject--disjoint Tongji evaluation in Section~\ref{sec:results} is the decisive evidence for the final paper claim. Under that protocol, B6 does not improve over B1 overall. Therefore, the ablation supports a protocol-sensitivity interpretation rather than a final method-dominance claim.
