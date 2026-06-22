@@ -23,6 +23,10 @@ Tongji primary, IITD secondary. No third dataset.
   - Template keys like `seed`, `save_dir`, and `dataset.split_file` are the only parameters requiring updates for seed and split sweeps.
   - Core recipes (ResNet18Baseline + CE + SupCon for B1, ResNet18BNNeck + ArcFace for B6) are preserved from the corresponding templates.
 
+### Experiment Status
+- **Tongji Subject-Disjoint Core Experiment**: Complete.
+- **Final Verdict**: B1 stronger overall; B6 limited S1→S2 low-FAR gain only.
+
 ## Claims checked
 
 ```text
@@ -34,5 +38,6 @@ Tongji primary, IITD secondary. No third dataset.
 ```
 
 ## Remaining TODOs
-- Run B1/B6 models using the generated configs.
+- Decide whether to run IITD B1/B6 3 seeds or B4 subject-disjoint diagnostic before rewriting LaTeX.
+
 
