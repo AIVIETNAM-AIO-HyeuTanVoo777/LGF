@@ -4,7 +4,7 @@ The subject-disjoint results change the interpretation of the BNNeck + ArcFace v
 
 The main failure mode is not uniform across session directions. B6 has a limited gain at the strict TAR@FAR=$10^{-3}$ operating point in the S1$\rightarrow$S2 direction, but it trails B1 on most other S1$\rightarrow$S2 metrics and underperforms B1 across all reported metrics in S2$\rightarrow$S1. This indicates that angular-margin supervision and BNNeck can shape useful embedding geometry in some settings, but that the effect does not translate reliably to held-out subjects under both session directions.
 
-The IITD within-dataset subject-disjoint result also supports a conservative claim. It is a mixed near-tie result: B6 slightly improves the average Rank-1, Rank-5, EER, and TAR@FAR=$10^{-2}$ metrics, but it loses Macro-F1 and strict TAR@FAR=$10^{-3}$. Because IITD is recorded as a single-session dataset in the manifest, it should be read as within-dataset secondary validation, not as cross-session evidence.
+The IITD within-dataset subject-disjoint protocol is prepared as a secondary validation setting, but it is not used in the current evidence package. When metrics become available, it should be read as within-dataset secondary validation, not as cross-session evidence.
 
 These results do not imply that BNNeck or ArcFace are ineffective for palmprint embeddings. They indicate that their benefit is conditioned on protocol design, identity overlap, and session direction. A fair report must therefore distinguish seen-identity evidence from held-out subject evidence and should avoid claims of dataset-independent dominance.
 

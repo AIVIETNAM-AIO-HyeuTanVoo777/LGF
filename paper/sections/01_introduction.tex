@@ -6,12 +6,12 @@ The current strong baseline is B1, a ResNet18 model trained with cross entropy a
 
 The central result is protocol-sensitive. BNNeck + ArcFace improves the original seen-identity Tongji protocol, but it does not improve over CE + SupCon overall under the stricter development/test subject-disjoint Tongji protocol. Under this stricter protocol, B6 trails B1 by 1.18 percentage points in bidirectional three-seed Rank-1 and has an EER that is 1.01 percentage points worse.
 
-This paper therefore reframes the method evidence as protocol-sensitive. The test protocol matters: results that look favorable in a seen-identity setting do not necessarily transfer to held-out subjects at cross-session operating points. The IITD subject-disjoint within-dataset evaluation is used only as secondary validation, where the result is mixed and does not support a broad dominance claim.
+This paper therefore reframes the method evidence as protocol-sensitive. The test protocol matters: results that look favorable in a seen-identity setting do not necessarily transfer to held-out subjects at cross-session operating points. The IITD subject-disjoint within-dataset protocol is prepared for secondary validation, though no results or claims are reported for IITD in the current evidence package.
 
 The contributions of this paper are:
 \begin{itemize}
     \item A subject-disjoint cross-session evaluation of B1 CE + SupCon and B6 BNNeck + ArcFace on Tongji.
     \item A protocol-sensitivity analysis showing that BNNeck + ArcFace does not consistently improve under held-out subject evaluation.
-    \item An IITD subject-disjoint within-dataset secondary validation showing a mixed/near-tie result.
+    \item An IITD subject-disjoint within-dataset secondary validation protocol configuration (not active in the current evidence package).
     \item Reproducible splits, configs, and result summaries for the scoped evaluation.
 \end{itemize}

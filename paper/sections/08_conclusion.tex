@@ -2,6 +2,6 @@
 
 This paper evaluated a ResNet18 + BNNeck + ArcFace embedding model for palmprint recognition under protocols that lead to different empirical conclusions. The method improves over the CE + SupCon baseline in the original seen-identity Tongji protocol, but it does not improve over CE + SupCon overall under the stricter development/test subject-disjoint Tongji protocol. In the subject-disjoint Tongji evaluation, B6 trails B1 in Rank-1, Rank-5, Macro-F1, EER, and TAR@FAR=$10^{-2}$, and it also trails B1 on the bidirectional average TAR@FAR=$10^{-3}$.
 
-The IITD subject-disjoint within-dataset evaluation provides mixed secondary evidence only. B6 is close to B1 on IITD, but it does not demonstrate a clean dominance result. Therefore, the supported conclusion is protocol-sensitivity: the result depends on whether the evaluation uses seen identities or held-out subjects.
+The IITD subject-disjoint within-dataset protocol is prepared for secondary validation but is not used as evidence in the current version of this paper. Therefore, the supported conclusion is protocol-sensitivity based on the Tongji results: the result depends on whether the evaluation uses seen identities or held-out subjects.
 
 The final claim is thus scoped. The paper does not claim universal superiority, external benchmark leadership, or cross-dataset robustness. It contributes a reproducible protocol-sensitive evaluation and identifies an important limit of transferring seen-identity improvements to subject-disjoint cross-session palmprint recognition.
