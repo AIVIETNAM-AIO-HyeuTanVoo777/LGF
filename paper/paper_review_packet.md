@@ -4,7 +4,7 @@
 
 Paper title: "Protocol-Sensitive Evaluation of BNNeck and ArcFace Embeddings for Cross-Session Palmprint Recognition"
 
-Abstract summary: The draft evaluates B6 (ResNet18 + BNNeck + ArcFace) against B1 (ResNet18 + CE + SupCon) under both the original seen-identity Tongji protocol and a stricter subject-disjoint Tongji protocol. In the seen-identity setting, B6 shows improvements. However, under the subject-disjoint cross-session protocol, B6 does not improve over B1 overall. An IITD subject-disjoint protocol is prepared but not used as current experimental evidence.
+Abstract summary: The draft evaluates B6 (ResNet18 + BNNeck + ArcFace) against B1 (ResNet18 + CE + SupCon) under both the original seen-identity Tongji protocol and a stricter subject-disjoint Tongji protocol. In the seen-identity setting, B6 shows improvements. However, under the subject-disjoint cross-session protocol, B6 does not improve over B1 overall. An IITD subject-disjoint within-session protocol is included as secondary validation and is best interpreted as a near-tie between B6 and B1.
 
 ## 2. Main Claim and Scope
 
@@ -12,7 +12,7 @@ Abstract summary: The draft evaluates B6 (ResNet18 + BNNeck + ArcFace) against B
 - **Key Finding**: B6 (BNNeck + ArcFace) does not improve over B1 overall under the stricter subject-disjoint cross-session Tongji protocol.
   - Bidirectional 3-seed Rank-1 average: B6 trails B1 by -1.18 percentage points (92.21% vs 93.39%).
   - Bidirectional 3-seed EER average: B6 is 1.01 percentage points worse than B1 (5.27% vs 4.25%).
-- **IITD Status**: IITD within-dataset subject-disjoint protocol is a placeholder and not used as experimental evidence in the current version of the paper.
+- **IITD Status**: IITD subject-disjoint within-session validation is now included as secondary evidence. B6 is near-tied with B1: Rank-1 is 89.99% +/- 0.78% for B6 versus 89.85% +/- 2.67% for B1, with a mean Rank-1 delta of +0.14 pp; B6 trails B1 at TAR@FAR=1e-3 by -1.82 pp.
 - **Universal Superiority**: No universal superiority, broad benchmark leadership, or cross-dataset robustness claims are made.
 
 ## 3. Core Result Verification
@@ -25,10 +25,10 @@ Abstract summary: The draft evaluates B6 (ResNet18 + BNNeck + ArcFace) against B
 | Tongji Subject-Disjoint | Baseline (B1) | EER | 4.25% ± 0.44% | `docs/results/tongji_subject_disjoint_summary.md` | Match |
 | Tongji Subject-Disjoint | BNNeck+ArcFace (B6) | EER | 5.27% ± 0.49% | `docs/results/tongji_subject_disjoint_summary.md` | Match |
 | Tongji Subject-Disjoint | Delta (B6 - B1) | EER | +1.01 pp | `docs/results/tongji_subject_disjoint_summary.md` | Match |
-| IITD | N/A | N/A | N/A | `docs/results/iitd_subject_disjoint_summary.md` (Placeholder) | Match |
+| IITD Subject-Disjoint Within-Session | B1 vs B6 | Rank-1 / TAR@FAR=1e-3 | B6 Rank-1 +0.14 pp; B6 TAR@FAR=1e-3 -1.82 pp | `docs/results/iitd_subject_disjoint_summary.md` | Match |
 
 ## 4. Overall Review Verdict
 
 VERDICT: PASS (With Scoped Evidence)
 
-Reason: The paper draft has been successfully aligned with the restart evidence. Stale claims and fake tables regarding IITD metrics have been removed, and the Tongji metrics match the aggregated experimental logs perfectly.
+Reason: The paper draft is aligned with the restart evidence. Tongji remains the primary cross-session subject-disjoint evidence, while IITD is included only as secondary within-session subject-disjoint validation. The IITD result supports a near-tie interpretation rather than a universal BNNeck + ArcFace improvement claim.

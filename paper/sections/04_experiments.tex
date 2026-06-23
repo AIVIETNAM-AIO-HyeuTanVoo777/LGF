@@ -9,7 +9,7 @@ The primary evaluation uses the segmented Tongji palmprint dataset \cite{zhang20
 \end{itemize}
 The main reported Tongji numbers are bidirectional averages over S1$\rightarrow$S2 and S2$\rightarrow$S1 with seeds 42, 2026, and 2705.
 
-The IITD subject-disjoint within-dataset protocol is prepared as a secondary validation configuration. The repository manifest contains 2,601 IITD images from 460 palms/classes \cite{iitd_touchless_palmprint}, with all samples recorded as session 1 and image size $150 \times 150$. While the splits are constructed over seeds 42, 2026, and 2705, IITD is not used for the current results or claims in this paper version, as valid restart experiment metrics for IITD are not yet available.
+The IITD subject-disjoint within-session protocol is used as secondary validation. The repository manifest contains 2,601 IITD images from 460 palms/classes \cite{iitd_touchless_palmprint}, with all samples recorded as session 1 and image size $150 \times 150$. Splits are constructed over seeds 42, 2026, and 2705. Because IITD is single-session in the current manifest, it is interpreted as within-session subject-disjoint validation rather than cross-session evidence.
 
 \begin{table}[t]
 \centering
