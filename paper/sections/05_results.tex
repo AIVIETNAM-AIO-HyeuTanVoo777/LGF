@@ -21,7 +21,24 @@ B6 ResNet18 + BNNeck + ArcFace & 92.21 $\pm$ 1.69 & 95.96 $\pm$ 0.99 & 91.41 $\p
 
 Under this stricter protocol, B6 does not improve over B1 overall. Relative to B1, B6 changes Rank-1 by -1.18 percentage points, Rank-5 by -1.00 percentage point, Macro-F1 by -1.31 percentage points, EER by +1.01 percentage points (worse), TAR@FAR=$10^{-2}$ by -2.39 percentage points, and TAR@FAR=$10^{-3}$ by -2.07 percentage points. The result therefore contradicts a universal-improvement claim for BNNeck + ArcFace under held-out subject evaluation.
 
-The directional analysis shows that the failure is not symmetric. In S1$\rightarrow$S2, B6 gives a limited strict low-FAR gain of +1.19 percentage points in TAR@FAR=$10^{-3}$ but trails B1 on Rank-1, Rank-5, Macro-F1, EER, and TAR@FAR=$10^{-2}$. In S2$\rightarrow$S1, B6 underperforms B1 across all reported metrics, including -2.22 percentage points in Rank-1 and -5.33 percentage points in TAR@FAR=$10^{-3}$. This direction sensitivity is the central empirical finding of the stricter Tongji evaluation.
+\begin{table}[t]
+\centering
+\caption{Directional mean deltas for B6 relative to B1 on Tongji subject-disjoint cross-session evaluation. Values are B6 minus B1 in percentage points. Positive Rank/TAR deltas favor B6, while positive EER deltas indicate worse performance for B6.}
+\label{tab:tongji_directional_delta}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lccc}
+\toprule
+Direction & $\Delta$Rank-1 & $\Delta$EER & $\Delta$TAR@FAR=$10^{-3}$ \\
+\midrule
+S1$\rightarrow$S2 & -0.14 & +0.85 & +1.19 \\
+S2$\rightarrow$S1 & -2.22 & +1.18 & -5.33 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Table~\ref{tab:tongji_directional_delta} shows that the average degradation is direction-dependent. In S1$\rightarrow$S2, B6 is close to B1 in Rank-1 (-0.14 pp) and has a limited strict low-FAR gain (+1.19 pp in TAR@FAR=$10^{-3}$), but its EER is higher by +0.85 pp. In S2$\rightarrow$S1, B6 trails B1 more consistently, with -2.22 pp in Rank-1, +1.18 pp in EER, and -5.33 pp in TAR@FAR=$10^{-3}$. The bidirectional average should therefore be read as hiding directional asymmetry rather than as a single uniform failure mode.
+
 
 \subsection{IITD Secondary Subject-Disjoint Validation}
 

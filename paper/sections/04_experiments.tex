@@ -30,14 +30,7 @@ IITD within (Disjoint) & 1,670 & 417 & 257 & 257 & 368 & 92 \\
 
 \subsection{Compared Methods}
 
-The paper compares the following methods:
-\begin{itemize}
-    \item B1: ResNet18 + cross entropy + supervised contrastive learning.
-    \item B2: FixedGaborResNet18.
-    \item B4: ResNet18 + ArcFace.
-    \item B6: ResNet18 + BNNeck + ArcFace.
-    \item B7: ResNet18 + BNNeck + ArcFace + light SupCon.
-\end{itemize}
+The main strict-protocol comparison focuses on two methods for which complete Tongji subject-disjoint and IITD secondary-validation runs are available: B1 and B6. B1 denotes ResNet18 trained with cross entropy and supervised contrastive learning. B6 denotes ResNet18 with BNNeck and ArcFace supervision. B4 and B7 are retained only in the diagnostic seen-identity ablation reported in Section~\ref{sec:ablation}; they are not used as main strict-protocol evidence. Fixed-Gabor variants are discussed as related baselines but are not included in the current strict-protocol result table because corresponding subject-disjoint runs are not yet available.
 
 \subsection{Training Recipe}
 
@@ -58,7 +51,7 @@ B1 uses a ResNet18 baseline trained with cross entropy and supervised contrastiv
 
 \subsection{Checkpoint and Evaluation Protocol}
 
-Evaluation uses the \texttt{best.pt} checkpoint produced by the training script. For B6, the config selects the post-BN embedding for evaluation. Matching is performed with cosine similarity over normalized embeddings. The reported metrics are Rank-1, Rank-5, Macro-F1, EER, TAR@FAR=1e-2, TAR@FAR=1e-3, parameter count, FLOPs, and average inference latency. TAR@FAR=1e-3 is emphasized because it measures strict low-FAR verification behavior.
+Evaluation uses the \texttt{best.pt} checkpoint produced by the training script. For B6, the config selects the post-BN embedding for evaluation. Matching is performed with cosine similarity over normalized embeddings. The reported metrics are Rank-1, Rank-5, Macro-F1, EER, TAR@FAR=$10^{-2}$, and TAR@FAR=$10^{-3}$. TAR@FAR=$10^{-3}$ is emphasized because it measures strict low-FAR verification behavior.
 
 \subsection{Evaluation Metrics}
 
