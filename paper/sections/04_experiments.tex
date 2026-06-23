@@ -9,7 +9,7 @@ The primary evaluation uses the segmented Tongji palmprint dataset \cite{zhang20
 \end{itemize}
 The main reported Tongji numbers are bidirectional averages over S1$\rightarrow$S2 and S2$\rightarrow$S1 with seeds 42, 2026, and 2705.
 
-The IITD subject-disjoint within-session protocol is used as secondary validation. The repository manifest contains 2,601 IITD images from 460 palms/classes \cite{iitd_touchless_palmprint}, with all samples recorded as session 1 and image size $150 \times 150$. Splits are constructed over seeds 42, 2026, and 2705. Because IITD is single-session in the current manifest, it is interpreted as within-session subject-disjoint validation rather than cross-session evidence.
+The IITD palm-class-disjoint within-session protocol is used as secondary validation. The repository manifest contains 2,601 IITD images from 460 palms/classes \cite{iitd_touchless_palmprint}, with all samples recorded as session 1 and image size $150 \times 150$. Splits are constructed over seeds 42, 2026, and 2705. Because IITD is single-session in the current manifest, it is interpreted as within-session palm-class-disjoint validation rather than cross-session evidence.
 
 \begin{table}[t]
 \centering
@@ -28,9 +28,11 @@ IITD within (Disjoint) & 1,670 & 417 & 257 & 257 & 368 & 92 \\
 \end{tabular}
 \end{table}
 
+\input{../docs/audits/rankb_protocol_audit_table.tex}
+
 \subsection{Compared Methods}
 
-The main strict-protocol comparison focuses on two methods for which complete Tongji subject-disjoint and IITD secondary-validation runs are available: B1 and B6. B1 denotes ResNet18 trained with cross entropy and supervised contrastive learning. B6 denotes ResNet18 with BNNeck and ArcFace supervision. B4 and B7 are retained only in the diagnostic seen-identity ablation reported in Section~\ref{sec:ablation}; they are not used as main strict-protocol evidence. Fixed-Gabor variants are discussed as related baselines but are not included in the current strict-protocol result table because corresponding subject-disjoint runs are not yet available.
+The main strict-protocol comparison focuses on two methods for which complete Tongji palm-class-disjoint and IITD secondary-validation runs are available: B1 and B6. B1 denotes ResNet18 trained with cross entropy and supervised contrastive learning. B6 denotes ResNet18 with BNNeck and ArcFace supervision. B4 and B7 are retained only in the diagnostic seen-identity ablation reported in Section~\ref{sec:ablation}; they are not used as main strict-protocol evidence. Fixed-Gabor variants are discussed as related baselines but are not included in the current strict-protocol result table because corresponding palm-class-disjoint runs are not yet available.
 
 \subsection{Training Recipe}
 
@@ -78,4 +80,4 @@ The verified local evidence records CUDA execution on an NVIDIA GeForce RTX 4050
 
 \subsection{Reproducibility}
 
-The experiments are configured through YAML files, split JSON files, and scripts in the repository. The relevant training and evaluation entry points are \texttt{scripts/train\_lgf.py} and \texttt{scripts/eval\_embedding.py}. Subject-disjoint split construction and audit are supported by \texttt{scripts/make\_tongji\_iitd\_disjoint\_splits.py} and \texttt{scripts/rank\_b\_split\_audit\_and\_iitd\_fix.py}. The final paper tables are recorded in \texttt{docs/results/paper\_ready\_core\_results\_tables.md}, with raw Tongji and IITD summaries in \texttt{docs/results/tongji\_subject\_disjoint\_metrics\_raw.md} and \texttt{docs/results/iitd\_subject\_disjoint\_summary.md}. Raw segmented data, experiment directories, and checkpoint tensors are not committed; the repository tracks configs, split JSON files, metadata, scripts, and saved result summaries.
+The experiments are configured through YAML files, split JSON files, and scripts in the repository. The relevant training and evaluation entry points are \texttt{scripts/train\_lgf.py} and \texttt{scripts/eval\_embedding.py}. Palm-class-disjoint split construction and audit are supported by \texttt{scripts/make\_tongji\_iitd\_disjoint\_splits.py} and \texttt{scripts/rank\_b\_split\_audit\_and\_iitd\_fix.py}. The final paper tables are recorded in \texttt{docs/results/paper\_ready\_core\_results\_tables.md}, with raw Tongji and IITD summaries in \texttt{docs/results/tongji\_subject\_disjoint\_metrics\_raw.md} and \texttt{docs/results/iitd\_subject\_disjoint\_summary.md}. Raw segmented data, experiment directories, and checkpoint tensors are not committed; the repository tracks configs, split JSON files, metadata, scripts, and saved result summaries.

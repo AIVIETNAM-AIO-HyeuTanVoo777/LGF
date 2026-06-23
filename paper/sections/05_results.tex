@@ -1,13 +1,13 @@
 \section{Results}
 \label{sec:results}
 
-\subsection{Tongji Subject-Disjoint Cross-Session Results}
+\subsection{Tongji Palm-Class-Disjoint Cross-Session Results}
 
-Table~\ref{tab:tongji_subject_disjoint} reports the primary Tongji cross-session results under the development/test subject-disjoint protocol. Values are bidirectional three-seed means and standard deviations across S1$\rightarrow$S2 and S2$\rightarrow$S1 runs with seeds 42, 2026, and 2705.
+Table~\ref{tab:tongji_subject_disjoint} reports the primary Tongji cross-session results under the development/test palm-class-disjoint protocol. Values are bidirectional three-seed means and standard deviations across S1$\rightarrow$S2 and S2$\rightarrow$S1 runs with seeds 42, 2026, and 2705.
 
 \begin{table*}[t]
 \centering
-\caption{Tongji cross-session subject-disjoint results. Values are mean $\pm$ standard deviation over three seeds after bidirectional averaging. Lower EER is better; higher values are better for all other metrics.}
+\caption{Tongji cross-session palm-class-disjoint results. Values are mean $\pm$ standard deviation over three seeds after bidirectional averaging. Lower EER is better; higher values are better for all other metrics.}
 \label{tab:tongji_subject_disjoint}
 \begin{tabular}{lcccccc}
 \toprule
@@ -19,11 +19,11 @@ B6 ResNet18 + BNNeck + ArcFace & 92.21 $\pm$ 1.69 & 95.96 $\pm$ 0.99 & 91.41 $\p
 \end{tabular}
 \end{table*}
 
-Under this stricter protocol, B6 does not improve over B1 overall. Relative to B1, B6 changes Rank-1 by -1.18 percentage points, Rank-5 by -1.00 percentage point, Macro-F1 by -1.31 percentage points, EER by +1.01 percentage points (worse), TAR@FAR=$10^{-2}$ by -2.39 percentage points, and TAR@FAR=$10^{-3}$ by -2.07 percentage points. The result therefore contradicts a universal-improvement claim for BNNeck + ArcFace under held-out subject evaluation.
+Under this stricter protocol, B6 does not improve over B1 overall. Relative to B1, B6 changes Rank-1 by -1.18 percentage points, Rank-5 by -1.00 percentage point, Macro-F1 by -1.31 percentage points, EER by +1.01 percentage points (worse), TAR@FAR=$10^{-2}$ by -2.39 percentage points, and TAR@FAR=$10^{-3}$ by -2.07 percentage points. The result therefore contradicts a universal-improvement claim for BNNeck + ArcFace under held-out palm-class evaluation.
 
 \begin{table}[t]
 \centering
-\caption{Directional mean deltas for B6 relative to B1 on Tongji subject-disjoint cross-session evaluation. Values are B6 minus B1 in percentage points. Positive Rank/TAR deltas favor B6, while positive EER deltas indicate worse performance for B6.}
+\caption{Directional mean deltas for B6 relative to B1 on Tongji palm-class-disjoint cross-session evaluation. Values are B6 minus B1 in percentage points. Positive Rank/TAR deltas favor B6, while positive EER deltas indicate worse performance for B6.}
 \label{tab:tongji_directional_delta}
 \footnotesize
 \setlength{\tabcolsep}{4pt}
@@ -40,11 +40,11 @@ S2$\rightarrow$S1 & -2.22 & +1.18 & -5.33 \\
 Table~\ref{tab:tongji_directional_delta} shows that the average degradation is direction-dependent. In S1$\rightarrow$S2, B6 is close to B1 in Rank-1 (-0.14 pp) and has a limited strict low-FAR gain (+1.19 pp in TAR@FAR=$10^{-3}$), but its EER is higher by +0.85 pp. In S2$\rightarrow$S1, B6 trails B1 more consistently, with -2.22 pp in Rank-1, +1.18 pp in EER, and -5.33 pp in TAR@FAR=$10^{-3}$. The bidirectional average should therefore be read as hiding directional asymmetry rather than as a single uniform failure mode.
 
 
-\subsection{IITD Secondary Subject-Disjoint Validation}
+\subsection{IITD Secondary Palm-Class-Disjoint Validation}
 
 \begin{table}[t]
 \centering
-\caption{IITD subject-disjoint within-session secondary validation. Values are mean $\pm$ standard deviation over three seeds. Lower EER is better; higher values are better for all other metrics.}
+\caption{IITD palm-class-disjoint within-session secondary validation. Values are mean $\pm$ standard deviation over three seeds. Lower EER is better; higher values are better for all other metrics.}
 \label{tab:iitd_subject_disjoint}
 \resizebox{\columnwidth}{!}{%
 \begin{tabular}{lcccccc}
@@ -59,8 +59,8 @@ B6 ResNet18 + BNNeck + ArcFace & 89.99 $\pm$ 0.78 & 92.43 $\pm$ 1.24 & 90.05 $\p
 \end{table}
 
 
-Table~\ref{tab:iitd_subject_disjoint} reports the IITD subject-disjoint within-session secondary validation. B6 is best interpreted as near-tied with B1 rather than clearly superior. Its mean Rank-1 is 89.99 $\pm$ 0.78 compared with 89.85 $\pm$ 2.67 for B1, corresponding to a small +0.14 percentage-point delta. B6 also has small positive deltas for Rank-5 (+0.39 pp), EER (-0.05 pp; lower is better), and TAR@FAR=$10^{-2}$ (+0.34 pp), but trails B1 in Macro-F1 (-0.26 pp) and TAR@FAR=$10^{-3}$ (-1.82 pp).
+Table~\ref{tab:iitd_subject_disjoint} reports the IITD palm-class-disjoint within-session secondary validation. B6 is best interpreted as near-tied with B1 rather than clearly superior. Its mean Rank-1 is 89.99 $\pm$ 0.78 compared with 89.85 $\pm$ 2.67 for B1, corresponding to a small +0.14 percentage-point delta. B6 also has small positive deltas for Rank-5 (+0.39 pp), EER (-0.05 pp; lower is better), and TAR@FAR=$10^{-2}$ (+0.34 pp), but trails B1 in Macro-F1 (-0.26 pp) and TAR@FAR=$10^{-3}$ (-1.82 pp).
 
 \subsection{Result Summary}
 
-The evidence changes the paper framing. BNNeck + ArcFace improves the original seen-identity Tongji protocol, but it does not improve over CE + SupCon overall under the stricter development/test subject-disjoint Tongji protocol. The supported contribution is therefore a protocol-sensitive evaluation of BNNeck and ArcFace embeddings for palmprint recognition, not a universal method-improvement claim.
+The evidence changes the paper framing. BNNeck + ArcFace improves the original seen-identity Tongji protocol, but it does not improve over CE + SupCon overall under the stricter development/test palm-class-disjoint Tongji protocol. The supported contribution is therefore a protocol-sensitive evaluation of BNNeck and ArcFace embeddings for palmprint recognition, not a universal method-improvement claim.

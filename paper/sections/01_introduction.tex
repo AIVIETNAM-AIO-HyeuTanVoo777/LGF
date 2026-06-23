@@ -4,14 +4,14 @@ Palmprint recognition is commonly evaluated as an identification and verificatio
 
 The current strong baseline is B1, a ResNet18 model trained with cross entropy and supervised contrastive learning \cite{khosla2020supervised}. The evaluated variant is B6, which combines a ResNet18 backbone, a 256-D embedding projection, BNNeck \cite{luo2019strong}, and an ArcFace normalized classifier \cite{deng2019arcface}. During evaluation, the post-BN embedding is L2-normalized and compared with cosine similarity.
 
-The central result is protocol-sensitive. BNNeck + ArcFace improves the original seen-identity Tongji protocol, but it does not improve over CE + SupCon overall under the stricter development/test subject-disjoint Tongji protocol. Under this stricter protocol, B6 trails B1 by 1.18 percentage points in bidirectional three-seed Rank-1 and has an EER that is 1.01 percentage points worse.
+The central result is protocol-sensitive. BNNeck + ArcFace improves the original seen-identity Tongji protocol, but it does not improve over CE + SupCon overall under the stricter development/test palm-class-disjoint Tongji protocol. Under this stricter protocol, B6 trails B1 by 1.18 percentage points in bidirectional three-seed Rank-1 and has an EER that is 1.01 percentage points worse.
 
-This paper therefore reframes the method evidence as protocol-sensitive. The test protocol matters: results that look favorable in a seen-identity setting do not necessarily transfer to held-out subjects at cross-session operating points. The IITD subject-disjoint within-session protocol is included as secondary validation; it shows that B6 is competitive with B1 but not consistently superior.
+This paper therefore reframes the method evidence as protocol-sensitive. The test protocol matters: results that look favorable in a seen-identity setting do not necessarily transfer to held-out palm classes at cross-session operating points. The IITD palm-class-disjoint within-session protocol is included as secondary validation; it shows that B6 is competitive with B1 but not consistently superior.
 
 The contributions of this paper are:
 \begin{itemize}
-    \item A subject-disjoint cross-session evaluation of B1 CE + SupCon and B6 BNNeck + ArcFace on Tongji.
-    \item A protocol-sensitivity analysis showing that BNNeck + ArcFace does not consistently improve under held-out subject evaluation.
-    \item An IITD subject-disjoint within-session secondary validation showing a near-tie between B1 and B6 rather than a decisive B6 improvement.
+    \item A palm-class-disjoint cross-session evaluation of B1 CE + SupCon and B6 BNNeck + ArcFace on Tongji.
+    \item A protocol-sensitivity analysis showing that BNNeck + ArcFace does not consistently improve under held-out palm-class evaluation.
+    \item An IITD palm-class-disjoint within-session secondary validation showing a near-tie between B1 and B6 rather than a decisive B6 improvement.
     \item Reproducible splits, configs, and result summaries for the scoped evaluation.
 \end{itemize}
