@@ -1,4 +1,4 @@
-import os
+﻿import os
 import json
 import numpy as np
 import pandas as pd
@@ -291,7 +291,7 @@ A positive delta (pp = percentage points) indicates B6 outperformed B1.
 
         iitd_report += """
 ## 3. Key Takeaways and Insights
-- **Within-Session Stability**: Under the within-session subject-disjoint protocol on IITD, the performance drop is less severe than on Tongji, showing that cross-session evaluation highlights generalization gaps much more prominently.
+- **Secondary Validation Verdict**: On IITD, B6 is best interpreted as near-tied with B1 rather than clearly superior. Mean deltas are small for Rank-1 (+0.14 pp), Rank-5 (+0.39 pp), EER (-0.05 pp; lower is better), and TAR@FAR=1e-2 (+0.34 pp), while B6 trails B1 on Macro-F1 (-0.26 pp) and TAR@FAR=1e-3 (-1.82 pp). This supports protocol-sensitive behavior, not universal improvement.
 """
     else:
         iitd_report = """# IITD Subject-Disjoint Within-Dataset Evaluation Summary
