@@ -1,0 +1,19 @@
+\begin{table*}[t]
+\centering
+\caption{Strict Tongji palm-class-disjoint ablation by session direction. Values are mean $\pm$ standard deviation over three seeds. Lower EER is better; higher values are better for all other metrics. The table focuses on B1, B5, and B6 to highlight the baseline, the strongest tested component variant, and the BNNeck+ArcFace variant.}
+\label{tab:strict_tongji_ablation_by_direction}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llccccc}
+\toprule
+Method & Direction & Rank-1 & Macro-F1 & EER & TAR@FAR=$10^{-2}$ & TAR@FAR=$10^{-3}$ \\
+\midrule
+B1 ResNet18 + CE + SupCon & S1$\rightarrow$S2 & 91.69 $\pm$ 4.06 & 90.80 $\pm$ 4.76 & 4.50 $\pm$ 1.02 & 86.71 $\pm$ 4.43 & 67.86 $\pm$ 7.87 \\
+B1 ResNet18 + CE + SupCon & S2$\rightarrow$S1 & 95.08 $\pm$ 1.26 & 94.63 $\pm$ 1.30 & 4.01 $\pm$ 0.27 & 90.54 $\pm$ 1.63 & 75.67 $\pm$ 5.14 \\
+B5 ResNet18 + BNNeck + CE & S1$\rightarrow$S2 & 94.17 $\pm$ 0.52 & 93.65 $\pm$ 0.59 & 4.44 $\pm$ 0.63 & 89.12 $\pm$ 2.26 & 75.02 $\pm$ 3.94 \\
+B5 ResNet18 + BNNeck + CE & S2$\rightarrow$S1 & 93.47 $\pm$ 2.10 & 92.76 $\pm$ 2.48 & 5.01 $\pm$ 0.40 & 86.49 $\pm$ 2.24 & 70.27 $\pm$ 4.45 \\
+B6 ResNet18 + BNNeck + ArcFace & S1$\rightarrow$S2 & 91.56 $\pm$ 1.62 & 90.74 $\pm$ 1.78 & 5.35 $\pm$ 0.41 & 86.12 $\pm$ 2.05 & 69.05 $\pm$ 4.58 \\
+B6 ResNet18 + BNNeck + ArcFace & S2$\rightarrow$S1 & 92.86 $\pm$ 1.77 & 92.07 $\pm$ 1.89 & 5.19 $\pm$ 0.57 & 86.34 $\pm$ 2.64 & 70.34 $\pm$ 4.74 \\
+\bottomrule
+\end{tabular}%
+}
+\end{table*}

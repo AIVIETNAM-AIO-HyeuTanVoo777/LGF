@@ -60,3 +60,10 @@ The strict Tongji component-ablation claim is supported by paired comparisons ov
 
 - `docs/results/paired_statistics_component_ablation.md`
 - `docs/results/paired_statistics_component_ablation.csv`
+
+## Strict Tongji by-direction ablation
+
+The strict Tongji component-ablation results are also summarized separately by session direction to support the direction-sensitivity analysis.
+
+- `docs/results/strict_tongji_ablation_by_direction.md`
+- `docs/results/strict_tongji_ablation_by_direction.csv`
