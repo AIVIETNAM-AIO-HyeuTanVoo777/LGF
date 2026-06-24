@@ -21,6 +21,10 @@ B6 ResNet18 + BNNeck + ArcFace & 92.21 $\pm$ 1.69 & 95.96 $\pm$ 0.99 & 91.41 $\p
 
 Under this stricter protocol, B6 does not improve over B1 overall. Relative to B1, B6 changes Rank-1 by -1.18 percentage points, Rank-5 by -1.00 percentage point, Macro-F1 by -1.31 percentage points, EER by +1.01 percentage points (worse), TAR@FAR=$10^{-2}$ by -2.39 percentage points, and TAR@FAR=$10^{-3}$ by -2.07 percentage points. The result therefore contradicts a universal-improvement claim for BNNeck + ArcFace under held-out palm-class evaluation.
 
+\input{sections/paired_statistics_b6_vs_b1_table.tex}
+
+Table~\ref{tab:paired_statistics_b6_vs_b1} reports paired uncertainty estimates over the six matched seed-direction units. The mean paired deltas are unfavorable to B6 for all reported metrics. The EER degradation is the most consistent paired effect, with a bootstrap interval above zero and an exact sign-flip value of $p=0.0312$. For Rank-1, Rank-5, Macro-F1, and TAR metrics, the bootstrap intervals cross zero, so these results should be interpreted as directional paired evidence rather than as strong formal significance claims.
+
 \begin{table}[t]
 \centering
 \caption{Directional mean deltas for B6 relative to B1 on Tongji palm-class-disjoint cross-session evaluation. Values are B6 minus B1 in percentage points. Positive Rank/TAR deltas favor B6, while positive EER deltas indicate worse performance for B6.}
