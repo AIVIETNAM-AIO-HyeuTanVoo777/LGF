@@ -1,0 +1,19 @@
+\begin{table*}[t]
+\centering
+\caption{Training configuration summary for the final strict Tongji component ablation. The table reports method-level settings shared across the two session directions and three seeds. All methods use ImageNet-pretrained ResNet18 variants, 256-dimensional embeddings, 60 epochs, learning rate $10^{-4}$, weight decay $10^{-4}$, AMP, and gradient accumulation of four steps.}
+\label{tab:training_config_summary}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lllcccccc}
+\toprule
+Method & Model & Loss & Eval emb. & $\lambda_{\mathrm{supcon}}$ & ArcFace $(s,m)$ & Epochs & LR & Sampler \\
+\midrule
+B0 ResNet18 + CE & ResNet18Baseline & ce & pre_bn_or_default & 0.0 & - & 60 & 0.0001 & 8x2 \\
+B1 ResNet18 + CE + SupCon & ResNet18Baseline & ce+supcon & pre_bn_or_default & 0.1 & - & 60 & 0.0001 & 8x2 \\
+B4 ResNet18 + ArcFace & ResNet18Baseline & arcface & pre_bn_or_default & 0.0 & (30.0,0.5) & 60 & 0.0001 & 8x2 \\
+B5 ResNet18 + BNNeck + CE & ResNet18BNNeck & ce & post_bn & 0.0 & - & 60 & 0.0001 & 8x2 \\
+B6 ResNet18 + BNNeck + ArcFace & ResNet18BNNeck & arcface & post_bn & 0.0 & (30.0,0.5) & 60 & 0.0001 & 8x2 \\
+B7 ResNet18 + BNNeck + ArcFace + light SupCon & ResNet18BNNeck & arcface & post_bn & 0.02 & (30.0,0.5) & 60 & 0.0001 & 8x2 \\
+\bottomrule
+\end{tabular}%
+}
+\end{table*}

@@ -81,3 +81,11 @@ Reviewer-facing ROC, DET, and score-distribution figures are generated for B1, B
 - `paper/figures/det_tongji_b1_b5_b6_s2_to_s1.pdf`
 - `paper/figures/score_hist_tongji_b1_b5_b6_s1_to_s2.pdf`
 - `paper/figures/score_hist_tongji_b1_b5_b6_s2_to_s1.pdf`
+
+## Training configuration audit
+
+The final strict Tongji component-ablation configs are summarized for reviewer-facing reproducibility.
+
+- `docs/audits/training_config_audit.md`
+- `docs/audits/training_config_audit.csv`
+- `paper/sections/training_config_table.tex`

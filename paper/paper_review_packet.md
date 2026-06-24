@@ -29,6 +29,7 @@ Abstract summary: The draft evaluates B6 (ResNet18 + BNNeck + ArcFace) against B
 | Strict Tongji Component Paired Stats | B5 vs B1 / B5 vs B6 / B6 vs B1 | Rank-1 / EER / TAR@FAR=1e-3 | B5 modestly improves Rank-1/TAR@FAR=1e-3 vs B1 but has worse EER; B5 is stronger than B6 on paired means | `docs/results/paired_statistics_component_ablation.md` | Match |
 | Strict Tongji By-Direction Ablation | B1/B5/B6 by S1->S2 and S2->S1 | Rank-1 / EER / TAR@FAR=1e-3 | B5 improves B1 in S1->S2 but trails B1 in S2->S1; B6 trails B1 on Rank-1/EER in both directions | `docs/results/strict_tongji_ablation_by_direction.md` | Match |
 | Strict Tongji ROC/DET/Score Figures | B1/B5/B6 by S1->S2 and S2->S1 | ROC / DET / score distributions | B5 has stronger low-FAR TPR in S1->S2, while B1 is strongest in S2->S1; B6 does not show robust low-FAR improvement | `docs/results/strict_tongji_roc_det_score_figures.md` | Match |
+| Training Configuration Audit | B0/B1/B4/B5/B6/B7 strict Tongji configs | Model / loss / embedding / optimizer / sampler | All final strict Tongji configs are parsed from YAML; B5 isolates BNNeck+CE and B6 isolates BNNeck+ArcFace with post-BN evaluation | `docs/audits/training_config_audit.md` | Match |
 | IITD Palm-Class-Disjoint Within-Session | B1 vs B6 | Rank-1 / TAR@FAR=1e-3 | B6 Rank-1 +0.12 pp; B6 TAR@FAR=1e-3 -0.72 pp; B6 EER +0.19 pp | `docs/results/iitd_subject_disjoint_rerun_results.md` | Match |
 
 ## 4. Overall Review Verdict
