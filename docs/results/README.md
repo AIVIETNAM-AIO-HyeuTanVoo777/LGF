@@ -46,3 +46,10 @@ The corrected IITD palm-class-disjoint within-session rerun is secondary validat
 - `docs/results/iitd_subject_disjoint_rerun_summary.csv`
 - `docs/results/iitd_subject_disjoint_rerun_delta_b6_minus_b1.csv`
 - `docs/results/iitd_subject_disjoint_rerun_table.tex`
+
+## Metric-threshold audit
+
+The strict Tongji verification metrics are audited for pair counts and threshold convention.
+
+- `docs/audits/metric_threshold_audit.md`
+- `docs/audits/metric_threshold_audit.csv`

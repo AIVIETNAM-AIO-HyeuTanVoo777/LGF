@@ -10,6 +10,7 @@ Abstract summary: The draft evaluates B6 (ResNet18 + BNNeck + ArcFace) against B
 
 - **Main Supported Claim**: Protocol-sensitive evaluation on Tongji. The test protocol is a first-order determinant of embedding performance under session shift.
 - **Key Finding**: B6 (BNNeck + ArcFace) does not improve over B1 overall under the stricter palm-class-disjoint cross-session Tongji protocol.
+- **Metric-Threshold Audit**: Strict Tongji verification metrics use 12,000 genuine and 1,428,000 impostor comparisons per run; TAR@FAR uses the nearest empirical-FPR ROC point.
   - Bidirectional 3-seed Rank-1 average: B6 trails B1 by -1.18 percentage points (92.21% vs 93.39%).
   - Bidirectional 3-seed EER average: B6 is 1.01 percentage points worse than B1 (5.27% vs 4.25%).
 - **IITD Status**: IITD palm-class-disjoint within-session validation is now included as secondary evidence. After the corrected gallery/probe rerun, B6 is near-tied with B1: Rank-1 is 97.95% +/- 1.71% for B6 versus 97.83% +/- 0.72% for B1, with a mean Rank-1 delta of +0.12 pp; B6 trails B1 at TAR@FAR=1e-3 by -0.72 pp and has slightly worse EER.
