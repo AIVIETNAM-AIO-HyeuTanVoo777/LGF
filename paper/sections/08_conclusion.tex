@@ -2,6 +2,8 @@
 
 This paper evaluated a ResNet18 + BNNeck + ArcFace embedding model for palmprint recognition under protocols that lead to different empirical conclusions. The method improves over the CE + SupCon baseline in the original seen-identity Tongji protocol, but it does not improve over CE + SupCon overall under the stricter development/test palm-class-disjoint Tongji protocol. In the palm-class-disjoint Tongji evaluation, B6 trails B1 in Rank-1, Rank-5, Macro-F1, EER, and TAR@FAR=$10^{-2}$, and it also trails B1 on the bidirectional average TAR@FAR=$10^{-3}$.
 
+The strict component ablation further shows that the strongest tested variant is B5, which combines BNNeck with cross-entropy supervision. This indicates that BNNeck can help the embedding geometry, but that ArcFace and light SupCon do not provide a reliable additional gain under the strict Tongji palm-class-disjoint protocol.
+
 The IITD palm-class-disjoint within-session protocol is included as secondary validation. It shows that B6 is near-tied with B1 rather than decisively better: B6 changes Rank-1 by +0.14 percentage points but trails at TAR@FAR=$10^{-3}$ by -1.82 percentage points. Together with the primary Tongji cross-session palm-class-disjoint result, this supports the conclusion that the BNNeck + ArcFace recipe is protocol-sensitive rather than universally superior.
 
 The final claim is thus scoped. The paper does not claim universal superiority, external benchmark leadership, or cross-dataset robustness. It contributes a reproducible protocol-sensitive evaluation and identifies an important limit of transferring seen-identity improvements to palm-class-disjoint cross-session palmprint recognition.

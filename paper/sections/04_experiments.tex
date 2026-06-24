@@ -32,7 +32,7 @@ IITD within (Disjoint) & 1,670 & 417 & 257 & 257 & 368 & 92 \\
 
 \subsection{Compared Methods}
 
-The main strict-protocol comparison focuses on two methods for which complete Tongji palm-class-disjoint and IITD secondary-validation runs are available: B1 and B6. B1 denotes ResNet18 trained with cross entropy and supervised contrastive learning. B6 denotes ResNet18 with BNNeck and ArcFace supervision. B4 and B7 are retained only in the diagnostic seen-identity ablation reported in Section~\ref{sec:ablation}; they are not used as main strict-protocol evidence. Fixed-Gabor variants are discussed as related baselines but are not included in the current strict-protocol result table because corresponding palm-class-disjoint runs are not yet available.
+The main strict-protocol comparison focuses on the pre-specified B1/B6 pair because B1 is the current CE + SupCon baseline and B6 is the BNNeck + ArcFace variant evaluated as the principal method hypothesis. Section~\ref{sec:ablation} additionally reports a complete strict Tongji component ablation over B0, B1, B4, B5, B6, and B7 across both session directions and three seeds. Fixed-Gabor variants are discussed as related baselines but are outside the current strict-protocol component-ablation matrix.
 
 \subsection{Training Recipe}
 
@@ -49,7 +49,7 @@ The common training recipe used by the final compared Tongji runs is:
     \item Tongji seeds: 42, 2026, 2705.
 \end{itemize}
 
-B1 uses a ResNet18 baseline trained with cross entropy and supervised contrastive learning, with $\lambda_{\mathrm{supcon}}=0.10$ and temperature 0.07. B6 uses ResNet18 + BNNeck + ArcFace, with ArcFace scale $s=30.0$, margin $m=0.5$, $\lambda_{\mathrm{supcon}}=0.0$, and temperature 0.07 retained in the config for compatibility. B7 adds a light supervised contrastive term for the ablation comparison.
+B0 uses ResNet18 with cross entropy only. B1 adds supervised contrastive learning with $\lambda_{\mathrm{supcon}}=0.10$ and temperature 0.07. B4 uses ResNet18 with ArcFace supervision. B5 uses ResNet18 + BNNeck with cross entropy only. B6 uses ResNet18 + BNNeck + ArcFace, with ArcFace scale $s=30.0$, margin $m=0.5$, $\lambda_{\mathrm{supcon}}=0.0$, and temperature 0.07 retained in the config for compatibility. B7 adds a light supervised contrastive term with $\lambda_{\mathrm{supcon}}=0.02$ for the ablation comparison.
 
 \subsection{Checkpoint and Evaluation Protocol}
 
