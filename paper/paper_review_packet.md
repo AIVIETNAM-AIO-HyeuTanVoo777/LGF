@@ -26,6 +26,7 @@ Abstract summary: The draft evaluates B6 (ResNet18 + BNNeck + ArcFace) against B
 | Tongji Palm-Class-Disjoint | Baseline (B1) | EER | 4.25% ± 0.44% | `docs/results/tongji_subject_disjoint_summary.md` | Match |
 | Tongji Palm-Class-Disjoint | BNNeck+ArcFace (B6) | EER | 5.27% ± 0.49% | `docs/results/tongji_subject_disjoint_summary.md` | Match |
 | Tongji Palm-Class-Disjoint | Delta (B6 - B1) | EER | +1.01 pp | `docs/results/tongji_subject_disjoint_summary.md` | Match |
+| Strict Tongji Component Paired Stats | B5 vs B1 / B5 vs B6 / B6 vs B1 | Rank-1 / EER / TAR@FAR=1e-3 | B5 modestly improves Rank-1/TAR@FAR=1e-3 vs B1 but has worse EER; B5 is stronger than B6 on paired means | `docs/results/paired_statistics_component_ablation.md` | Match |
 | IITD Palm-Class-Disjoint Within-Session | B1 vs B6 | Rank-1 / TAR@FAR=1e-3 | B6 Rank-1 +0.12 pp; B6 TAR@FAR=1e-3 -0.72 pp; B6 EER +0.19 pp | `docs/results/iitd_subject_disjoint_rerun_results.md` | Match |
 
 ## 4. Overall Review Verdict

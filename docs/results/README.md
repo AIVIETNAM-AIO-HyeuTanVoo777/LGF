@@ -53,3 +53,10 @@ The strict Tongji verification metrics are audited for pair counts and threshold
 
 - `docs/audits/metric_threshold_audit.md`
 - `docs/audits/metric_threshold_audit.csv`
+
+## Paired component-ablation statistics
+
+The strict Tongji component-ablation claim is supported by paired comparisons over the six matched seed-direction units.
+
+- `docs/results/paired_statistics_component_ablation.md`
+- `docs/results/paired_statistics_component_ablation.csv`
