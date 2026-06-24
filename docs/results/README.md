@@ -67,3 +67,17 @@ The strict Tongji component-ablation results are also summarized separately by s
 
 - `docs/results/strict_tongji_ablation_by_direction.md`
 - `docs/results/strict_tongji_ablation_by_direction.csv`
+
+## Strict Tongji ROC/DET/score figures
+
+Reviewer-facing ROC, DET, and score-distribution figures are generated for B1, B5, and B6 by session direction.
+
+- `docs/results/strict_tongji_roc_det_score_figures.md`
+- `docs/results/strict_tongji_roc_det_score_figures.csv`
+- `paper/sections/strict_tongji_score_figures.tex`
+- `paper/figures/roc_tongji_b1_b5_b6_s1_to_s2.pdf`
+- `paper/figures/roc_tongji_b1_b5_b6_s2_to_s1.pdf`
+- `paper/figures/det_tongji_b1_b5_b6_s1_to_s2.pdf`
+- `paper/figures/det_tongji_b1_b5_b6_s2_to_s1.pdf`
+- `paper/figures/score_hist_tongji_b1_b5_b6_s1_to_s2.pdf`
+- `paper/figures/score_hist_tongji_b1_b5_b6_s2_to_s1.pdf`

@@ -16,6 +16,15 @@ SRC_BIB = PAPER_DIR / "references.bib"
 
 OUT_MAIN = OUT_DIR / "main.tex"
 OUT_BIB = OUT_DIR / "references.bib"
+REQUIRED_FIGURES = [
+    ROOT / "paper" / "figures" / "roc_tongji_b1_b5_b6_s1_to_s2.pdf",
+    ROOT / "paper" / "figures" / "roc_tongji_b1_b5_b6_s2_to_s1.pdf",
+    ROOT / "paper" / "figures" / "det_tongji_b1_b5_b6_s1_to_s2.pdf",
+    ROOT / "paper" / "figures" / "det_tongji_b1_b5_b6_s2_to_s1.pdf",
+    ROOT / "paper" / "figures" / "score_hist_tongji_b1_b5_b6_s1_to_s2.pdf",
+    ROOT / "paper" / "figures" / "score_hist_tongji_b1_b5_b6_s2_to_s1.pdf",
+]
+
 
 
 INPUT_RE = re.compile(r"^[ \t]*\\input\{([^}]+)\}[ \t]*$", re.MULTILINE)
@@ -96,16 +105,28 @@ def main() -> None:
     merged = inline_inputs(main_text, SRC_MAIN.resolve(), {SRC_MAIN.resolve()})
 
     # Keep bibliography external as references.bib.
-    # This package is intentionally exactly two files: main.tex + references.bib.
+    # This package contains main.tex, references.bib, and any external figures referenced by main.tex.
     OUT_MAIN.write_text(merged.rstrip() + "\n", encoding="utf-8")
     shutil.copyfile(SRC_BIB, OUT_BIB)
 
     if OUT_ZIP.exists():
         OUT_ZIP.unlink()
 
+    # Copy external figures referenced by the exported main.tex.
+    export_fig_dir = OUT_DIR / "figures"
+    export_fig_dir.mkdir(parents=True, exist_ok=True)
+    for fig in REQUIRED_FIGURES:
+        if not fig.exists():
+            raise FileNotFoundError(f"Missing required export figure: {fig}")
+        dst = export_fig_dir / fig.name
+        shutil.copy2(fig, dst)
+        print(f"Wrote {dst}")
+
     with zipfile.ZipFile(OUT_ZIP, "w", compression=zipfile.ZIP_DEFLATED) as z:
         z.write(OUT_MAIN, arcname="main.tex")
         z.write(OUT_BIB, arcname="references.bib")
+        for fig in REQUIRED_FIGURES:
+            z.write(OUT_DIR / "figures" / fig.name, arcname=f"figures/{fig.name}")
 
     print(f"Wrote {OUT_MAIN}")
     print(f"Wrote {OUT_BIB}")
