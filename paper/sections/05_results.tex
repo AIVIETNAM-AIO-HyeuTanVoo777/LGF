@@ -19,7 +19,7 @@ B6 ResNet18 + BNNeck + ArcFace & 92.21 $\pm$ 1.69 & 95.96 $\pm$ 0.99 & 91.41 $\p
 \end{tabular}
 \end{table*}
 
-Under this stricter protocol, B6 does not improve over B1 overall. Relative to B1, B6 changes Rank-1 by -1.18 percentage points, Rank-5 by -1.00 percentage point, Macro-F1 by -1.31 percentage points, EER by +1.01 percentage points (worse), TAR@FAR=$10^{-2}$ by -2.39 percentage points, and TAR@FAR=$10^{-3}$ by -2.07 percentage points. The result therefore contradicts a universal-improvement claim for BNNeck + ArcFace under held-out palm-class evaluation.
+Under this stricter protocol, B6 does not improve over B1 overall. Relative to B1, B6 changes Rank-1 by -1.18 percentage points, Rank-5 by -1.00 percentage point, Macro-F1 by -1.31 percentage points, EER by +1.01 percentage points (worse), TAR@FAR=$10^{-2}$ by -2.39 percentage points, and TAR@FAR=$10^{-3}$ by -2.07 percentage points. The result therefore does not support a general-improvement claim for BNNeck + ArcFace under held-out palm-class evaluation.
 
 \input{sections/paired_statistics_b6_vs_b1_table.tex}
 
@@ -49,7 +49,7 @@ To inspect low-FAR behavior beyond aggregate TAR values, Table~\ref{tab:strict_t
 
 \input{sections/strict_tongji_score_diagnostics_table.tex}
 
-The diagnostics refine the interpretation of the ablation results. B5 is the strongest tested variant by Rank-1 and TAR@FAR=$10^{-3}$, but B1 has the highest d-prime, indicating the strongest average separation between genuine and impostor scores. B5 instead has the lowest impostor mean among the tested variants, which is consistent with its favorable low-FAR recognition result. B6 and B7 do not improve the score-distribution diagnostics over B1; their d-prime values are lower and their score-tail behavior does not support a robust ArcFace-based advantage under the strict protocol.
+The diagnostics refine the interpretation of the ablation results. B5 is the best-performing tested variant by Rank-1 and TAR@FAR=$10^{-3}$, but B1 has the highest d-prime, indicating the largest average separation between genuine and impostor scores. B5 instead has the lowest impostor mean among the tested variants, which is consistent with its favorable low-FAR recognition result. B6 and B7 do not improve the score-distribution diagnostics over B1; their d-prime values are lower and their score-tail behavior does not support a robust ArcFace-based advantage under the strict protocol.
 
 
 \subsection{IITD Secondary Palm-Class-Disjoint Validation}
@@ -75,4 +75,4 @@ Table~\ref{tab:iitd_subject_disjoint} reports the IITD palm-class-disjoint withi
 
 \subsection{Result Summary}
 
-The evidence changes the paper framing. BNNeck + ArcFace improves the original seen-identity Tongji protocol, but it does not improve over CE + SupCon overall under the stricter development/test palm-class-disjoint Tongji protocol. The supported contribution is therefore a protocol-sensitive evaluation of BNNeck and ArcFace embeddings for palmprint recognition, not a universal method-improvement claim.
+The evidence changes the paper framing. BNNeck + ArcFace appears favorable in the original seen-identity Tongji diagnostic setting, but it does not improve over CE + SupCon overall under the stricter development/test palm-class-disjoint Tongji protocol. The supported contribution is therefore a protocol-sensitive evaluation of BNNeck and ArcFace embeddings for palmprint recognition, not a universal method-improvement claim.
