@@ -35,6 +35,21 @@ IITD within (Disjoint) & 1,670 & 417 & 238 & 276 & 368 & 92 \\
 
 Palm-class and subject-ID fields are parsed from the repository manifest before split construction. The identity/parser audit documents the manifest fields used for \texttt{path}, \texttt{session}, \texttt{hand}, \texttt{subject\_id}, \texttt{palm\_id}, \texttt{class\_id}, and \texttt{sample\_id}. For each seed, it verifies zero image-level, palm-class, palm-ID, and subject-ID overlap between development and held-out test partitions. Because the repository does not provide an independently verified person-level identifier beyond the manifest fields, the final claim remains conservatively scoped as palm-class-disjoint rather than person-disjoint.
 
+\begin{table}[t]
+\centering
+\caption{Schematic of the audited Tongji evaluation protocol. A palm class denotes one hand/palm instance in the manifest-level recognition labels. The split is claimed as palm-class-disjoint; independently verified person-disjointness is not asserted.}
+\label{tab:tongji_protocol_schematic}
+\begin{tabular}{lll}
+\toprule
+Source & Partition & Use \\
+\midrule
+Manifest palm classes & Development classes & Train/validation and checkpoint selection \\
+Manifest palm classes & Held-out classes, S1$\rightarrow$S2 & Session 1 gallery, Session 2 probe \\
+Manifest palm classes & Held-out classes, S2$\rightarrow$S1 & Session 2 gallery, Session 1 probe \\
+\bottomrule
+\end{tabular}
+\end{table}
+
 A gallery/probe construction audit further verifies the held-out evaluation partitions. For Tongji, S1$\rightarrow$S2 uses session 1 as gallery and session 2 as probe, while S2$\rightarrow$S1 reverses this direction. For the corrected IITD within-session split, every held-out palm class appears in both gallery and probe with zero image overlap. IITD therefore remains secondary within-session validation rather than cross-session evidence.
 
 
@@ -88,7 +103,8 @@ The verified local evidence records CUDA execution on an NVIDIA GeForce RTX 4050
 
 \subsection{Reproducibility}
 
-The experiments are configured through YAML files, split JSON files, and scripts in the repository. The relevant training and evaluation entry points are \texttt{scripts/train\_lgf.py} and \texttt{scripts/eval\_embedding.py}. Palm-class-disjoint split construction and audit are supported by \texttt{scripts/make\_tongji\_iitd\_disjoint\_splits.py}, \texttt{scripts/audit\_rankb\_protocol.py}, and \texttt{scripts/validate\_configs.py}. The final evidence index is \texttt{docs/results/README.md}. The final strict ablation outputs are \texttt{docs/results/strict\_tongji\_ablation\_results.md}, \texttt{docs/results/strict\_tongji\_ablation\_runs.csv}, and \texttt{docs/results/strict\_tongji\_ablation\_by\_direction.md}; score-tail diagnostics are stored in \texttt{docs/results/strict\_tongji\_score\_diagnostics.md}; ROC/DET/score-distribution figure evidence is stored in \texttt{docs/results/strict\_tongji\_roc\_det\_score\_figures.md}; paired uncertainty is stored in \texttt{docs/results/paired\_statistics\_b6\_vs\_b1.md} and \texttt{docs/results/paired\_statistics\_component\_ablation.md}. Protocol, checkpoint-selection, identity/parser, gallery/probe-construction, metric-threshold, training-configuration, session-quality, and reference audits are stored in \texttt{docs/audits/rankb\_protocol\_audit.md}, \texttt{docs/audits/checkpoint\_selection\_audit.md}, \texttt{docs/audits/identity\_parser\_audit.md}, \texttt{docs/audits/gallery\_probe\_audit.md}, \texttt{docs/audits/metric\_threshold\_audit.md}, \texttt{docs/audits/training\_config\_audit.md}, \texttt{docs/audits/tongji\_session\_quality.md}, and \texttt{docs/audits/paper\_reference\_audit.md}. Superseded exploratory summaries are archived under \texttt{docs/legacy\_results/}. Raw segmented data, experiment directories, checkpoint tensors, score tensors, and exported submission zips are not committed; the repository tracks configs, split JSON files, metadata, scripts, audits, and saved result summaries.
+\paragraph{Reproducibility artifacts.}
+We provide split hashes, checkpoint-selection audit, metric-threshold audit, and scripts used to generate the reported tables and figures. The released audit files record manifest-level overlap checks, gallery/probe construction checks, training-configuration checks, and the exact genuine/impostor comparison counts used for low-FAR estimates. Generated export files are not treated as source; the submission package is produced from the paper source and controlled figure/table scripts. Raw segmented data, experiment directories, checkpoint tensors, score tensors, and exported submission zips are not committed.
 
 
 

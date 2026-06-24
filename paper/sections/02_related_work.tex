@@ -17,3 +17,27 @@ Margin-based normalized classifiers provide another route to discriminative embe
 \subsection{Cross-Session and Protocol-Sensitive Evaluation}
 
 Cross-session and cross-domain robustness are central issues for deployable biometric systems. Contactless and unconstrained palmprint studies show that performance can depend strongly on acquisition condition, ROI quality, and evaluation design \cite{ungureanu2020toward,matkowski2020uncontrolled}. Broader palmprint robustness research includes domain adaptation, style-transfer, synthetic-data, mobile-device acquisition, and cross-dataset evaluation directions \cite{zhang2020smartphone,shao2020efficient}. This paper does not attempt to benchmark all of those settings. Instead, it focuses on Tongji cross-session recognition with S1$\rightarrow$S2 and S2$\rightarrow$S1 protocols. The results should therefore be read as evidence for the scoped Tongji cross-session evaluation, not as a broad cross-domain benchmark claim. External datasets and verified cross-domain comparisons remain future work.
+
+\subsection{Protocol Positioning Relative to Palmprint Literature}
+
+Representative palmprint studies differ substantially in acquisition setup, ROI construction, gallery/probe definition, session use, and reported operating points. Table~\ref{tab:literature_protocol_positioning} therefore positions this work relative to prior palmprint literature by protocol properties rather than by direct numerical ranking.
+
+\begin{table*}[t]
+\centering
+\caption{Protocol positioning relative to representative palmprint recognition studies. The table is intended to contextualize protocols rather than claim direct numerical comparability.}
+\label{tab:literature_protocol_positioning}
+\begin{tabular}{llllll}
+\toprule
+Study & Representation & Dataset(s) & Contactless & Cross-session & Directly comparable? \\
+\midrule
+Zhang et al.~\cite{zhang2017tongji} & CR CompCode & Tongji & Yes & Yes & Partially; protocol differs \\
+PalmNet~\cite{genovese2019palmnet} & Gabor-PCA CNN & Multiple touchless sets & Yes & Not normalized here & No \\
+CompNet~\cite{liang2021compnet} & Learnable Gabor CNN & Multiple palmprint sets & Yes & Not normalized here & No \\
+Matkowski et al.~\cite{matkowski2020uncontrolled} & Alignment + feature network & IITD/CASIA/PolyU/NTU & Yes & Mixed & No \\
+Smartphone verification~\cite{zhang2020smartphone} & DCNN verification pipeline & Smartphone palmprint data & Yes & Yes & No \\
+Ours & Controlled BNNeck/ArcFace component matrix & Tongji + IITD & Yes & Tongji yes & Current protocol \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+Because prior studies differ in ROI pipelines, train/test identity assumptions, gallery construction, session use, and reported metrics, this table is not used as a leaderboard. It motivates why the present work focuses on a controlled within-paper component matrix under one audited protocol.
