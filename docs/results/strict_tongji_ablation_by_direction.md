@@ -27,4 +27,3 @@ This table summarizes the strict Tongji palm-class-disjoint ablation separately 
 ## Paper compact subset
 
 The paper table reports B1, B5, and B6 because these are the baseline, the strongest strict component variant, and the originally evaluated BNNeck+ArcFace variant.
-
