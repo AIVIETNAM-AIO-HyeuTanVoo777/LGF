@@ -1,0 +1,34 @@
+# B7: ResNet18 + BNNeck + ArcFace + light SupCon on Tongji palm-class-disjoint S2 -> S1, seed 2705
+# Note: filenames retain historical 'subject_disjoint' naming, while the paper claim is capped at palm-class-disjoint by audit.
+seed: 2705
+device: cuda
+save_dir: experiments/b7_resnet18_bnneck_arcface_light_supcon_tongji_subject_disjoint_s2s1_seed2705
+dataset:
+  name: Tongji
+  split_file: data/splits/tongji_subject_disjoint_s2_to_s1_seed2705.json
+sampler:
+  num_identities: 8
+  num_instances: 2
+  fallback_identities: 4
+loader:
+  num_workers: 0
+model:
+  name: ResNet18BNNeck
+  embedding_dim: 256
+  pretrained: true
+  eval_embedding: post_bn
+eval:
+  embedding: post_bn
+loss:
+  name: arcface
+  scale: 30.0
+  margin: 0.5
+training:
+  epochs: 60
+  lr: 0.0001
+  weight_decay: 0.0001
+  grad_accumulation_steps: 4
+  temperature: 0.07
+  amp: true
+  loss_type: arcface
+  lambda_supcon: 0.02

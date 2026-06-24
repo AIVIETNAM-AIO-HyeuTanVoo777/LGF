@@ -1,0 +1,31 @@
+# B4: ResNet18 + ArcFace on Tongji palm-class-disjoint S1 -> S2, seed 2705
+# Note: filenames retain historical 'subject_disjoint' naming, while the paper claim is capped at palm-class-disjoint by audit.
+seed: 2705
+device: cuda
+save_dir: experiments/b4_resnet18_arcface_tongji_subject_disjoint_s1s2_seed2705
+dataset:
+  name: Tongji
+  split_file: data/splits/tongji_subject_disjoint_s1_to_s2_seed2705.json
+sampler:
+  num_identities: 8
+  num_instances: 2
+  fallback_identities: 4
+loader:
+  num_workers: 0
+model:
+  name: ResNet18Baseline
+  embedding_dim: 256
+  pretrained: true
+loss:
+  name: arcface
+  scale: 30.0
+  margin: 0.5
+training:
+  epochs: 60
+  lr: 0.0001
+  weight_decay: 0.0001
+  grad_accumulation_steps: 4
+  temperature: 0.07
+  amp: true
+  loss_type: arcface
+  lambda_supcon: 0.0
