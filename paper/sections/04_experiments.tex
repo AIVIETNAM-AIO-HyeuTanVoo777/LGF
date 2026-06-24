@@ -30,6 +30,9 @@ IITD within (Disjoint) & 1,670 & 417 & 257 & 257 & 368 & 92 \\
 
 \input{../docs/audits/rankb_protocol_audit_table.tex}
 
+Palm-class and subject-ID fields are parsed from the repository manifest before split construction. The identity/parser audit documents the manifest fields used for \texttt{path}, \texttt{session}, \texttt{hand}, \texttt{subject\_id}, \texttt{palm\_id}, \texttt{class\_id}, and \texttt{sample\_id}. For each seed, it verifies zero image-level, palm-class, palm-ID, and subject-ID overlap between development and held-out test partitions. Because the repository does not provide an independently verified person-level identifier beyond the manifest fields, the final claim remains conservatively scoped as palm-class-disjoint rather than person-disjoint.
+
+
 \subsection{Compared Methods}
 
 The main strict-protocol comparison focuses on the pre-specified B1/B6 pair because B1 is the current CE + SupCon baseline and B6 is the BNNeck + ArcFace variant evaluated as the principal method hypothesis. Section~\ref{sec:ablation} additionally reports a complete strict Tongji component ablation over B0, B1, B4, B5, B6, and B7 across both session directions and three seeds. Fixed-Gabor variants are discussed as related baselines but are outside the current strict-protocol component-ablation matrix.
