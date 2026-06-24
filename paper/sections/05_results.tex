@@ -39,6 +39,14 @@ S2$\rightarrow$S1 & -2.22 & +1.18 & -5.33 \\
 
 Table~\ref{tab:tongji_directional_delta} shows that the average degradation is direction-dependent. In S1$\rightarrow$S2, B6 is close to B1 in Rank-1 (-0.14 pp) and has a limited strict low-FAR gain (+1.19 pp in TAR@FAR=$10^{-3}$), but its EER is higher by +0.85 pp. In S2$\rightarrow$S1, B6 trails B1 more consistently, with -2.22 pp in Rank-1, +1.18 pp in EER, and -5.33 pp in TAR@FAR=$10^{-3}$. The bidirectional average should therefore be read as hiding directional asymmetry rather than as a single uniform failure mode.
 
+\subsection{Score-Distribution Diagnostics}
+
+To inspect low-FAR behavior beyond aggregate TAR values, Table~\ref{tab:strict_tongji_score_diagnostics} summarizes genuine and impostor cosine-score distributions for the strict Tongji ablation runs. The impostor q0.999 statistic approximates the high-impostor-score tail, while d-prime summarizes average genuine/impostor separation.
+
+\input{sections/strict_tongji_score_diagnostics_table.tex}
+
+The diagnostics refine the interpretation of the ablation results. B5 is the strongest tested variant by Rank-1 and TAR@FAR=$10^{-3}$, but B1 has the highest d-prime, indicating the strongest average separation between genuine and impostor scores. B5 instead has the lowest impostor mean among the tested variants, which is consistent with its favorable low-FAR recognition result. B6 and B7 do not improve the score-distribution diagnostics over B1; their d-prime values are lower and their score-tail behavior does not support a robust ArcFace-based advantage under the strict protocol.
+
 
 \subsection{IITD Secondary Palm-Class-Disjoint Validation}
 
