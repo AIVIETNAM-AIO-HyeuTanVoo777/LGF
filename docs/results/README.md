@@ -16,9 +16,22 @@ This directory contains the final result artifacts used by the current paper dra
 - `tongji_directional_delta_b6_minus_b1.md`
 - `tongji_directional_delta_b6_minus_b1.csv`
 
+## Linked audit evidence
+
+The final paper also depends on audit artifacts stored outside `docs/results/`:
+
+- `docs/audits/rankb_protocol_audit.md`
+- `docs/audits/rankb_protocol_audit.csv`
+- `docs/audits/checkpoint_selection_audit.md`
+- `docs/audits/checkpoint_selection_audit.csv`
+- `docs/audits/identity_parser_audit.md`
+- `docs/audits/identity_parser_audit.csv`
+- `docs/audits/tongji_session_quality.md`
+- `docs/audits/paper_reference_audit.md`
+
 ## Current claim boundary
 
-The current paper uses a palm-class-disjoint Tongji cross-session protocol audit. The paper does not claim universal superiority for BNNeck + ArcFace. The strict Tongji ablation shows that B5 is the strongest tested variant by Rank-1 and TAR@FAR=1e-3, while B1 has the strongest average genuine/impostor separation by d-prime.
+The current paper uses a palm-class-disjoint Tongji cross-session protocol audit, a checkpoint-selection audit, and an identity/parser audit. The paper does not claim universal superiority for BNNeck + ArcFace. The strict Tongji ablation shows that B5 is the strongest tested variant by Rank-1 and TAR@FAR=1e-3, while B1 has the strongest average genuine/impostor separation by d-prime.
 
 ## Legacy files
 
