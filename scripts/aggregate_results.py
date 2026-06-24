@@ -234,9 +234,9 @@ No new result claim is made in this file. Tongji should be treated as primary cr
     )
 
     if has_iitd_metrics:
-        iitd_report = """# IITD Subject-Disjoint Within-Session Evaluation Summary
+        iitd_report = """# IITD Palm-Class-Disjoint Within-Session Evaluation Summary
 
-This document aggregates evaluation metrics for Tier-1 models on the secondary IITD subject-disjoint within-session protocol across three random seeds: 42, 2026, and 2705.
+This document aggregates evaluation metrics for Tier-1 models on the secondary IITD palm-class-disjoint within-session protocol across three random seeds: 42, 2026, and 2705.
 
 - **Baseline (B1)**: ResNet18 trained with Cross-Entropy and Supervised Contrastive Loss.
 - **BNNeck + ArcFace (B6)**: ResNet18 trained with BNNeck and ArcFace Loss.
@@ -291,10 +291,10 @@ A positive delta (pp = percentage points) indicates B6 outperformed B1.
 
         iitd_report += """
 ## 3. Key Takeaways and Insights
-- **Secondary Validation Verdict**: On IITD, B6 is best interpreted as near-tied with B1 rather than clearly superior. Mean deltas are small for Rank-1 (+0.14 pp), Rank-5 (+0.39 pp), EER (-0.05 pp; lower is better), and TAR@FAR=1e-2 (+0.34 pp), while B6 trails B1 on Macro-F1 (-0.26 pp) and TAR@FAR=1e-3 (-1.82 pp). This supports protocol-sensitive behavior, not universal improvement.
+- **Secondary Validation Verdict**: Superseded. The IITD gallery/probe construction was corrected after this legacy aggregator was written. Use `scripts/aggregate_iitd_rerun_results.py` and `docs/results/iitd_subject_disjoint_rerun_results.md` as the authoritative IITD evidence. The corrected IITD rerun shows a near-tie: B6 has Rank-1 +0.12 pp versus B1, slightly worse EER (+0.19 pp), and lower TAR@FAR=1e-3 (-0.72 pp). IITD remains secondary within-session palm-class-disjoint validation, not cross-session evidence or universal superiority evidence.
 """
     else:
-        iitd_report = """# IITD Subject-Disjoint Within-Dataset Evaluation Summary
+        iitd_report = """# IITD Palm-Class-Disjoint Within-Dataset Evaluation Summary
 
 Status: restart aggregation placeholder.
 
@@ -303,7 +303,7 @@ No valid restart metrics were found by the current aggregation script. This file
 ## Intended protocol
 
 - Dataset: IITD
-- Protocol: subject-disjoint within-dataset secondary validation
+- Protocol: palm-class-disjoint within-dataset secondary validation
 - Seeds: 42, 2026, 2705
 - Metrics: Rank-1, Rank-5, Macro-F1, EER, TAR@FAR=1e-2, TAR@FAR=1e-3
 
@@ -312,9 +312,9 @@ No valid restart metrics were found by the current aggregation script. This file
 No new result claim is made in this file. IITD should be treated as secondary validation, not as evidence for cross-session robustness or universal improvement.
 """
 
-    with open(RESULTS_DIR / "iitd_subject_disjoint_summary.md", "w", encoding="utf-8") as f:
+    with open(RESULTS_DIR / "iitd_subject_disjoint_summary_SUPERSEDED_USE_RERUN.md", "w", encoding="utf-8") as f:
         f.write(iitd_report)
-    print("Wrote iitd_subject_disjoint_summary.md")
+    print("Wrote iitd_subject_disjoint_summary_SUPERSEDED_USE_RERUN.md")
 
 if __name__ == "__main__":
     main()
