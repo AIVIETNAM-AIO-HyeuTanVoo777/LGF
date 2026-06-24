@@ -3,12 +3,13 @@
 
 \subsection{Tongji Palm-Class-Disjoint Cross-Session Results}
 
-Table~\ref{tab:tongji_subject_disjoint} reports the primary Tongji cross-session results under the development/test palm-class-disjoint protocol. Values are bidirectional three-seed means and standard deviations across S1$\rightarrow$S2 and S2$\rightarrow$S1 runs with seeds 42, 2026, and 2705.
+Table~\ref{tab:tongji_palm_class_disjoint} reports the primary Tongji cross-session results under the development/test palm-class-disjoint protocol. Values are bidirectional three-seed means and standard deviations across S1$\rightarrow$S2 and S2$\rightarrow$S1 runs with seeds 42, 2026, and 2705.
 
 \begin{table*}[t]
 \centering
 \caption{Tongji cross-session palm-class-disjoint results. Values are mean $\pm$ standard deviation over three seeds after bidirectional averaging. Lower EER is better; higher values are better for all other metrics.}
-\label{tab:tongji_subject_disjoint}
+\label{tab:tongji_palm_class_disjoint}
+\resizebox{\textwidth}{!}{%
 \begin{tabular}{lcccccc}
 \toprule
 Method & Rank-1 & Rank-5 & Macro-F1 & EER & TAR@FAR=$10^{-2}$ & TAR@FAR=$10^{-3}$ \\
@@ -16,12 +17,16 @@ Method & Rank-1 & Rank-5 & Macro-F1 & EER & TAR@FAR=$10^{-2}$ & TAR@FAR=$10^{-3}
 B1 ResNet18 + CE + SupCon & 93.39 $\pm$ 2.11 & 96.96 $\pm$ 0.96 & 92.71 $\pm$ 2.36 & 4.25 $\pm$ 0.44 & 88.62 $\pm$ 2.35 & 71.76 $\pm$ 5.49 \\
 B6 ResNet18 + BNNeck + ArcFace & 92.21 $\pm$ 1.69 & 95.96 $\pm$ 0.99 & 91.41 $\pm$ 1.84 & 5.27 $\pm$ 0.49 & 86.23 $\pm$ 2.34 & 69.69 $\pm$ 4.64 \\
 \bottomrule
-\end{tabular}
+\end{tabular}%
+}
 \end{table*}
 
 Under this stricter protocol, B6 does not improve over B1 overall. Relative to B1, B6 changes Rank-1 by -1.18 percentage points, Rank-5 by -1.00 percentage point, Macro-F1 by -1.31 percentage points, EER by +1.01 percentage points (worse), TAR@FAR=$10^{-2}$ by -2.39 percentage points, and TAR@FAR=$10^{-3}$ by -2.07 percentage points. The result therefore does not support a general-improvement claim for BNNeck + ArcFace under held-out palm-class evaluation.
 
-\input{sections/paired_statistics_b6_vs_b1_table.tex}
+
+
+\input{sections/paired_statistics_b6_vs_b1_table}
+
 
 Table~\ref{tab:paired_statistics_b6_vs_b1} reports paired uncertainty estimates over the six matched seed-direction units. The mean paired deltas are unfavorable to B6 for all reported metrics. The EER degradation is the most consistent paired effect, with a bootstrap interval above zero and an exact sign-flip value of $p=0.0312$. For Rank-1, Rank-5, Macro-F1, and TAR metrics, the bootstrap intervals cross zero, so these results should be interpreted as directional paired evidence rather than as strong formal significance claims.
 
@@ -47,7 +52,10 @@ Table~\ref{tab:tongji_directional_delta} shows that the average degradation is d
 
 To inspect low-FAR behavior beyond aggregate TAR values, Table~\ref{tab:strict_tongji_score_diagnostics} summarizes genuine and impostor cosine-score distributions for the strict Tongji ablation runs. The impostor q0.999 statistic approximates the high-impostor-score tail, while d-prime summarizes average genuine/impostor separation.
 
-\input{sections/strict_tongji_score_diagnostics_table.tex}
+
+
+\input{sections/strict_tongji_score_diagnostics_table}
+
 
 The diagnostics refine the interpretation of the ablation results. B5 is the best-performing tested variant by Rank-1 and TAR@FAR=$10^{-3}$, but B1 has the highest d-prime, indicating the largest average separation between genuine and impostor scores. B5 instead has the lowest impostor mean among the tested variants, which is consistent with its favorable low-FAR recognition result. B6 and B7 do not improve the score-distribution diagnostics over B1; their d-prime values are lower and their score-tail behavior does not support a robust ArcFace-based advantage under the strict protocol.
 
@@ -59,7 +67,8 @@ The IITD experiment is retained only as secondary within-session validation, not
 \begin{table*}[t]
 \centering
 \caption{IITD palm-class-disjoint within-session rerun after gallery/probe split correction. Values are mean $\pm$ standard deviation over three seeds. Lower EER is better; higher values are better for all other metrics.}
-\label{tab:iitd_subject_disjoint}
+\label{tab:iitd_palm_class_disjoint}
+\resizebox{\textwidth}{!}{%
 \begin{tabular}{lcccccc}
 \toprule
 Method & Rank-1 & Rank-5 & Macro-F1 & EER & TAR@FAR=$10^{-2}$ & TAR@FAR=$10^{-3}$ \\
@@ -67,10 +76,11 @@ Method & Rank-1 & Rank-5 & Macro-F1 & EER & TAR@FAR=$10^{-2}$ & TAR@FAR=$10^{-3}
 B1 ResNet18 + CE + SupCon & 97.83 $\pm$ 0.72 & 98.91 $\pm$ 0.36 & 97.70 $\pm$ 0.81 & 3.05 $\pm$ 1.18 & 94.82 $\pm$ 2.86 & 86.17 $\pm$ 7.07 \\
 B6 ResNet18 + BNNeck + ArcFace & 97.95 $\pm$ 1.71 & 98.91 $\pm$ 0.63 & 97.86 $\pm$ 1.80 & 3.24 $\pm$ 1.34 & 94.39 $\pm$ 2.51 & 85.45 $\pm$ 3.85 \\
 \bottomrule
-\end{tabular}
+\end{tabular}%
+}
 \end{table*}
 
-Table~\ref{tab:iitd_subject_disjoint} reports the corrected IITD rerun. B6 is again best interpreted as near-tied with B1 rather than clearly superior. Its mean Rank-1 is 97.95 $\pm$ 1.71 compared with 97.83 $\pm$ 0.72 for B1, corresponding to a small +0.12 percentage-point delta. However, B6 has slightly worse mean EER, 3.24 $\pm$ 1.34 versus 3.05 $\pm$ 1.18 for B1, and lower mean TAR@FAR=$10^{-2}$ and TAR@FAR=$10^{-3}$ by -0.44 and -0.72 percentage points, respectively. The corrected IITD result therefore supports the same conservative interpretation as the primary Tongji evidence: BNNeck + ArcFace is competitive, but not consistently superior.
+Table~\ref{tab:iitd_palm_class_disjoint} reports the corrected IITD rerun. B6 is again best interpreted as near-tied with B1 rather than clearly superior. Its mean Rank-1 is 97.95 $\pm$ 1.71 compared with 97.83 $\pm$ 0.72 for B1, corresponding to a small +0.12 percentage-point delta. However, B6 has slightly worse mean EER, 3.24 $\pm$ 1.34 versus 3.05 $\pm$ 1.18 for B1, and lower mean TAR@FAR=$10^{-2}$ and TAR@FAR=$10^{-3}$ by -0.44 and -0.72 percentage points, respectively. The corrected IITD result therefore supports the same conservative interpretation as the primary Tongji evidence: BNNeck + ArcFace is competitive, but not consistently superior.
 
 \subsection{Result Summary}
 

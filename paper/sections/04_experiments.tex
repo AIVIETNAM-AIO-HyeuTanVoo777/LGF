@@ -28,7 +28,10 @@ IITD within (Disjoint) & 1,670 & 417 & 238 & 276 & 368 & 92 \\
 \end{tabular}
 \end{table}
 
-\input{../docs/audits/rankb_protocol_audit_table.tex}
+
+
+\input{../docs/audits/rankb_protocol_audit_table}
+
 
 Palm-class and subject-ID fields are parsed from the repository manifest before split construction. The identity/parser audit documents the manifest fields used for \texttt{path}, \texttt{session}, \texttt{hand}, \texttt{subject\_id}, \texttt{palm\_id}, \texttt{class\_id}, and \texttt{sample\_id}. For each seed, it verifies zero image-level, palm-class, palm-ID, and subject-ID overlap between development and held-out test partitions. Because the repository does not provide an independently verified person-level identifier beyond the manifest fields, the final claim remains conservatively scoped as palm-class-disjoint rather than person-disjoint.
 
@@ -87,6 +90,9 @@ The verified local evidence records CUDA execution on an NVIDIA GeForce RTX 4050
 
 The experiments are configured through YAML files, split JSON files, and scripts in the repository. The relevant training and evaluation entry points are \texttt{scripts/train\_lgf.py} and \texttt{scripts/eval\_embedding.py}. Palm-class-disjoint split construction and audit are supported by \texttt{scripts/make\_tongji\_iitd\_disjoint\_splits.py}, \texttt{scripts/audit\_rankb\_protocol.py}, and \texttt{scripts/validate\_configs.py}. The final evidence index is \texttt{docs/results/README.md}. The final strict ablation outputs are \texttt{docs/results/strict\_tongji\_ablation\_results.md}, \texttt{docs/results/strict\_tongji\_ablation\_runs.csv}, and \texttt{docs/results/strict\_tongji\_ablation\_by\_direction.md}; score-tail diagnostics are stored in \texttt{docs/results/strict\_tongji\_score\_diagnostics.md}; ROC/DET/score-distribution figure evidence is stored in \texttt{docs/results/strict\_tongji\_roc\_det\_score\_figures.md}; paired uncertainty is stored in \texttt{docs/results/paired\_statistics\_b6\_vs\_b1.md} and \texttt{docs/results/paired\_statistics\_component\_ablation.md}. Protocol, checkpoint-selection, identity/parser, gallery/probe-construction, metric-threshold, training-configuration, session-quality, and reference audits are stored in \texttt{docs/audits/rankb\_protocol\_audit.md}, \texttt{docs/audits/checkpoint\_selection\_audit.md}, \texttt{docs/audits/identity\_parser\_audit.md}, \texttt{docs/audits/gallery\_probe\_audit.md}, \texttt{docs/audits/metric\_threshold\_audit.md}, \texttt{docs/audits/training\_config\_audit.md}, \texttt{docs/audits/tongji\_session\_quality.md}, and \texttt{docs/audits/paper\_reference\_audit.md}. Superseded exploratory summaries are archived under \texttt{docs/legacy\_results/}. Raw segmented data, experiment directories, checkpoint tensors, score tensors, and exported submission zips are not committed; the repository tracks configs, split JSON files, metadata, scripts, audits, and saved result summaries.
 
+
+
 \input{sections/training_config_table}
+
 
 Table~\ref{tab:training_config_summary} summarizes the method-level training configuration used for the final strict Tongji component ablation. This table is generated from the YAML configs listed in \texttt{docs/results/strict\_tongji\_ablation\_runs.csv}; the corresponding audit is stored in \texttt{docs/audits/training\_config\_audit.md}. The summary makes the intended component isolation explicit: B5 uses BNNeck with CE and post-BN evaluation, whereas B6 uses BNNeck with ArcFace and post-BN evaluation.

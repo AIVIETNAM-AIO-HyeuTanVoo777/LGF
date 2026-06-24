@@ -58,6 +58,15 @@ def fmt_values(values: List[Any]) -> str:
     return "; ".join(str(v) for v in values)
 
 
+def display_eval_embedding(value: Any) -> str:
+    text = str(value)
+    mapping = {
+        "pre_bn_or_default": "pre-BN/default",
+        "post_bn": "post-BN",
+    }
+    return mapping.get(text, text)
+
+
 def infer_loss(cfg: Dict[str, Any]) -> str:
     loss_name = str(get_nested(cfg, "loss.name", "") or "")
     training_loss = str(get_nested(cfg, "training.loss_type", "") or "")
@@ -100,7 +109,7 @@ def method_row(method: str, sub: pd.DataFrame) -> Dict[str, Any]:
         "embedding_dim": fmt_values([get_nested(c, "model.embedding_dim") for c in cfgs]),
         "pretrained": fmt_values([get_nested(c, "model.pretrained") for c in cfgs]),
         "eval_embedding": fmt_values([
-            get_nested(c, "eval.embedding", get_nested(c, "model.eval_embedding", "pre_bn_or_default"))
+            display_eval_embedding(get_nested(c, "eval.embedding", get_nested(c, "model.eval_embedding", "pre_bn_or_default")))
             for c in cfgs
         ]),
         "loss": fmt_values([infer_loss(c) for c in cfgs]),

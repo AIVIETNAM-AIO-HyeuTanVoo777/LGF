@@ -12,12 +12,12 @@ This audit summarizes the training/evaluation configuration fields used by the f
 
 | Method | Model | Loss | Eval embedding | SupCon lambda | ArcFace | Epochs | LR | WD | Sampler | AMP | Verdict |
 |---|---|---|---|---:|---|---:|---:|---:|---|---|---|
-| B0 ResNet18 + CE | ResNet18Baseline | ce | pre_bn_or_default | 0.0 | - | 60 | 0.0001 | 0.0001 | 8x2 | True | PASS |
-| B1 ResNet18 + CE + SupCon | ResNet18Baseline | ce+supcon | pre_bn_or_default | 0.1 | - | 60 | 0.0001 | 0.0001 | 8x2 | True | PASS |
-| B4 ResNet18 + ArcFace | ResNet18Baseline | arcface | pre_bn_or_default | 0.0 | s=30.0, m=0.5 | 60 | 0.0001 | 0.0001 | 8x2 | True | PASS |
-| B5 ResNet18 + BNNeck + CE | ResNet18BNNeck | ce | post_bn | 0.0 | - | 60 | 0.0001 | 0.0001 | 8x2 | True | PASS |
-| B6 ResNet18 + BNNeck + ArcFace | ResNet18BNNeck | arcface | post_bn | 0.0 | s=30.0, m=0.5 | 60 | 0.0001 | 0.0001 | 8x2 | True | PASS |
-| B7 ResNet18 + BNNeck + ArcFace + light SupCon | ResNet18BNNeck | arcface | post_bn | 0.02 | s=30.0, m=0.5 | 60 | 0.0001 | 0.0001 | 8x2 | True | PASS |
+| B0 ResNet18 + CE | ResNet18Baseline | ce | pre-BN/default | 0.0 | - | 60 | 0.0001 | 0.0001 | 8x2 | True | PASS |
+| B1 ResNet18 + CE + SupCon | ResNet18Baseline | ce+supcon | pre-BN/default | 0.1 | - | 60 | 0.0001 | 0.0001 | 8x2 | True | PASS |
+| B4 ResNet18 + ArcFace | ResNet18Baseline | arcface | pre-BN/default | 0.0 | s=30.0, m=0.5 | 60 | 0.0001 | 0.0001 | 8x2 | True | PASS |
+| B5 ResNet18 + BNNeck + CE | ResNet18BNNeck | ce | post-BN | 0.0 | - | 60 | 0.0001 | 0.0001 | 8x2 | True | PASS |
+| B6 ResNet18 + BNNeck + ArcFace | ResNet18BNNeck | arcface | post-BN | 0.0 | s=30.0, m=0.5 | 60 | 0.0001 | 0.0001 | 8x2 | True | PASS |
+| B7 ResNet18 + BNNeck + ArcFace + light SupCon | ResNet18BNNeck | arcface | post-BN | 0.02 | s=30.0, m=0.5 | 60 | 0.0001 | 0.0001 | 8x2 | True | PASS |
 
 ## Reviewer-facing notes
 

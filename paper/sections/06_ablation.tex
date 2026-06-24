@@ -7,21 +7,33 @@ This section separates two kinds of ablation evidence. The primary ablation evid
 
 The strict ablation compares six ResNet18 variants under the same Tongji development/test palm-class-disjoint protocol, two session directions, and three random seeds. B0 uses cross entropy only. B1 adds supervised contrastive learning. B4 uses ArcFace without BNNeck. B5 uses BNNeck with cross entropy only. B6 combines BNNeck and ArcFace. B7 adds a light supervised contrastive term to BNNeck + ArcFace.
 
-\input{sections/strict_tongji_ablation_table.tex}
+
+
+\input{sections/strict_tongji_ablation_table}
+
 
 Table~\ref{tab:strict_tongji_ablation} shows that the strongest strict-protocol ablation row is B5, not B6 or B7. B5 reaches the best bidirectional Rank-1 average and the best strict TAR@FAR=$10^{-3}$ average among the tested variants. Compared with B0, B5 improves Rank-1 by 0.85 percentage points. Compared with B1, B5 improves Rank-1 by 0.43 percentage points and TAR@FAR=$10^{-3}$ by 0.88 percentage points. These gains are modest and not uniformly favorable across all verification metrics: B5 has a slightly worse mean EER than B1. Thus, the evidence supports B5 as the strongest tested component variant on the selected strict Tongji Rank-1 and low-FAR TAR criteria, not as a statistically established improvement on every metric.
 
 The ArcFace-based variants are less consistent. B4 does not improve over B0 overall, B6 trails B1 in Rank-1 and low-FAR verification, and B7 has high directional variance. In particular, B7 improves the S2$\rightarrow$S1 direction relative to B6 but is unstable in S1$\rightarrow$S2. This supports a component-level interpretation: BNNeck can be beneficial, but ArcFace and light SupCon do not provide a reliable improvement under the strict Tongji palm-class-disjoint protocol.
 
+
+
 \input{sections/strict_tongji_ablation_by_direction_table}
+
 
 Table~\ref{tab:strict_tongji_ablation_by_direction} separates the strict ablation by session direction for B1, B5, and B6. The by-direction view clarifies the component behavior hidden by the bidirectional average. B5 is strongest in S1$\rightarrow$S2, improving over B1 in Rank-1 (94.17 versus 91.69) and TAR@FAR=$10^{-3}$ (75.02 versus 67.86), while keeping EER similar. In S2$\rightarrow$S1, however, B5 trails B1 on Rank-1 (93.47 versus 95.08), EER (5.01 versus 4.01), and TAR@FAR=$10^{-3}$ (70.27 versus 75.67). B6 is weaker than B1 in both directions on Rank-1 and EER. Thus, the component evidence supports direction-sensitive behavior: BNNeck with cross-entropy is helpful in one session direction, but neither BNNeck nor ArcFace yields a direction-invariant improvement.
 
+
+
 \input{sections/strict_tongji_score_figures}
+
 
 Figures~\ref{fig:strict_tongji_roc_by_direction}--\ref{fig:strict_tongji_score_hist_by_direction} provide a score-level view of this behavior. In S1$\rightarrow$S2, the seed-averaged ROC grid gives B5 a higher TPR at FPR=$10^{-3}$ than B1 and B6 (74.92 versus 67.76 and 68.97). In S2$\rightarrow$S1, B1 has the strongest low-FAR behavior, with TPR at FPR=$10^{-3}$ of 75.57 compared with 70.19 for B5 and 70.24 for B6. The DET and score-distribution views are therefore consistent with the table-level conclusion: the useful effect of BNNeck with cross entropy is direction-dependent, while BNNeck+ArcFace does not produce a robust low-FAR improvement.
 
+
+
 \input{sections/paired_statistics_component_ablation_table}
+
 
 Table~\ref{tab:paired_statistics_component_ablation} reports paired uncertainty for the key component comparisons over the same six seed-direction units. For B5 minus B1, the paired mean deltas are +0.43 percentage points for Rank-1 and +0.88 percentage points for TAR@FAR=$10^{-3}$, while EER is +0.47 percentage points, which is worse for B5. For B5 minus B6, the paired means favor B5 on Rank-1 (+1.61 percentage points), EER (-0.54 percentage points), and TAR@FAR=$10^{-3}$ (+2.95 percentage points). The bootstrap intervals remain wide because there are only six paired units, so these results should be treated as component-level paired evidence rather than formal superiority claims.
 
