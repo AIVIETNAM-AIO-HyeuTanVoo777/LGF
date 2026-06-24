@@ -54,24 +54,23 @@ The diagnostics refine the interpretation of the ablation results. B5 is the bes
 
 \subsection{IITD Secondary Palm-Class-Disjoint Validation}
 
-\begin{table}[t]
+The IITD experiment is retained only as secondary within-session validation, not as cross-session evidence. After the gallery/probe construction audit revealed that the previous IITD held-out split did not guarantee matching gallery and probe palm-class sets, the IITD split generator was corrected and B1/B6 were rerun over seeds 42, 2026, and 2705. In the corrected split, every held-out IITD palm class appears in both gallery and probe, with zero image overlap.
+
+\begin{table*}[t]
 \centering
-\caption{IITD palm-class-disjoint within-session secondary validation. Values are mean $\pm$ standard deviation over three seeds. Lower EER is better; higher values are better for all other metrics.}
+\caption{IITD palm-class-disjoint within-session rerun after gallery/probe split correction. Values are mean $\pm$ standard deviation over three seeds. Lower EER is better; higher values are better for all other metrics.}
 \label{tab:iitd_subject_disjoint}
-\resizebox{\columnwidth}{!}{%
 \begin{tabular}{lcccccc}
 \toprule
 Method & Rank-1 & Rank-5 & Macro-F1 & EER & TAR@FAR=$10^{-2}$ & TAR@FAR=$10^{-3}$ \\
 \midrule
-B1 ResNet18 + CE + SupCon & 89.85 $\pm$ 2.67 & 92.04 $\pm$ 1.28 & 90.32 $\pm$ 3.44 & 2.93 $\pm$ 1.32 & 94.97 $\pm$ 3.19 & 86.05 $\pm$ 8.11 \\
-B6 ResNet18 + BNNeck + ArcFace & 89.99 $\pm$ 0.78 & 92.43 $\pm$ 1.24 & 90.05 $\pm$ 1.70 & 2.88 $\pm$ 1.52 & 95.31 $\pm$ 2.53 & 84.23 $\pm$ 4.98 \\
+B1 ResNet18 + CE + SupCon & 97.83 $\pm$ 0.72 & 98.91 $\pm$ 0.36 & 97.70 $\pm$ 0.81 & 3.05 $\pm$ 1.18 & 94.82 $\pm$ 2.86 & 86.17 $\pm$ 7.07 \\
+B6 ResNet18 + BNNeck + ArcFace & 97.95 $\pm$ 1.71 & 98.91 $\pm$ 0.63 & 97.86 $\pm$ 1.80 & 3.24 $\pm$ 1.34 & 94.39 $\pm$ 2.51 & 85.45 $\pm$ 3.85 \\
 \bottomrule
-\end{tabular}%
-}
-\end{table}
+\end{tabular}
+\end{table*}
 
-
-Table~\ref{tab:iitd_subject_disjoint} reports the IITD palm-class-disjoint within-session secondary validation. B6 is best interpreted as near-tied with B1 rather than clearly superior. Its mean Rank-1 is 89.99 $\pm$ 0.78 compared with 89.85 $\pm$ 2.67 for B1, corresponding to a small +0.14 percentage-point delta. B6 also has small positive deltas for Rank-5 (+0.39 pp), EER (-0.05 pp; lower is better), and TAR@FAR=$10^{-2}$ (+0.34 pp), but trails B1 in Macro-F1 (-0.26 pp) and TAR@FAR=$10^{-3}$ (-1.82 pp).
+Table~\ref{tab:iitd_subject_disjoint} reports the corrected IITD rerun. B6 is again best interpreted as near-tied with B1 rather than clearly superior. Its mean Rank-1 is 97.95 $\pm$ 1.71 compared with 97.83 $\pm$ 0.72 for B1, corresponding to a small +0.12 percentage-point delta. However, B6 has slightly worse mean EER, 3.24 $\pm$ 1.34 versus 3.05 $\pm$ 1.18 for B1, and lower mean TAR@FAR=$10^{-2}$ and TAR@FAR=$10^{-3}$ by -0.44 and -0.72 percentage points, respectively. The corrected IITD result therefore supports the same conservative interpretation as the primary Tongji evidence: BNNeck + ArcFace is competitive, but not consistently superior.
 
 \subsection{Result Summary}
 

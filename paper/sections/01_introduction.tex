@@ -6,13 +6,13 @@ The current strong baseline is B1, a ResNet18 model trained with cross entropy a
 
 The central result is protocol-sensitive. BNNeck + ArcFace appears favorable in the original seen-identity Tongji diagnostic setting, but it does not improve over CE + SupCon overall under the stricter development/test palm-class-disjoint Tongji protocol. Under this stricter protocol, B6 trails B1 by 1.18 percentage points in bidirectional three-seed Rank-1 and has an EER that is 1.01 percentage points worse.
 
-This paper therefore reframes the method evidence as protocol-sensitive. The test protocol matters: results that look favorable in a seen-identity setting do not necessarily transfer to held-out palm classes at cross-session operating points. The IITD palm-class-disjoint within-session protocol is included as secondary validation; it shows that B6 is competitive with B1 but not consistently superior.
+This paper therefore reframes the method evidence as protocol-sensitive. The test protocol matters: results that look favorable in a seen-identity setting do not necessarily transfer to held-out palm classes at cross-session operating points. After correcting the IITD gallery/probe split and rerunning B1/B6, the IITD palm-class-disjoint within-session protocol remains secondary validation; it shows that B6 is competitive with B1 but not consistently superior.
 
 The contributions of this paper are:
 \begin{itemize}
     \item A palm-class-disjoint cross-session evaluation of B1 CE + SupCon and B6 BNNeck + ArcFace on Tongji.
     \item A protocol-sensitivity analysis showing that BNNeck + ArcFace does not consistently improve under held-out palm-class evaluation.
     \item A strict component ablation showing that BNNeck + CE is the best-performing tested variant on the main strict Tongji metrics, while ArcFace-based variants are not consistently beneficial.
-    \item An IITD palm-class-disjoint within-session secondary validation showing a near-tie between B1 and B6 rather than a clear B6 improvement.
+    \item A corrected IITD palm-class-disjoint within-session secondary validation showing a near-tie between B1 and B6 rather than a clear B6 improvement.
     \item Reproducible splits, configs, and result summaries for the scoped evaluation.
 \end{itemize}

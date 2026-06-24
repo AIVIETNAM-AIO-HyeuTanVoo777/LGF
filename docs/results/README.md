@@ -36,3 +36,13 @@ The current paper uses a palm-class-disjoint Tongji cross-session protocol audit
 ## Legacy files
 
 Older exploratory summaries and superseded claim drafts have been moved to `docs/legacy_results/`. They are retained for project history only and are not part of the final paper evidence package.
+
+## IITD rerun evidence
+
+The corrected IITD palm-class-disjoint within-session rerun is secondary validation only and is not cross-session evidence.
+
+- `docs/results/iitd_subject_disjoint_rerun_results.md`
+- `docs/results/iitd_subject_disjoint_rerun_runs.csv`
+- `docs/results/iitd_subject_disjoint_rerun_summary.csv`
+- `docs/results/iitd_subject_disjoint_rerun_delta_b6_minus_b1.csv`
+- `docs/results/iitd_subject_disjoint_rerun_table.tex`
