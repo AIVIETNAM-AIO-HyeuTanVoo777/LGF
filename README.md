@@ -74,4 +74,50 @@ python experiments/reproduce_table5_feature_comparison.py --config configs/casia
 ```bash
 python experiments/reproduce_table6_kernel_comparison.py --config configs/casia.yaml
 ```
-"# LGF" 
+
+---
+
+## 6. Rank-B Revision Study Reproduction
+
+For the Rank-B protocol-sensitivity revision, please refer to the comprehensive [reproducibility_manifest.md](docs/reproducibility_manifest.md) in the `docs/` folder.
+
+### Quick Start:
+
+1. **Environment Setup**:
+   Ensure python package dependencies are met:
+   ```bash
+   pip install -r requirements.txt
+   # Environment snapshot: docs/agent_logs/pip_freeze.txt
+   ```
+
+2. **Dataset & Splits Audit**:
+   Verify that all splits are strictly subject-disjoint with no overlap:
+   ```bash
+   python scripts/audit_splits.py
+   ```
+
+3. **Running Evaluations & Smoke Tests**:
+   Run the smoke test to verify correct loading of pretrained models and metric calculations:
+   - On Windows (PowerShell):
+     ```powershell
+     powershell -ExecutionPolicy Bypass -File scripts/run_rankb_smoke_tests.ps1
+     ```
+   - On Linux/Bash:
+     ```bash
+     bash scripts/run_rankb_smoke_tests.sh
+     ```
+
+4. **Results Collection & Table Regeneration**:
+   To aggregate all metrics and regenerate the LaTeX tables for the paper:
+   ```bash
+   python scripts/collect_results.py --manifest docs/results/rankb_run_manifest.csv --out-dir docs/results
+   python scripts/compute_paired_statistics.py --input docs/results/main_tongji_results.csv --out docs/results/paired_deltas.csv
+   python scripts/make_result_tables.py --results-dir docs/results --out-dir paper/sections
+   ```
+
+5. **Paper Compilation**:
+   To compile the updated paper PDF:
+   ```bash
+   cd paper && latexmk -pdf -interaction=nonstopmode main.tex
+   ```
+
