@@ -1,6 +1,6 @@
 # Split Integrity Summary
 
-This document provides verification results for all subject-disjoint split files, checking for duplicate paths, image existence, partition size, and identity leakage (overlap between development and test subsets).
+This document provides verification results for all manifest-scoped split files, checking for duplicate paths, image existence, partition size, and identity leakage (overlap between development and test subsets).
 
 ## Split File: `iitd_subject_disjoint_within_seed2026.json`
 
@@ -18,7 +18,7 @@ This document provides verification results for all subject-disjoint split files
 
 - [x] **Duplicate Paths**: None found (passed).
 - [x] **File Existence**: All referenced images exist on disk (passed).
-- [x] **Subject Leakage**: 0 overlapping subjects (passed subject-disjoint constraint).
+- [x] **Manifest subject-field overlap**: 0 overlapping manifest subject fields (manifest-level check; independent person-disjointness is not asserted).
 - [x] **Palm Leakage**: 0 overlapping palms (passed).
 - [x] **Class Leakage**: 0 overlapping classes (passed).
 
@@ -40,7 +40,7 @@ This document provides verification results for all subject-disjoint split files
 
 - [x] **Duplicate Paths**: None found (passed).
 - [x] **File Existence**: All referenced images exist on disk (passed).
-- [x] **Subject Leakage**: 0 overlapping subjects (passed subject-disjoint constraint).
+- [x] **Manifest subject-field overlap**: 0 overlapping manifest subject fields (manifest-level check; independent person-disjointness is not asserted).
 - [x] **Palm Leakage**: 0 overlapping palms (passed).
 - [x] **Class Leakage**: 0 overlapping classes (passed).
 
@@ -62,7 +62,7 @@ This document provides verification results for all subject-disjoint split files
 
 - [x] **Duplicate Paths**: None found (passed).
 - [x] **File Existence**: All referenced images exist on disk (passed).
-- [x] **Subject Leakage**: 0 overlapping subjects (passed subject-disjoint constraint).
+- [x] **Manifest subject-field overlap**: 0 overlapping manifest subject fields (manifest-level check; independent person-disjointness is not asserted).
 - [x] **Palm Leakage**: 0 overlapping palms (passed).
 - [x] **Class Leakage**: 0 overlapping classes (passed).
 
@@ -84,7 +84,7 @@ This document provides verification results for all subject-disjoint split files
 
 - [x] **Duplicate Paths**: None found (passed).
 - [x] **File Existence**: All referenced images exist on disk (passed).
-- [x] **Subject Leakage**: 0 overlapping subjects (passed subject-disjoint constraint).
+- [x] **Manifest subject-field overlap**: 0 overlapping manifest subject fields (manifest-level check; independent person-disjointness is not asserted).
 - [x] **Palm Leakage**: 0 overlapping palms (passed).
 - [x] **Class Leakage**: 0 overlapping classes (passed).
 
@@ -106,7 +106,7 @@ This document provides verification results for all subject-disjoint split files
 
 - [x] **Duplicate Paths**: None found (passed).
 - [x] **File Existence**: All referenced images exist on disk (passed).
-- [x] **Subject Leakage**: 0 overlapping subjects (passed subject-disjoint constraint).
+- [x] **Manifest subject-field overlap**: 0 overlapping manifest subject fields (manifest-level check; independent person-disjointness is not asserted).
 - [x] **Palm Leakage**: 0 overlapping palms (passed).
 - [x] **Class Leakage**: 0 overlapping classes (passed).
 
@@ -128,7 +128,7 @@ This document provides verification results for all subject-disjoint split files
 
 - [x] **Duplicate Paths**: None found (passed).
 - [x] **File Existence**: All referenced images exist on disk (passed).
-- [x] **Subject Leakage**: 0 overlapping subjects (passed subject-disjoint constraint).
+- [x] **Manifest subject-field overlap**: 0 overlapping manifest subject fields (manifest-level check; independent person-disjointness is not asserted).
 - [x] **Palm Leakage**: 0 overlapping palms (passed).
 - [x] **Class Leakage**: 0 overlapping classes (passed).
 
@@ -150,7 +150,7 @@ This document provides verification results for all subject-disjoint split files
 
 - [x] **Duplicate Paths**: None found (passed).
 - [x] **File Existence**: All referenced images exist on disk (passed).
-- [x] **Subject Leakage**: 0 overlapping subjects (passed subject-disjoint constraint).
+- [x] **Manifest subject-field overlap**: 0 overlapping manifest subject fields (manifest-level check; independent person-disjointness is not asserted).
 - [x] **Palm Leakage**: 0 overlapping palms (passed).
 - [x] **Class Leakage**: 0 overlapping classes (passed).
 
@@ -172,7 +172,7 @@ This document provides verification results for all subject-disjoint split files
 
 - [x] **Duplicate Paths**: None found (passed).
 - [x] **File Existence**: All referenced images exist on disk (passed).
-- [x] **Subject Leakage**: 0 overlapping subjects (passed subject-disjoint constraint).
+- [x] **Manifest subject-field overlap**: 0 overlapping manifest subject fields (manifest-level check; independent person-disjointness is not asserted).
 - [x] **Palm Leakage**: 0 overlapping palms (passed).
 - [x] **Class Leakage**: 0 overlapping classes (passed).
 
@@ -194,7 +194,7 @@ This document provides verification results for all subject-disjoint split files
 
 - [x] **Duplicate Paths**: None found (passed).
 - [x] **File Existence**: All referenced images exist on disk (passed).
-- [x] **Subject Leakage**: 0 overlapping subjects (passed subject-disjoint constraint).
+- [x] **Manifest subject-field overlap**: 0 overlapping manifest subject fields (manifest-level check; independent person-disjointness is not asserted).
 - [x] **Palm Leakage**: 0 overlapping palms (passed).
 - [x] **Class Leakage**: 0 overlapping classes (passed).
 

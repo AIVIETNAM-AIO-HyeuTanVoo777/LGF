@@ -1,3 +1,5 @@
+Terminology note: for the current submission, claims are scoped as palm-class-disjoint with manifest-level subject-field audit, not independently verified person-disjointness.
+
 # Related Work Citation Plan
 
 This document outlines the citation requirements, verified references, and BibTeX structures for the protocol-sensitive palmprint recognition paper. To prevent citation fabrication, all entries here correspond to historically verified, real-world publications.
@@ -124,8 +126,8 @@ This document outlines the citation requirements, verified references, and BibTe
 
 ## 4. Biometric Evaluation Protocols & Session Shift
 
-### 4.1 Cross-Session & Subject-Disjoint Generalization
-* **Description**: Biometric evaluation protocols dictate the generalization expectations of the trained model. Stricter protocols separate training identities entirely from test sets to measure generalization to unseen subjects, whereas cross-session setups evaluate resilience against acquisition interval shifts.
+### 4.1 Cross-Session and Palm-Class-Disjoint Generalization
+* **Description**: Biometric evaluation protocols dictate the generalization expectations of the trained model. Stricter protocols separate training identities entirely from test sets to measure generalization to held-out identities or held-out palm classes, whereas cross-session setups evaluate resilience against acquisition interval shifts.
 * **Key References**:
   * ISO/IEC standards outlining biometric testing methodology:
     ```bibtex

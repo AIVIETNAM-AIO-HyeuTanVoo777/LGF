@@ -18,7 +18,11 @@
 \maketitle
 
 \begin{abstract}
-Evaluation protocols can reverse conclusions about metric-learning components in contactless palmprint recognition. This paper presents a protocol-sensitive component evaluation of BNNeck and ArcFace under cross-session palmprint recognition, focusing on whether gains observed in a seen-identity diagnostic setting persist when the evaluation is made palm-class-disjoint. Using Tongji as the primary benchmark, we evaluate bidirectional S1$\rightarrow$S2 and S2$\rightarrow$S1 matching with controlled ResNet18 variants: cross-entropy, supervised contrastive learning, ArcFace, BNNeck, and their combinations. The strict Tongji results do not support a universal BNNeck+ArcFace improvement: B6 (BNNeck+ArcFace) trails B1 (cross-entropy+SupCon) by 1.18 percentage points in Rank-1 and has 1.01 percentage points higher EER under paired seed-direction analysis. Instead, B5 (BNNeck+cross-entropy) has the highest observed mean Rank-1 and TAR@FAR=$10^{-3}$ among the tested strict-protocol variants, while IITD within-session validation shows only a near tie between B1 and B6. The main implication is that seen-identity diagnostic gains are insufficient evidence for held-out-palm cross-session deployment. The paper therefore contributes an audited empirical evaluation rather than a new architecture or a state-of-the-art claim.
+Evaluation protocols can reverse conclusions about metric-learning components in contactless palmprint recognition.
+Seen-identity diagnostics are therefore insufficient evidence for cross-session held-out palm-class deployment.
+Using Tongji as the primary benchmark, we evaluate bidirectional S1$\rightarrow$S2 and S2$\rightarrow$S1 cross-session matching over three seeds with a controlled ResNet18 matrix spanning cross-entropy, supervised contrastive learning, BNNeck, ArcFace, and their combinations under a palm-class-disjoint protocol.
+Under this stricter protocol, B6 (BNNeck+ArcFace) does not improve B1 (cross-entropy+SupCon) overall, and the results show directional asymmetry rather than uniform component gains.
+The paper contributes an audited, reproducible protocol-sensitive evaluation rather than a new architecture or state-of-the-art claim; B5 (BNNeck+cross-entropy) is reported only as the highest observed mean on selected strict Tongji metrics, not as statistically established superiority.
 \end{abstract}
 
 

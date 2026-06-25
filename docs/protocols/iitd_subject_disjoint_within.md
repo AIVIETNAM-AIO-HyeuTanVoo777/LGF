@@ -1,16 +1,16 @@
-# IITD Subject-Disjoint Within-Dataset Protocol
+# IITD Palm-Class-Disjoint Within-Dataset Protocol (Manifest-Scoped)
 
-This document defines the subject-disjoint within-dataset evaluation protocol for the IITD dataset.
+This document defines the palm-class-disjoint within-dataset evaluation protocol for the IITD dataset.
 
 ## 1. Protocol Clarification
 Unlike the Tongji dataset, the IITD dataset does not provide distinct multi-session metadata or timestamps indicating separate sessions. Therefore:
 - **Terminology**: We **do not** call the IITD evaluation "cross-session".
-- **Nature**: It is strictly a **subject-disjoint within-dataset** protocol.
+- **Nature**: It is strictly a **palm-class-disjoint within-dataset** protocol.
 - **Role**: It acts as a secondary validation protocol to test the generalization of protocol sensitivity.
 
 ---
 
-## 2. Subject-Disjoint Partitions
+## 2. Palm-Class-Disjoint Partitions
 The identities in the dataset are divided into disjoint partitions:
 1. **Development Set (Train & Validation)**:
    - Contains a subset of subjects (e.g., 140 subjects out of 230).
@@ -38,3 +38,7 @@ Since there are no sessions, gallery and probe sets are constructed by splitting
 - **Gallery**: A set of images per palm (e.g., first few images) from the evaluation subjects.
 - **Probe**: The remaining images of the evaluation subjects.
 - The precise gallery/probe split is controlled by the split configuration files.
+
+## Manifest-scope caveat
+
+Because the repository audit is based on manifest fields rather than independent person-level identity verification, this protocol is scoped as palm-class-disjoint and manifest-level subject-field-disjoint, not independently verified person-disjoint.

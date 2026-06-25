@@ -1,16 +1,18 @@
+Terminology note: current submission wording is palm-class-disjoint with manifest-level subject-field audit; independently verified person-disjointness is not asserted.
+
 # Rank-B Restart Plan: Protocol-Sensitive Palmprint Evaluation
 
 This document outlines the strategic pivot and implementation plan to restart the project from scratch, positioning it for a Rank-B conference publication.
 
 ## 1. New Core Thesis
 
-The project is repositioned from a **"method paper"** (claiming universal improvement of a specific model configuration, e.g., BNNeck + ArcFace) to a **"protocol-sensitive benchmark/evaluation paper"** for subject-disjoint cross-session palmprint recognition.
+The project is repositioned from a **"method paper"** (claiming universal improvement of a specific model configuration, e.g., BNNeck + ArcFace) to a **"protocol-sensitive benchmark/evaluation paper"** for palm-class-disjoint cross-session palmprint recognition.
 
 ### Key Conceptual Shifts:
 - **No SOTA Claims**: We do not claim state-of-the-art performance or universal superiority of any investigated variant.
-- **Protocol Sensitivity**: We show that standard deep biometric pipeline components (like BNNeck + ArcFace, designated as candidate B6) perform well on standard "seen-identity" protocols but fail to show consistent or universal improvement under stricter, more realistic "subject-disjoint" protocols.
-- **Primary Evidence**: The **Tongji** dataset is our primary evidence because it supports a true cross-session protocol (S1 -> S2 and S2 -> S1) under subject-disjoint splits.
-- **Secondary Validation**: The **IITD** dataset is used as secondary validation for subject-disjoint within-dataset evaluation (no multi-session metadata is available).
+- **Protocol Sensitivity**: We show that standard deep biometric pipeline components (like BNNeck + ArcFace, designated as candidate B6) perform well on standard "seen-identity" protocols but fail to show consistent or universal improvement under stricter, more realistic "palm-class-disjoint" protocols.
+- **Primary Evidence**: The **Tongji** dataset is our primary evidence because it supports a true cross-session protocol (S1 -> S2 and S2 -> S1) under palm-class-disjoint splits.
+- **Secondary Validation**: The **IITD** dataset is used as secondary validation for palm-class-disjoint within-dataset evaluation (no multi-session metadata is available).
 - **Training from Scratch**: All models in the final matrix will be retrained from scratch under the documented protocols to ensure full reproducibility.
 
 ---
@@ -18,7 +20,7 @@ The project is repositioned from a **"method paper"** (claiming universal improv
 ## 2. Dataset Roles & Protocols
 
 ### Primary: Tongji Dataset
-- **Protocol**: Subject-disjoint cross-session.
+- **Protocol**: Palm-class-disjoint cross-session.
 - **Directions**: $S1 \rightarrow S2$ and $S2 \rightarrow S1$.
 - **Setup**:
   - Development set (train/validation) is disjoint in identities from the test set (gallery/probe).
@@ -26,7 +28,7 @@ The project is repositioned from a **"method paper"** (claiming universal improv
   - Zero identity leakage between development and test.
 
 ### Secondary: IITD Dataset
-- **Protocol**: Subject-disjoint within-dataset validation.
+- **Protocol**: Palm-class-disjoint within-dataset validation.
 - **Setup**:
   - Identities split into disjoint development and evaluation partitions.
   - Seeds: 42, 2026, 2705.

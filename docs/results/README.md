@@ -31,7 +31,7 @@ The final paper also depends on audit artifacts stored outside `docs/results/`:
 
 ## Current claim boundary
 
-The current paper uses a palm-class-disjoint Tongji cross-session protocol audit, a checkpoint-selection audit, and an identity/parser audit. The paper does not claim universal superiority for BNNeck + ArcFace. The strict Tongji ablation shows that B5 is the strongest tested variant by Rank-1 and TAR@FAR=1e-3, while B1 has the strongest average genuine/impostor separation by d-prime.
+The current paper uses a palm-class-disjoint Tongji cross-session protocol audit, a checkpoint-selection audit, and an identity/parser audit. The paper does not claim universal superiority for BNNeck + ArcFace. The strict Tongji ablation shows that B5 has the highest observed mean among tested variants by Rank-1 and TAR@FAR=1e-3, while B1 has the highest observed average genuine/impostor separation by d-prime.
 
 ## Legacy files
 
