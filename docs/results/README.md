@@ -89,3 +89,9 @@ The final strict Tongji component-ablation configs are summarized for reviewer-f
 - `docs/audits/training_config_audit.md`
 - `docs/audits/training_config_audit.csv`
 - `paper/sections/training_config_table.tex`
+## ArcFace sensitivity evidence
+
+The current revision records fixed-recipe ArcFace component sensitivity evidence, not a margin hyperparameter sweep.
+
+- `docs/results/arcface_sensitivity_evidence.md`
+- `docs/plans/arcface_sensitivity_plan.md`
