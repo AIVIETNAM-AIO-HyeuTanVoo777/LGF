@@ -3,113 +3,46 @@
 
 \subsection{Tongji Palm-Class-Disjoint Cross-Session Results}
 
-Table~\ref{tab:tongji_palm_class_disjoint} reports the primary Tongji cross-session results under the development/test palm-class-disjoint protocol. Values are bidirectional three-seed means and standard deviations across S1$\rightarrow$S2 and S2$\rightarrow$S1 runs with seeds 42, 2026, and 2705.
+The primary cross-session palmprint evaluation is conducted under the development/test palm-class-disjoint protocol on the Tongji dataset. Table~\ref{tab:strict_tongji_ablation} reports the performance metrics for the complete ResNet18 model matrix (M0–M7). Values are bidirectional six seed-direction unit means and standard deviations, without pre-averaging.
 
-\begin{table*}[t]
-\centering
-\caption{Tongji cross-session palm-class-disjoint results. For each seed, S1$\rightarrow$S2 and S2$\rightarrow$S1 are averaged first; the table reports mean $\pm$ standard deviation over three seed-level bidirectional averages. Lower EER is better; higher values are better for all other metrics.}
-\label{tab:tongji_palm_class_disjoint}
-\resizebox{\textwidth}{!}{%
-\begin{tabular}{lcccccc}
-\toprule
-Method & Rank-1 & Rank-5 & Macro-F1 & EER & TAR@FAR=$10^{-2}$ & TAR@FAR=$10^{-3}$ \\
-\midrule
-B1 ResNet18 + CE + SupCon & 93.39 $\pm$ 2.11 & 96.96 $\pm$ 0.96 & 92.71 $\pm$ 2.36 & 4.25 $\pm$ 0.44 & 88.63 $\pm$ 2.35 & 71.77 $\pm$ 5.49 \\
-B6 ResNet18 + BNNeck + ArcFace & 92.21 $\pm$ 1.69 & 95.96 $\pm$ 0.99 & 91.41 $\pm$ 1.84 & 5.27 $\pm$ 0.49 & 86.24 $\pm$ 2.34 & 69.71 $\pm$ 4.64 \\
-\bottomrule
-\end{tabular}%
-}
-\end{table*}
+\input{sections/strict_tongji_ablation_table}
 
-Under this stricter protocol, B6 does not improve over B1 overall. Relative to B1, B6 changes Rank-1 by -1.18 percentage points, Rank-5 by -1.00 percentage point, Macro-F1 by -1.31 percentage points, EER by +1.01 percentage points (worse), TAR@FAR=$10^{-2}$ by -2.39 percentage points, and TAR@FAR=$10^{-3}$ by -2.06 percentage points. The result therefore does not support a general-improvement claim for BNNeck + ArcFace under held-out palm-class evaluation.
+The primary comparison of interest is between the baseline model M1 (CE + SupCon) and the angular-margin configuration M6 (BNNeck + ArcFace). Under the strict protocol, M6 does not yield a consistent improvement over M1. Specifically, M6 changes Rank-1 by $-1.18$ percentage points (PP), Rank-5 by $-1.00$ PP, Macro-F1 by $-1.30$ PP, EER by $+1.02$ PP (worse), TAR@FAR=$10^{-2}$ by $-2.39$ PP, and TAR@FAR=$10^{-3}$ by $-2.07$ PP. These findings demonstrate that transferring normalization and angular-margin heads from face recognition to contactless palmprint recognition does not guarantee performance gains under held-out palm-class cross-session protocols.
 
+To evaluate alternative angular-margin heads, configuration M3 (CosFace) is also evaluated. M3 achieves a mean Rank-1 of $92.63\% \pm 1.65\%$, which is very close to ArcFace (M2: $92.64\% \pm 1.09\%$) and also trails the M1 baseline ($93.39\% \pm 3.27\%$). These results further support the finding that angular-margin classifier heads do not consistently enhance held-out representation quality compared to standard contrastive feature learning (M1).
 
+\input{sections/paired_statistics_component_ablation_table}
 
-\input{sections/paired_statistics_b6_vs_b1_table}
+Table~\ref{tab:paired_statistics_component_ablation} reports paired difference statistics over the six matched seed-direction units. For the M6 $-$ M1 comparison, the mean paired delta is unfavorable to M6 for all reported metrics. The EER degradation is the most consistent paired effect, with a bootstrap interval above zero ($[+0.52, +1.52]$ PP) and an exact sign-flip value of $p = 0.03125$. For Rank-1 and TAR metrics, the bootstrap intervals cross zero, so these results should be interpreted as directional paired evidence rather than as strong formal significance claims.
 
+\subsection{Directional and Ablation Analysis}
 
-Table~\ref{tab:paired_statistics_b6_vs_b1} reports paired uncertainty estimates over the six matched seed-direction units. The mean paired deltas are unfavorable to B6 for all reported metrics. The EER degradation is the most consistent paired effect, with a bootstrap interval above zero and an exact sign-flip value of $p=0.0312$. For Rank-1, Rank-5, Macro-F1, and TAR metrics, the bootstrap intervals cross zero, so these results should be interpreted as directional paired evidence rather than as strong formal significance claims.
+\input{sections/strict_tongji_ablation_by_direction_table}
 
-\begin{table}[t]
-\centering
-\caption{Directional mean deltas for B6 relative to B1 on Tongji palm-class-disjoint cross-session evaluation. Values are B6 minus B1 in percentage points. Positive Rank/TAR deltas favor B6, while positive EER deltas indicate worse performance for B6.}
-\label{tab:tongji_directional_delta}
-\footnotesize
-\setlength{\tabcolsep}{4pt}
-\begin{tabular}{lccc}
-\toprule
-Direction & $\Delta$Rank-1 & $\Delta$EER & $\Delta$TAR@FAR=$10^{-3}$ \\
-\midrule
-S1$\rightarrow$S2 & -0.14 & +0.85 & +1.20 \\
-S2$\rightarrow$S1 & -2.22 & +1.18 & -5.33 \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-Table~\ref{tab:tongji_directional_delta} shows that the average degradation is direction-dependent. In S1$\rightarrow$S2, B6 is close to B1 in Rank-1 (-0.14 pp) and has a limited strict low-FAR gain (+1.20 pp in TAR@FAR=$10^{-3}$), but its EER is higher by +0.85 pp. In S2$\rightarrow$S1, B6 trails B1 more consistently, with -2.22 pp in Rank-1, +1.18 pp in EER, and -5.33 pp in TAR@FAR=$10^{-3}$. The bidirectional average should therefore be read as hiding directional asymmetry rather than as a single uniform failure mode.
+Table~\ref{tab:strict_tongji_ablation_by_direction} shows that the average degradation is highly direction-dependent. In the S1$\rightarrow$S2 direction, M6 performs close to M1 in Rank-1 ($-0.14$ PP) and achieves a small strict low-FAR verification gain ($+1.21$ PP in TAR@FAR=$10^{-3}$), though its EER is still higher by $+0.85$ PP. Conversely, in the S2$\rightarrow$S1 direction, M6 trails M1 more consistently, with a Rank-1 delta of $-2.22$ PP, EER increase of $+1.18$ PP, and a substantial TAR@FAR=$10^{-3}$ drop of $-5.34$ PP. The bidirectional average should therefore be read as hiding directional asymmetry rather than reflecting a single uniform performance characteristic.
 
 \subsection{Score-Distribution Diagnostics}
 
-To inspect low-FAR behavior beyond aggregate TAR values, Table~\ref{tab:strict_tongji_score_diagnostics} summarizes genuine and impostor cosine-score distributions for the strict Tongji ablation runs. The impostor q0.999 statistic approximates the high-impostor-score tail, while d-prime summarizes average genuine/impostor separation.
-
-
+To inspect low-FAR behavior beyond aggregate TAR values, Table~\ref{tab:strict_tongji_score_diagnostics} summarizes genuine and impostor cosine-score distributions for the strict Tongji ablation runs. The impostor $q_{0.999}$ statistic approximates the high-impostor-score tail, while d-prime summarizes average genuine/impostor separation.
 
 \input{sections/strict_tongji_score_diagnostics_table}
 
-
-The diagnostics refine the interpretation of the ablation results. B5 has the highest observed mean among the tested variants by Rank-1 and TAR@FAR=$10^{-3}$, but B1 has the highest d-prime, indicating the largest average separation between genuine and impostor scores. B5 instead has the lowest impostor mean among the tested variants, which is consistent with its favorable low-FAR recognition result. B6 and B7 do not improve the score-distribution diagnostics over B1; their d-prime values are lower and their score-tail behavior does not support a reliable ArcFace-based advantage under the strict protocol.
-
+The diagnostics refine the interpretation of the ablation results. M4 (BNNeck + CE) has the highest observed mean among the tested variants by Rank-1 and TAR@FAR=$10^{-3}$, but M1 has the highest d-prime, indicating the largest average separation between genuine and impostor scores. M4 instead has the lowest impostor mean among the tested variants, which is consistent with its favorable low-FAR recognition result. M6 and M7 do not improve the score-distribution diagnostics over M1; their d-prime values are lower and their score-tail behavior does not support a reliable ArcFace-based advantage under the strict protocol.
 
 \input{sections/strict_tongji_failure_tail_table}
 
-Table~\ref{tab:strict_tongji_failure_tail} explains why the low-FAR ranking differs from the average-separation view. In S1$\rightarrow$S2, B5 reduces the high-impostor-score tail relative to B1 and gains +7.16 percentage points in TAR@FAR=$10^{-3}$ despite a lower genuine mean and lower d-prime. In S2$\rightarrow$S1, the same B5 comparison loses -5.40 percentage points at TAR@FAR=$10^{-3}$, showing that the BNNeck+CE benefit is direction-dependent rather than direction-invariant. B6 shows the same asymmetry more weakly: it has only a small S1$\rightarrow$S2 low-FAR gain and a clear S2$\rightarrow$S1 degradation relative to B1. These score-tail deltas support the interpretation that ArcFace and BNNeck affect the impostor tail and score calibration differently across session order, rather than producing a uniform improvement in embedding quality.
+Table~\ref{tab:strict_tongji_failure_tail} explains why the low-FAR ranking differs from the average-separation view. In S1$\rightarrow$S2, M4 reduces the high-impostor-score tail relative to M1 and gains $+7.16$ percentage points in TAR@FAR=$10^{-3}$ despite a lower genuine mean and lower d-prime. In S2$\rightarrow$S1, the same M4 comparison loses $-5.40$ percentage points at TAR@FAR=$10^{-3}$, showing that the BNNeck+CE benefit is direction-dependent rather than direction-invariant. M6 shows the same asymmetry more weakly: it has only a small S1$\rightarrow$S2 low-FAR gain and a clear S2$\rightarrow$S1 degradation relative to M1. These score-tail deltas support the interpretation that ArcFace and BNNeck affect the impostor tail and score calibration differently across session order, rather than producing a uniform improvement in embedding quality.
 
 \subsection{Palmprint-Specific Fixed-Gabor Reference Baseline}
+
 \input{sections/palmprint_specific_baseline_table}
 
-Table~\ref{tab:palmprint_specific_gabor_baseline} adds a palmprint-specific fixed Gabor texture reference under the same strict Tongji gallery/probe splits. This baseline is deterministic and uses no learned checkpoint, so it should be interpreted as a protocol-normalized classical texture reference rather than as a reimplementation of PalmNet, CompNet, or Competitive Code. The fixed Gabor baseline reaches a competitive Rank-1 mean of 92.99\%, but its verification behavior is substantially weaker, with 9.61\% EER and 34.38\% TAR@FAR=$10^{-3}$. This contrast supports the need to report both identification and low-FAR verification metrics: a palmprint-specific texture representation can remain competitive for nearest-gallery identification while failing to match learned embeddings in the low-FAR impostor-tail regime.
+Table~\ref{tab:palmprint_specific_baseline} adds a palmprint-specific fixed Gabor texture reference under the same strict Tongji gallery/probe splits. This baseline is deterministic and uses no learned checkpoint, so it should be interpreted as a protocol-normalized classical texture reference. The fixed Gabor baseline reaches a competitive Rank-1 mean of $92.99\% \pm 1.86\%$, but its verification behavior is substantially weaker, with $9.61\% \pm 0.90\%$ EER and $34.38\% \pm 5.17\%$ TAR@FAR=$10^{-3}$. This contrast highlights the need to report both identification and low-FAR verification metrics: a palmprint-specific texture representation can remain competitive for nearest-gallery identification while failing to match learned embeddings in the low-FAR impostor-tail regime.
 
 \subsection{IITD Secondary Palm-Class-Disjoint Validation}
 
-The IITD experiment is retained only as secondary within-session validation, not as cross-session evidence. After the gallery/probe construction audit revealed that the previous IITD held-out split did not guarantee matching gallery and probe palm-class sets, the IITD split generator was corrected and B1/B6 were rerun over seeds 42, 2026, and 2705. In the corrected split, every held-out IITD palm class appears in both gallery and probe, with zero image overlap.
+The IITD validation is a within-session evaluation. After the splits were audited and corrected to ensure gallery and probe palm-class alignment, the baseline models were rerun.
 
-\begin{table*}[t]
-\centering
-\caption{IITD palm-class-disjoint within-session rerun after gallery/probe split correction. Values are mean $\pm$ standard deviation over three seeds. Lower EER is better; higher values are better for all other metrics.}
-\label{tab:iitd_palm_class_disjoint}
-\resizebox{\textwidth}{!}{%
-\begin{tabular}{lcccccc}
-\toprule
-Method & Rank-1 & Rank-5 & Macro-F1 & EER & TAR@FAR=$10^{-2}$ & TAR@FAR=$10^{-3}$ \\
-\midrule
-B1 ResNet18 + CE + SupCon & 97.83 $\pm$ 0.72 & 98.91 $\pm$ 0.36 & 97.70 $\pm$ 0.81 & 3.05 $\pm$ 1.18 & 94.91 $\pm$ 2.93 & 86.17 $\pm$ 7.07 \\
-B6 ResNet18 + BNNeck + ArcFace & 97.95 $\pm$ 1.71 & 98.91 $\pm$ 0.63 & 97.86 $\pm$ 1.80 & 3.24 $\pm$ 1.34 & 94.43 $\pm$ 2.59 & 85.45 $\pm$ 3.85 \\
-\bottomrule
-\end{tabular}%
-}
-\end{table*}
+\input{sections/iitd_subject_disjoint_table}
 
-Table~\ref{tab:iitd_palm_class_disjoint} reports the corrected IITD rerun. B6 is again best interpreted as near-tied with B1 rather than clearly superior. Its mean Rank-1 is 97.95 $\pm$ 1.71 compared with 97.83 $\pm$ 0.72 for B1, corresponding to a small +0.12 percentage-point delta. However, B6 has slightly worse mean EER, 3.24 $\pm$ 1.34 versus 3.05 $\pm$ 1.18 for B1, and lower mean TAR@FAR=$10^{-2}$ and TAR@FAR=$10^{-3}$ by -0.48 and -0.72 percentage points, respectively. The corrected IITD result therefore supports the same conservative interpretation as the primary Tongji evidence: BNNeck + ArcFace is competitive, but not consistently superior.
-
-\subsection{Result Summary}
-
-Table~\ref{tab:protocol_inversion_summary} summarizes the resulting protocol-dependent component ranking.
-
-\begin{table}[t]
-\centering
-\caption{Summary of protocol-dependent component ranking. The table summarizes observed means only and is not a claim of universal superiority.}
-\label{tab:protocol_inversion_summary}
-\begin{tabular}{lll}
-\toprule
-Evaluation setting & Highest observed variant & Interpretation for B6 \\
-\midrule
-Seen-identity diagnostic & B6/B7 & Appears favorable, diagnostic only \\
-Strict Tongji cross-session & B5 & Weaker than B1 on Rank-1/EER \\
-IITD within-session secondary & B1/B6 near tie & No clear gain \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-The key result is not that one component is universally best, but that the apparent ranking of BNNeck and ArcFace depends on whether the evaluation admits seen identities or enforces held-out palm classes across sessions.
-
-The evidence changes the paper framing. BNNeck + ArcFace appears favorable in the original seen-identity Tongji diagnostic setting, but it does not improve over CE + SupCon overall under the stricter development/test palm-class-disjoint Tongji protocol. The supported contribution is therefore a protocol-sensitive evaluation of BNNeck and ArcFace embeddings for palmprint recognition, not a universal method-improvement claim.
+Table~\ref{tab:iitd_subject_disjoint} reports the corrected IITD results. M6 is best interpreted as near-tied with M1 rather than clearly superior. Its mean Rank-1 is $97.95\% \pm 1.71\%$ compared with $97.83\% \pm 0.72\%$ for M1, corresponding to a minor $+0.12$ PP delta. However, M6 has slightly worse mean EER ($3.24\% \pm 1.34\%$ versus $3.05\% \pm 1.18\%$ for M1) and lower mean TAR@FAR=$10^{-3}$ ($-0.72$ PP). This secondary validation on a distinct database reinforces our main conclusion: BNNeck + ArcFace does not yield a direction-invariant improvement under palm-class-disjoint protocol constraints.

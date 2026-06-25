@@ -1,19 +1,20 @@
-\section{Evaluated Component Matrix}
+\section{Audited Protocol and Component Matrix}
 
-We do not introduce a new architecture. Instead, we define a controlled component matrix that isolates the effect of SupCon, ArcFace, BNNeck, and their combination under identical backbone, optimizer, embedding dimensionality, checkpoint-selection, and evaluation protocols.
+We do not introduce a new architecture. Instead, we define a controlled component matrix that isolates the effect of cross-entropy, supervised contrastive learning (SupCon), BNNeck, and angular-margin heads (ArcFace, CosFace) under identical backbone, optimizer, embedding dimensionality, checkpoint-selection, and evaluation protocols.
 
 \subsection{Component Matrix and Evaluation Scope}
 
-This work evaluates a controlled family of ResNet18 embedding models rather than proposing a new palmprint architecture. All tested variants use the same backbone family and a 256-D embedding size; they differ only in the use of supervised contrastive learning, BNNeck, ArcFace, and a light SupCon term. The main variants are:
+This work evaluates a controlled family of ResNet18 embedding models rather than proposing a new palmprint architecture. All tested learned variants use the same backbone family and a 256-D embedding size; they differ only in their recognition heads, neck layers, and loss terms. The main configurations evaluated are:
 \begin{itemize}
-    \item B0: ResNet18 + cross entropy;
-    \item B1: ResNet18 + cross entropy + supervised contrastive learning;
-    \item B4: ResNet18 + ArcFace;
-    \item B5: ResNet18 + BNNeck + cross entropy;
-    \item B6: ResNet18 + BNNeck + ArcFace;
-    \item B7: ResNet18 + BNNeck + ArcFace + light supervised contrastive learning.
+    \item \textbf{M0} (B0): ResNet18 + Cross-Entropy (CE);
+    \item \textbf{M1} (B1): ResNet18 + CE + Supervised Contrastive Learning (SupCon);
+    \item \textbf{M2} (B4): ResNet18 + ArcFace;
+    \item \textbf{M3} (B8): ResNet18 + CosFace;
+    \item \textbf{M4} (B5): ResNet18 + BNNeck + CE;
+    \item \textbf{M6} (B6): ResNet18 + BNNeck + ArcFace;
+    \item \textbf{M7} (B7): ResNet18 + BNNeck + ArcFace + light SupCon.
 \end{itemize}
-B1 is the current CE + SupCon baseline. B6 is the initially hypothesized BNNeck + ArcFace variant because it appeared favorable in the seen-identity diagnostic setting. B5 is included to isolate the effect of BNNeck without ArcFace. The strict Tongji component matrix is used to distinguish the original B6 hypothesis from the broader component behavior observed under palm-class-disjoint evaluation.
+Here, M1 is the standard CE + SupCon baseline. M6 is the initially hypothesized BNNeck + ArcFace configuration because it appeared highly favorable in the seen-identity diagnostic setting. M4 is included to isolate the effect of BNNeck without ArcFace, while M3 incorporates CosFace to evaluate alternative angular-margin formulations. The strict Tongji component matrix is used to distinguish the original M6 hypothesis from the broader component behavior observed under palm-class-disjoint evaluation.
 
 \subsection{BNNeck Embedding}
 
@@ -31,7 +32,7 @@ For BNNeck variants, the evaluation embedding is the post-BN representation:
 \end{equation}
 For non-BNNeck variants, the corresponding 256-D embedding is L2-normalized before matching. Gallery and probe embeddings are compared with cosine similarity.
 
-\subsection{ArcFace Supervision}
+\subsection{Angular-Margin Supervision}
 
 ArcFace uses normalized features and normalized class weights to impose an additive angular margin \cite{deng2019arcface}. Let $W_j$ be the normalized classifier weight for class $j$, and let $\theta_j$ be the angle between the normalized embedding $f_i$ and $W_j$. For the ground-truth class $y_i$, ArcFace adds an angular margin $m$ and scales logits by $s$:
 \begin{equation}
@@ -44,8 +45,15 @@ ArcFace uses normalized features and normalized class weights to impose an addit
         + \sum_{j \ne y_i} \exp \left(s \cos(\theta_j)\right)
     }.
 \end{equation}
-In the current B6 configuration, $s=30.0$ and $m=0.5$. ArcFace directly shapes angular classifier geometry, but the experiments test whether that training geometry actually improves held-out palm-class verification and identification metrics.
-
-\subsection{What Is Not Claimed as the Main Method}
-
-Fixed-Gabor texture features are included as a palmprint-specific reference baseline because Gabor-style orientation coding is historically important in palmprint recognition \cite{kong2004competitive,genovese2019palmnet,liang2021compnet}. However, this baseline is not the main method and is not treated as a reimplementation of PalmNet, CompNet, or Competitive Code. The present evidence does not support a learnable-Gabor, universal BNNeck + ArcFace, state-of-the-art, or cross-dataset robustness claim. The supported claim is a scoped component evaluation under the stated Tongji and IITD protocols, with fixed Gabor used only as a protocol-normalized classical reference point.
+In the current M6 configuration, $s=30.0$ and $m=0.5$. CosFace (M3) similarly imposes an additive cosine margin:
+\begin{equation}
+    \ell_i =
+    -\log
+    \frac{
+        \exp \left(s (\cos\theta_{y_i} - m)\right)
+    }{
+        \exp \left(s (\cos\theta_{y_i} - m)\right)
+        + \sum_{j \ne y_i} \exp \left(s \cos\theta_j\right)
+    }.
+\end{equation}
+with $s=30.0$ and $m=0.35$. The experiments test whether these training geometries actually improve held-out palm-class verification and identification metrics under cross-session acquisition shifts.

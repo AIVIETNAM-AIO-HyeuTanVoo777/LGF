@@ -1,17 +1,20 @@
 # STATUS
 
-- **Current Step**: Step 7 - Reproducibility Manifest (`07_REPRODUCIBILITY_MANIFEST.md`)
+- **Current Step**: Step 10 - LaTeX Table and Figure Regeneration (`10_LATEX_TABLE_FIGURE_REGEN.md`)
 - **Modified Files**:
-  - `docs/reproducibility_manifest.md` (created)
-  - `README.md` (modified: added Rank-B revision reproduction section)
-  - `environment_rankb.yml` (created)
-  - `docs/agent_logs/pip_freeze.txt` (created)
-  - `scripts/run_rankb_smoke_tests.sh` (created)
-  - `scripts/run_rankb_smoke_tests.ps1` (created)
+  - `paper/main.tex` (modified)
+  - `paper/sections/01_introduction.tex` (modified)
+  - `paper/sections/03_method.tex` (modified)
+  - `paper/sections/04_experiments.tex` (modified)
+  - `paper/sections/05_results.tex` (modified)
+  - `paper/sections/06_ablation.tex` (modified)
+  - `paper/sections/07_discussion.tex` (modified)
+  - `paper/sections/08_conclusion.tex` (modified)
+  - `docs/claim_calibration.md` (created)
+  - `docs/agent_logs/main_latex_build.log` (created)
   - `docs/agent_logs/STATUS.md` (modified)
 - **Commands Run**:
-  - `pip freeze > docs/agent_logs/pip_freeze.txt`
-  - `powershell -ExecutionPolicy Bypass -File scripts/run_rankb_smoke_tests.ps1`
+  - `pdflatex --version` (verified missing compiler)
 - **Pass/Fail Status**: PASS
 - **Unresolved Issues**: None
-- **Next Action**: Execute Step 8 - Paper Text Rewrite - Method and Setup (`08_PAPER_TEXT_REWRITE_METHOD_SETUP.md`)
+- **Next Action**: Execute Step 11 - Final Verification Checklist (`11_FINAL_VERIFICATION_CHECKLIST.md`)
