@@ -1,0 +1,22 @@
+\begin{table*}[t]
+\centering
+\caption{Protocol audit summary. Image, palm/class, and subject-id overlaps are measured between development (train+validation) and held-out test (gallery+probe) partitions. Split hashes identify the exact JSON split files.}
+\label{tab:protocol_audit}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{llccclll}
+\toprule
+Dataset & Direction & Seed & Img ov. & Palm/class ov. & Manifest subj-field ov. & Split hash & Claim \\
+\midrule
+IITD & within-session & 42 & 0 & 0/0 & 0 & e512833752c0 & palm-class-disjoint \\
+IITD & within-session & 2026 & 0 & 0/0 & 0 & 61a6de578036 & palm-class-disjoint \\
+IITD & within-session & 2705 & 0 & 0/0 & 0 & 80a4a99f0a38 & palm-class-disjoint \\
+Tongji & S1$\to$S2 & 42 & 0 & 0/0 & 0 & 75238463a456 & palm-class-disjoint \\
+Tongji & S1$\to$S2 & 2026 & 0 & 0/0 & 0 & 62b35375625f & palm-class-disjoint \\
+Tongji & S1$\to$S2 & 2705 & 0 & 0/0 & 0 & 301cb16134bc & palm-class-disjoint \\
+Tongji & S2$\to$S1 & 42 & 0 & 0/0 & 0 & c302c8b966ef & palm-class-disjoint \\
+Tongji & S2$\to$S1 & 2026 & 0 & 0/0 & 0 & 2c2e1764a427 & palm-class-disjoint \\
+Tongji & S2$\to$S1 & 2705 & 0 & 0/0 & 0 & 6e768a21d332 & palm-class-disjoint \\
+\bottomrule
+\end{tabular}
+\end{table*}

@@ -5,10 +5,18 @@
 \usepackage{booktabs}
 \usepackage{graphicx}
 \usepackage{hyperref}
+\usepackage{amssymb}
 \usepackage{multirow}
+\usepackage[section]{placeins}
 
-\title{Protocol-Sensitive Evaluation of BNNeck and ArcFace Embeddings for Cross-Session Palmprint Recognition}
-\author{PALM\_CGK\_BASE Project Team}
+\title{Audited Protocol-Sensitive Evaluation of Recognition Heads and Losses for Cross-Session Palmprint Recognition}
+\author{%
+  Nguyen Duc Bao Lam\thanks{lam01662052827@gmail.com} \and
+  Nguyen Cong Thinh\thanks{nguyencongthinh17122006@gmail.com} \and
+  Tran Trung Tin\thanks{trungtin1218@gmail.com} \and
+  Vo Hieu Thang\thanks{thangvo27052006@gmail.com}\\[4pt]
+  FPT University, Vietnam
+}
 \date{\today}
 
 \begin{document}
@@ -16,19 +24,43 @@
 \maketitle
 
 \begin{abstract}
-Cross-session palmprint recognition requires embeddings that remain discriminative under acquisition shift and reliable at strict false-acceptance operating points. This paper evaluates a ResNet18 embedding model with BNNeck and ArcFace supervision for palmprint recognition under both the original seen-identity Tongji protocol and a stricter development/test subject-disjoint Tongji protocol. In the original seen-identity Tongji setting, BNNeck + ArcFace improves over the current CE + SupCon baseline. However, under the stricter development/test subject-disjoint Tongji protocol, BNNeck + ArcFace does not improve over CE + SupCon overall: its bidirectional three-seed average trails the baseline by 1.18 percentage points in Rank-1 and has an EER that is 1.01 percentage points worse. An IITD within-dataset subject-disjoint validation provides a mixed near-tie result and is treated as secondary evidence only. The supported contribution is therefore not a universal method-improvement claim, but a protocol-sensitive evaluation of BNNeck and ArcFace embeddings for palmprint recognition.
+Evaluation protocols in palmprint recognition vary substantially in identity overlap, session direction, gallery construction, and low-FAR threshold policy, making component-level conclusions difficult to compare across studies. We present an audited empirical study of recognition heads and training losses for palmprint embeddings under held-out palm-class evaluation. The study covers bidirectional Tongji cross-session matching and secondary within-session validation, and compares cross-entropy, supervised contrastive learning, BNNeck, angular-margin classifiers (ArcFace, CosFace), and palmprint-oriented texture references under common splits, checkpoint-selection rules, and conservative verification metrics. The analysis shows that recognition-head gains observed under seen-identity diagnostics do not reliably transfer to held-out palm-class cross-session testing. In particular, BNNeck+ArcFace does not yield a direction-invariant improvement over a cross-entropy plus supervised-contrastive baseline, while BNNeck with standard cross-entropy exhibits direction-dependent low-FAR behavior. Score-tail diagnostics and threshold audits further show that Rank-1 identification and strict low-FAR verification can rank components differently. These findings support an evaluation-centered conclusion: reproducible palmprint studies should report audited class-disjoint protocols, bidirectional session results, and conservative empirical-FAR thresholds before making component-level improvement claims.
 \end{abstract}
 
+
+
 \input{sections/01_introduction}
+
+
+
 \input{sections/02_related_work}
+
+
+
 \input{sections/03_method}
+
+
+
 \input{sections/04_experiments}
+
+
+
 \input{sections/05_results}
+
+
+
 \input{sections/06_ablation}
+
+
+
 \input{sections/07_discussion}
+
+
+
 \input{sections/08_conclusion}
 
-\bibliographystyle{plain}
+
+\bibliographystyle{IEEEtran}
 \bibliography{references}
 
 \end{document}

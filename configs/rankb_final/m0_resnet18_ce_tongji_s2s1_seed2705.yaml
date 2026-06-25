@@ -1,0 +1,51 @@
+seed: 2705
+device: cuda
+save_dir: experiments/b0_resnet18_ce_tongji_subject_disjoint_s2s1_seed2705
+dataset:
+  name: Tongji
+  split_file: data/splits/tongji_subject_disjoint_s2_to_s1_seed2705.json
+sampler:
+  num_identities: 8
+  num_instances: 2
+  fallback_identities: 4
+loader:
+  num_workers: 0
+model:
+  name: ResNet18Baseline
+  embedding_dim: 256
+  pretrained: true
+  bnneck: false
+  eval_embedding: post_bn
+loss:
+  name: combined
+  ce: true
+  supcon_lambda: 0.0
+  supcon_temperature: 0.07
+  arcface: false
+  arcface_scale: 30.0
+  arcface_margin: 0.5
+  cosface: false
+training:
+  epochs: 60
+  lr: 0.0001
+  weight_decay: 0.0001
+  grad_accumulation_steps: 4
+  temperature: 0.07
+  amp: true
+  loss_type: combined
+  lambda_supcon: 0.0
+  optimizer: Adam
+  scheduler: CosineAnnealingLR
+  batch_size: 16
+  effective_batch_size: 64
+  sampler: MPerClassSampler
+protocol:
+  dataset: Tongji
+  direction: s2_to_s1
+  split_file: data/splits/tongji_subject_disjoint_s2_to_s1_seed2705.json
+  validation_policy: same_session_development
+  test_policy: heldout_gallery_probe_only
+checkpoint:
+  monitor: validation_rank1
+  mode: max
+  no_test_data: true

@@ -26,7 +26,8 @@ def train_one_epoch(
     correct = 0
     total = 0
     
-    scaler = torch.cuda.amp.GradScaler(enabled=mixed_precision)
+    amp_enabled = mixed_precision and device.type == "cuda"
+    scaler = torch.amp.GradScaler("cuda", enabled=amp_enabled)
 
     for batch in loader:
         images = batch["image"].to(device)
@@ -35,7 +36,7 @@ def train_one_epoch(
         optimizer.zero_grad()
         
         # AMP forward
-        with torch.cuda.amp.autocast(enabled=mixed_precision):
+        with torch.amp.autocast("cuda", enabled=amp_enabled):
             logits = model(images)
             loss = criterion(logits, labels)
             

@@ -205,8 +205,33 @@ def make_iitd_splits(
         train_pool = indices_for(iitd, iitd[identity_col].isin(train_ids))
         train_idx, val_idx = half_split(train_pool, seed + 31, val_ratio=0.2)
         test_pool = indices_for(iitd, iitd[identity_col].isin(test_ids))
+
         # Same-session within-dataset enrollment/probe split for held-out test identities.
-        gallery_idx, probe_idx = half_split(test_pool, seed + 53, val_ratio=0.5)
+        # IMPORTANT: split inside each held-out palm class, not across the pooled image
+        # list. A pooled image-level split can put an entire palm class only in gallery
+        # or only in probe, which breaks closed-set identification/verification.
+        gallery_idx = []
+        probe_idx = []
+        rng_test = random.Random(seed + 53)
+
+        # `identity_col` controls development/test disjointness. For IITD, the final
+        # evaluation label is palm/class, so gallery/probe must both contain each
+        # evaluated class_id/palm_id.
+        eval_group_col = "class_id" if "class_id" in iitd.columns else identity_col
+        test_groups = sorted(iitd.loc[test_pool, eval_group_col].dropna().unique().tolist())
+
+        for eval_group in test_groups:
+            group_idx = indices_for(iitd, iitd.index.isin(test_pool) & (iitd[eval_group_col] == eval_group))
+            group_idx = list(group_idx)
+            rng_test.shuffle(group_idx)
+            if len(group_idx) < 2:
+                raise ValueError(f"IITD evaluation group {eval_group!r} has fewer than 2 images.")
+            cut = max(1, len(group_idx) // 2)
+            if cut >= len(group_idx):
+                cut = len(group_idx) - 1
+            gallery_idx.extend(group_idx[:cut])
+            probe_idx.extend(group_idx[cut:])
+
         split = {
             "train": materialize(df, train_idx, mode, path_col, record_fields),
             "val": materialize(df, val_idx, mode, path_col, record_fields),
@@ -239,7 +264,7 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--manifest", default="data/metadata/palm_segmented_manifest.csv")
     ap.add_argument("--out-dir", default="data/splits")
-    ap.add_argument("--audit", default="docs/results/disjoint_identity_split_audit.md")
+    ap.add_argument("--audit", default="audit_artifacts/splits/disjoint_identity_split_audit.md")
     ap.add_argument("--template-split", default="", help="Optional existing split JSON to infer split record format.")
     ap.add_argument("--write", action="store_true", help="Actually write JSON splits. Without this, only audit is printed/written.")
     ap.add_argument("--force", action="store_true", help="Allow overwriting generated split files.")

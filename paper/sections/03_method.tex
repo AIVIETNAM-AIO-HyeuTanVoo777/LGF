@@ -1,17 +1,20 @@
-\section{Method}
+\section{Audited Protocol and Component Matrix}
 
-\subsection{Baseline and Proposed Model}
+We do not introduce a new architecture. Instead, we define a controlled component matrix that probes selected effects and interactions of cross-entropy, supervised contrastive learning (SupCon), BNNeck, and angular-margin heads (ArcFace, CosFace) under identical backbone, optimizer, embedding dimensionality, checkpoint-selection, and evaluation protocols.
 
-The B1 baseline uses a ResNet18 backbone with a 256-D embedding head trained with cross entropy and supervised contrastive learning \cite{khosla2020supervised}. The proposed B6 model keeps the same ResNet18 backbone family and 256-D embedding size, but changes the embedding head and classifier supervision. B6 consists of:
+\subsection{Component Matrix and Evaluation Scope}
+
+This work evaluates a controlled family of ResNet18 embedding models rather than proposing a new palmprint architecture. All tested learned variants use the same backbone family and a 256-D embedding size; they differ only in their recognition heads, neck layers, and loss terms. The main configurations evaluated are:
 \begin{itemize}
-    \item a ResNet18 backbone;
-    \item a linear projection to a 256-D embedding;
-    \item a BNNeck layer after the embedding projection;
-    \item an ArcFace normalized classifier during training;
-    \item a post-BN, L2-normalized embedding for evaluation.
+    \item \textbf{M0}: ResNet18 + Cross-Entropy (CE);
+    \item \textbf{M1}: ResNet18 + CE + Supervised Contrastive Learning (SupCon);
+    \item \textbf{M2}: ResNet18 + ArcFace;
+    \item \textbf{M3}: ResNet18 + CosFace;
+    \item \textbf{M4}: ResNet18 + BNNeck + CE;
+    \item \textbf{M6}: ResNet18 + BNNeck + ArcFace;
+    \item \textbf{M7}: ResNet18 + BNNeck + ArcFace + light SupCon.
 \end{itemize}
-
-The evaluation embedding is the post-BN representation. Gallery and probe embeddings are L2-normalized, and verification/identification scores are computed by cosine similarity. This keeps the evaluation protocol aligned with the metric geometry induced by the normalized classifier.
+Here, M1 is the standard CE + SupCon baseline. M6 is the initially hypothesized BNNeck + ArcFace configuration because it appeared highly favorable in the seen-identity diagnostic setting. M4 is included to probe selected effects and interactions of BNNeck without ArcFace, while M3 incorporates CosFace to evaluate alternative angular-margin formulations. The strict Tongji component matrix is used to distinguish the original M6 hypothesis from the broader component behavior observed under palm-class-disjoint evaluation.
 
 \subsection{BNNeck Embedding}
 
@@ -23,12 +26,13 @@ BNNeck applies batch normalization to this projected vector:
 \begin{equation}
     \tilde{z}_i = \mathrm{BN}(z_i).
 \end{equation}
-The evaluation embedding is
+For BNNeck variants, the evaluation embedding is the post-BN representation:
 \begin{equation}
     f_i = \frac{\tilde{z}_i}{\lVert \tilde{z}_i \rVert_2}.
 \end{equation}
+For non-BNNeck variants, the corresponding 256-D embedding is L2-normalized before matching. Gallery and probe embeddings are compared with cosine similarity.
 
-\subsection{ArcFace Supervision}
+\subsection{Angular-Margin Supervision}
 
 ArcFace uses normalized features and normalized class weights to impose an additive angular margin \cite{deng2019arcface}. Let $W_j$ be the normalized classifier weight for class $j$, and let $\theta_j$ be the angle between the normalized embedding $f_i$ and $W_j$. For the ground-truth class $y_i$, ArcFace adds an angular margin $m$ and scales logits by $s$:
 \begin{equation}
@@ -41,8 +45,15 @@ ArcFace uses normalized features and normalized class weights to impose an addit
         + \sum_{j \ne y_i} \exp \left(s \cos(\theta_j)\right)
     }.
 \end{equation}
-In the current B6 configuration, $s=30.0$ and $m=0.5$. This objective encourages angular separation between classes, which directly targets the embedding geometry used by cosine verification.
-
-\subsection{What Is Not the Main Method}
-
-Earlier Gabor variants remain useful baselines and ablations, but they are not the main supported claim in this paper. The current evidence supports a protocol-sensitive comparison of B1 and B6, not a fixed-Gabor, learnable-Gabor, or universal B6 dominance claim.
+In the current M6 configuration, $s=30.0$ and $m=0.5$. CosFace (M3) similarly imposes an additive cosine margin:
+\begin{equation}
+    \ell_i =
+    -\log
+    \frac{
+        \exp \left(s (\cos\theta_{y_i} - m)\right)
+    }{
+        \exp \left(s (\cos\theta_{y_i} - m)\right)
+        + \sum_{j \ne y_i} \exp \left(s \cos\theta_j\right)
+    }.
+\end{equation}
+with $s=30.0$ and $m=0.35$. The experiments test whether these training geometries actually improve held-out palm-class verification and identification metrics under cross-session acquisition shifts.

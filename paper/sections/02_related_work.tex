@@ -2,18 +2,44 @@
 
 \subsection{Palmprint Recognition}
 
-Palmprint recognition has historically relied on local texture structure, including line, orientation, and filter-bank representations. Recent survey evidence describes the field's transition toward deep feature learning, with learned representations increasingly used for ROI processing, feature extraction, matching, and robustness analysis \cite{gao2025deeplearning}. This paper follows the embedding-learning direction rather than presenting a new ROI detector or a handcrafted texture descriptor.
+Palmprint recognition has a long history as a biometric identification and verification modality. Zhang et al. introduced an online palmprint identification system that combined a dedicated acquisition device with an efficient recognition algorithm \cite{zhang2003online}. Subsequent surveys summarized the broader palmprint pipeline, including capture devices, preprocessing, verification algorithms, fusion, large-database identification, and privacy/security issues \cite{kong2009survey}. More recent survey work evaluates feature-extraction methods across contact-based, contactless, high-resolution, and 3D palmprint scenarios \cite{fei2019feature}, while a deep-learning-focused survey describes the transition from handcrafted descriptors toward learned ROI, representation, matching, and security/privacy components \cite{gao2025deeplearning}.
 
-Gabor and other texture filters remain important context for palmprint recognition because they encode local ridge and crease patterns. However, the current subject-disjoint evidence does not support a Gabor-centered paper claim or a fixed-Gabor dominance claim. Fixed-Gabor variants remain useful baselines, but this work does not frame Gabor filtering as the source of a final method improvement.
+Classical palmprint methods often exploit local line and orientation structure. Competitive Code is a representative direction-coding method that encodes dominant local orientations using a bank of Gabor filters and angular matching \cite{kong2004competitive}. This orientation-coding lineage is relevant because palmprint texture is dominated by principal lines, wrinkles, creases, and ridge-like structures. Modern deep palmprint methods have also reused this bias: PalmNet tunes palmprint-specific filters through Gabor-PCA convolutional filters \cite{genovese2019palmnet}, and CompNet introduces learnable Gabor kernels in a competitive neural-network formulation \cite{liang2021compnet}. These works motivate reporting Gabor-related baselines, but they do not justify treating fixed Gabor filtering as the primary contribution of the present paper.
+
+Contactless palmprint recognition is more difficult than contact-based recognition because pose, scale, rotation, illumination, background, and session conditions are less controlled. Tongji was introduced as a contactless palmprint benchmark together with a contactless acquisition device and a collaborative-representation-based identification approach \cite{zhang2017tongji}. Wider reviews of unconstrained and consumer-device palmprint recognition emphasize that ROI extraction, feature learning, matching, and dataset protocol design remain central sources of variation \cite{ungureanu2020toward}. The present paper therefore focuses on a narrower but directly testable question: whether conclusions about BNNeck and ArcFace remain stable when moving from a seen-identity diagnostic setting to a palm-class-disjoint Tongji cross-session protocol.
 
 \subsection{Metric Learning for Biometric Embeddings}
 
-Biometric recognition systems depend on embedding geometry: genuine pairs should remain close while impostor pairs should be separated, especially at strict false-acceptance operating points. Supervised contrastive learning explicitly pulls same-class examples together and pushes different-class examples apart \cite{khosla2020supervised}. The B1 baseline in this project uses this idea together with cross entropy, forming a strong baseline for the Tongji cross-session protocol.
+Biometric recognition systems depend on embedding geometry: genuine pairs should remain close while impostor pairs should be separated, especially at strict false-acceptance operating points. Supervised contrastive learning explicitly pulls same-class examples together and pushes different-class examples apart \cite{khosla2020supervised}. The M1 baseline in this study uses this idea together with cross entropy, forming a strong baseline for the Tongji cross-session protocol.
 
-Margin-based normalized classifiers provide another route to discriminative embeddings. ArcFace adds an angular margin to normalized features and class weights, encouraging separation in angular space \cite{deng2019arcface}. BNNeck was introduced in person re-identification as a normalization neck that separates feature spaces used for metric comparison and classification supervision \cite{luo2019strong}. B6 adapts these two ideas to the palmprint setting: ArcFace shapes the angular classifier geometry, while BNNeck provides the post-BN embedding used for cosine verification.
+Margin-based normalized classifiers provide another route to discriminative embeddings. ArcFace adds an angular margin to normalized features and class weights, encouraging separation in angular space \cite{deng2019arcface}. BNNeck was introduced in person re-identification as a normalization neck that separates feature spaces used for metric comparison and classification supervision \cite{luo2019strong}. M6 adapts these ideas to the palmprint setting: ArcFace shapes the angular classifier geometry, while BNNeck provides the post-BN embedding used for cosine verification.
 
-\subsection{Cross-Session and Cross-Domain Robustness}
+\subsection{Cross-Session and Protocol-Sensitive Evaluation}
 
-Cross-session and cross-domain robustness are central issues for deployable biometric systems. The report reviewed for this draft mentions several palmprint domain-adaptation, style-transfer, and synthetic-data works, but many of those entries still need full author-title-venue-year verification before they are added to the bibliography. For this reason, the present draft uses them only as motivation for future literature expansion, not as cited evidence.
+Cross-session and cross-domain robustness are central issues for deployable biometric systems. Contactless and unconstrained palmprint studies show that performance can depend strongly on acquisition condition, ROI quality, and evaluation design \cite{ungureanu2020toward,matkowski2020uncontrolled}. Broader palmprint robustness research includes domain adaptation, style-transfer, synthetic-data, mobile-device acquisition, and cross-dataset evaluation directions \cite{zhang2020smartphone,shao2020efficient}. This paper does not attempt to benchmark all of those settings. Instead, it focuses on Tongji cross-session recognition with S1$\rightarrow$S2 and S2$\rightarrow$S1 protocols. The results should therefore be read as evidence for the scoped Tongji cross-session evaluation, not as a broad cross-domain benchmark claim. External datasets and verified cross-domain comparisons remain future work.
 
-This paper focuses on a narrower and directly measured setting: Tongji cross-session recognition with S1$\rightarrow$S2 and S2$\rightarrow$S1 protocols. The results should therefore be read as evidence for cross-session Tongji verification, not as a broad cross-domain benchmark claim. External datasets and verified cross-domain comparisons remain future work.
+\subsection{Protocol Positioning Relative to Palmprint Literature}
+
+Representative palmprint studies differ substantially in acquisition setup, ROI construction, gallery/probe definition, session use, and reported operating points. Table~\ref{tab:literature_protocol_positioning} therefore positions this work relative to prior palmprint literature by protocol properties rather than by direct numerical ranking.
+
+\begin{table*}[t]
+\centering
+\caption{Protocol positioning relative to representative palmprint recognition studies. This table is for protocol positioning and contextualization, not a direct numerical leaderboard comparison.}
+\label{tab:literature_protocol_positioning}
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{p{0.15\textwidth}p{0.18\textwidth}p{0.21\textwidth}p{0.09\textwidth}p{0.12\textwidth}p{0.17\textwidth}}
+\toprule
+Study & Representation & Dataset(s) & Contactless & Cross-session & Protocol note \\
+\midrule
+Zhang et al.~\cite{zhang2017tongji} & CR CompCode & Tongji & Yes & Yes & Partially; protocol differs \\
+PalmNet~\cite{genovese2019palmnet} & Gabor-PCA CNN & Multiple touchless sets & Yes & Not normalized here & Not directly comparable \\
+CompNet~\cite{liang2021compnet} & Learnable Gabor CNN & Multiple palmprint sets & Yes & Not normalized here & Not directly comparable \\
+Matkowski et al.~\cite{matkowski2020uncontrolled} & Alignment + feature network & IITD, CASIA, PolyU, NTU & Yes & Mixed & Not directly comparable \\
+Smartphone verif.~\cite{zhang2020smartphone} & DCNN verification pipeline & Smartphone palmprint data & Yes & Yes & Not directly comparable \\
+Ours & BNNeck/ArcFace matrix + Gabor ref. & Tongji + IITD & Yes & Tongji yes & Current protocol \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+Because prior studies differ in ROI pipelines, train/test identity assumptions, gallery construction, session use, and reported metrics, this table is not used as a leaderboard. It motivates why the present work focuses on a controlled within-paper component matrix under one audited protocol.

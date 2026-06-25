@@ -142,7 +142,8 @@ def train():
     
     # AMP and Gradient Accumulation
     use_amp = train_cfg.get("amp", True)
-    scaler = torch.cuda.amp.GradScaler(enabled=use_amp)
+    amp_enabled = use_amp and device.type == "cuda"
+    scaler = torch.amp.GradScaler("cuda", enabled=amp_enabled)
     grad_accumulation_steps = train_cfg.get("grad_accumulation_steps", 1)
     
     epochs = train_cfg.get("epochs", 10)
@@ -186,7 +187,7 @@ def train():
             images = batch["image"].to(device)
             labels = batch["label"].to(device)
             
-            with torch.cuda.amp.autocast(enabled=use_amp):
+            with torch.amp.autocast("cuda", enabled=amp_enabled):
                 logits, embeddings = model(images)
                 loss, loss_dict = criterion(logits, embeddings, labels)
                 # Scale loss for gradient accumulation
@@ -231,7 +232,7 @@ def train():
                 images = images[valid_mask]
                 labels = labels[valid_mask]
                 
-                with torch.cuda.amp.autocast(enabled=use_amp):
+                with torch.amp.autocast("cuda", enabled=amp_enabled):
                     logits, embeddings = model(images)
                     loss, loss_dict = criterion(logits, embeddings, labels)
                     

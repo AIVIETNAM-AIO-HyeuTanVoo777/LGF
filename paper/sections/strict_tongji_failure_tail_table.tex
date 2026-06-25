@@ -1,0 +1,17 @@
+\begin{table*}[t]
+\centering
+\caption{Score-tail evidence for protocol-dependent component behavior on strict Tongji. Deltas are averaged over three matched seeds within each direction. Positive TAR deltas favor the first method; positive impostor-tail deltas indicate a higher high-score impostor tail and are generally unfavorable at low FAR.}
+\label{tab:strict_tongji_failure_tail}
+\small
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{llrrrrp{0.28\textwidth}}
+\toprule
+Comparison & Direction & $\Delta\mu_{\mathrm{gen}}$ & $\Delta q^{\mathrm{imp}}_{0.999}$ & $\Delta d'$ & $\Delta$TAR@FAR=$10^{-3}$ & Interpretation \\
+\midrule
+M4$-$M1 & S1$\rightarrow$S2 & $-0.057$ & $-0.094$ & $-0.082$ & $+7.16$ pp & BNNeck+CE improves low-FAR TAR in this direction. \\
+M4$-$M1 & S2$\rightarrow$S1 & $-0.043$ & $-0.020$ & $-0.288$ & $-5.40$ pp & BNNeck+CE gain does not transfer to the reverse direction. \\
+M6$-$M1 & S1$\rightarrow$S2 & $-0.072$ & $-0.082$ & $-0.287$ & $+1.19$ pp & BNNeck+ArcFace shows only direction-limited low-FAR behavior. \\
+M6$-$M1 & S2$\rightarrow$S1 & $-0.063$ & $-0.043$ & $-0.399$ & $-5.33$ pp & BNNeck+ArcFace degrades the reverse-direction low-FAR result. \\
+\bottomrule
+\end{tabular}
+\end{table*}

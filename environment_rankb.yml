@@ -1,0 +1,19 @@
+name: rankb_reproduce
+channels:
+  - pytorch
+  - nvidia
+  - defaults
+dependencies:
+  - python=3.13
+  - pytorch=2.12
+  - torchvision
+  - pytorch-cuda=12.6
+  - numpy
+  - pandas
+  - scipy
+  - scikit-learn
+  - pip
+  - pip:
+      - fvcore
+      - pytest
+      - pyyaml

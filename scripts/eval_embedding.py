@@ -1,7 +1,10 @@
 import os
+import sys
 import json
 import yaml
 import argparse
+from pathlib import Path
+
 import numpy as np
 import pandas as pd
 import torch
@@ -10,8 +13,14 @@ from sklearn.metrics import f1_score, roc_curve
 from scipy.optimize import brentq
 from scipy.interpolate import interp1d
 
+ROOT = Path(".").resolve()
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from palmrec.evaluation.metrics import tar_at_far_conservative, conservative_tar_at_far
 from palmrec.datasets.palm_dataset import PalmDataset
 from palmrec.models.baselines import ResNet18Baseline
+
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Evaluate Palmprint Embeddings.")
@@ -239,9 +248,11 @@ def main():
         except Exception:
             pass
             
-        # TAR @ FAR
-        tar_1e2 = tpr[np.argmin(np.abs(fpr - 0.01))]
-        tar_1e3 = tpr[np.argmin(np.abs(fpr - 0.001))]
+        # Conservative TAR @ FAR: selected empirical FPR never exceeds the target FAR.
+        tar_1e2_info = conservative_tar_at_far(pos_scores, neg_scores, 1e-2)
+        tar_1e3_info = conservative_tar_at_far(pos_scores, neg_scores, 1e-3)
+        tar_1e2 = tar_1e2_info["tar"]
+        tar_1e3 = tar_1e3_info["tar"]
         
         # Downsample ROC curve to save space
         if len(fpr) > 10000:
@@ -250,6 +261,56 @@ def main():
             tpr = tpr[indices]
             
         roc_df = pd.DataFrame({"fpr": fpr, "tpr": tpr})
+        # Score export and diagnostics.
+        # Store per-pair scores as CSV rather than npy/npz so the artifacts are inspectable.
+        scores_df = pd.DataFrame({
+            "score": y_scores.astype(float),
+            "label": y_true.astype(int),
+        })
+        scores_df.to_csv(os.path.join(output_dir, "scores.csv"), index=False)
+
+        genuine_mean = float(np.mean(pos_scores))
+        genuine_std = float(np.std(pos_scores, ddof=1)) if len(pos_scores) > 1 else 0.0
+        impostor_mean = float(np.mean(neg_scores))
+        impostor_std = float(np.std(neg_scores, ddof=1)) if len(neg_scores) > 1 else 0.0
+        pooled_std = float(np.sqrt(0.5 * (genuine_std ** 2 + impostor_std ** 2)))
+        d_prime = float((genuine_mean - impostor_mean) / pooled_std) if pooled_std > 0 else 0.0
+
+        score_diag = {
+            "num_genuine_pairs": int(len(pos_scores)),
+            "num_impostor_pairs": int(len(neg_scores)),
+            "genuine_mean": genuine_mean,
+            "genuine_std": genuine_std,
+            "impostor_mean": impostor_mean,
+            "impostor_std": impostor_std,
+            "impostor_q0.990": float(np.quantile(neg_scores, 0.990)),
+            "impostor_q0.999": float(np.quantile(neg_scores, 0.999)),
+            "genuine_q0.001": float(np.quantile(pos_scores, 0.001)),
+            "genuine_q0.010": float(np.quantile(pos_scores, 0.010)),
+            "d_prime": d_prime,
+        }
+
+        with open(os.path.join(output_dir, "score_diagnostics.json"), "w", encoding="utf-8") as f:
+            json.dump(score_diag, f, indent=4)
+
+        score_diag_md = f"""# Score Distribution Diagnostics
+
+## Pair Counts
+- Genuine pairs: {score_diag['num_genuine_pairs']}
+- Impostor pairs: {score_diag['num_impostor_pairs']}
+
+## Score Summary
+| Group | Mean | Std | Tail quantiles |
+|---|---:|---:|---|
+| Genuine | {score_diag['genuine_mean']:.6f} | {score_diag['genuine_std']:.6f} | q0.001={score_diag['genuine_q0.001']:.6f}, q0.010={score_diag['genuine_q0.010']:.6f} |
+| Impostor | {score_diag['impostor_mean']:.6f} | {score_diag['impostor_std']:.6f} | q0.990={score_diag['impostor_q0.990']:.6f}, q0.999={score_diag['impostor_q0.999']:.6f} |
+
+## Separation
+- d-prime: {score_diag['d_prime']:.6f}
+"""
+        with open(os.path.join(output_dir, "score_diagnostics.md"), "w", encoding="utf-8") as f:
+            f.write(score_diag_md)
+
         roc_df.to_csv(os.path.join(output_dir, "roc.csv"), index=False)
         
     metrics = {

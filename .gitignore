@@ -1,4 +1,4 @@
-# Byte-compiled / optimized / DLL files
+﻿# Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
@@ -163,11 +163,21 @@ Thumbs.db
 
 # Project-specific Data & Large Files
 data/raw/
+data/tongji/
+data/iitd/
 data/segmented/
 data/toy/
+data/**/*.bmp
+data/**/*.jpg
+data/**/*.jpeg
+data/**/*.png
+data/**/*.tif
+data/**/*.tiff
 palm_agent_md_specs.zip
 
 # Project-specific Outputs & Checkpoints
+checkpoints/
+runs/
 outputs/checkpoints/
 outputs/evaluation/
 outputs/features/
@@ -175,9 +185,52 @@ outputs/graphs/
 outputs/kcca/
 outputs/logs/
 outputs/reports/
+outputs/
+wandb/
+tensorboard/
+lightning_logs/
 
 experiments/
 *.pt
 *.pth
 *.ckpt
 *.onnx
+*.pkl
+*.zip
+*.npy
+*.npz
+scores.csv
+score_tensor*
+*score_tensor*
+*scores.npy
+*scores.npz
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.synctex.gz
+*.toc
+*.lof
+*.lot
+*.nav
+*.snm
+review_bundle/
+paper_overleaf*.zip
+paper_export_rankb_single_file/
+rankb_single_file_latex_package.zip
+overleaf_package/
+antigravity_rankb_agent_pack/
+revision_patches/
+*.egg-info/
+
+# Local legacy archives kept out of the paper artifact
+docs/legacy/
+configs/legacy/
+scripts/legacy/
+palmrec/legacy/
+
+# Local legacy result archives kept out of the paper artifact
+docs/legacy_results/

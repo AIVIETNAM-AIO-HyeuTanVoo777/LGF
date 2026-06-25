@@ -1,25 +1,44 @@
-\section{Ablation Scope}
+\section{Ablation Analysis}
+\label{sec:ablation}
 
-The B1, B4, B6, and B7 ablation results are used as diagnostic evidence for interpreting the effect of ArcFace, BNNeck, and light SupCon supervision. These results are not used as the final basis for a general improvement claim because the final Tongji results are reported under the stricter development/test subject-disjoint protocol.
+This section separates two kinds of ablation evidence. The primary ablation evidence uses the same strict Tongji palm-class-disjoint protocol as the main result table. The older seen-identity seed 42 ablation is reported as diagnostic context because it explains why BNNeck and ArcFace initially appeared promising, but it is not used as primary evidence for the paper claim.
 
-\begin{table}[t]
+\subsection{Strict Palm-Class-Disjoint Ablation}
+
+The strict ablation compares seven ResNet18 variants under the same Tongji development/test palm-class-disjoint protocol, two session directions, and three random seeds. M0 uses cross entropy only. M1 adds supervised contrastive learning. M2 uses ArcFace without BNNeck. M3 uses CosFace without BNNeck. M4 uses BNNeck with cross entropy only. M6 combines BNNeck and ArcFace. M7 adds a light supervised contrastive term to BNNeck + ArcFace.
+
+Table~\ref{tab:strict_tongji_ablation} shows that the highest observed strict-protocol ablation row on the selected Rank-1 and low-FAR TAR criteria is M4, not M6 or M7. M4 reaches the highest observed bidirectional Rank-1 average and the highest observed strict TAR@FAR=$10^{-3}$ average among the tested variants. Compared with M0, M4 has a $+0.85$ percentage-point observed Rank-1 difference. Compared with M1, M4 has small observed mean advantages of $+0.43$ percentage points in Rank-1 and $+0.88$ percentage points in TAR@FAR=$10^{-3}$, but the paired intervals are wide and M4 has a slightly worse mean EER than M1. Thus, the evidence supports M4 as the highest observed tested component variant on the selected strict Tongji Rank-1 and low-FAR TAR criteria, not as a statistically established improvement on every metric.
+
+The ArcFace-based variants are less consistent. M2 does not show a reliable observed gain over M0 overall, M6 trails M1 in Rank-1 and low-FAR verification, and M7 has high directional variance. In particular, M7 has a favorable observed S2$\rightarrow$S1 difference relative to M6 but is unstable in S1$\rightarrow$S2. This supports a component-level interpretation: BNNeck+CE can be useful in a direction-dependent way, but ArcFace and light SupCon do not provide a reliable gain under the strict Tongji palm-class-disjoint protocol.
+
+Table~\ref{tab:strict_tongji_ablation_by_direction} separates the strict ablation by session direction for M1, M4, and M6. The by-direction view clarifies the component behavior hidden by the bidirectional average. M4 has the highest observed means in S1$\rightarrow$S2, with higher Rank-1 ($94.17\%$ versus $91.69\%$) and TAR@FAR=$10^{-3}$ ($75.02\%$ versus $67.87\%$) than M1 while keeping EER similar. In S2$\rightarrow$S1, however, M4 trails M1 on Rank-1 ($93.47\%$ versus $95.08\%$), EER ($5.01\%$ versus $4.01\%$), and TAR@FAR=$10^{-3}$ ($70.28\%$ versus $75.67\%$). M6 is weaker than M1 in both directions on Rank-1 and EER. Thus, the component evidence supports direction-sensitive behavior: BNNeck with cross-entropy is useful in one session direction, but neither BNNeck nor ArcFace yields a direction-invariant gain.
+
+Figures~\ref{fig:strict_tongji_roc_by_direction}--\ref{fig:strict_tongji_score_hist_by_direction} provide a score-level view of this behavior. In S1$\rightarrow$S2, the seed-averaged ROC grid gives M4 a higher TPR at FPR=$10^{-3}$ than M1 and M6 ($74.92\%$ versus $67.76\%$ and $68.97\%$). In S2$\rightarrow$S1, M1 has the highest observed low-FAR TPR in this direction, with TPR at FPR=$10^{-3}$ of $75.57\%$ compared with $70.19\%$ for M4 and $70.24\%$ for M6. The DET and score-distribution views are therefore consistent with the table-level conclusion: the useful effect of BNNeck with cross entropy is direction-dependent, while BNNeck+ArcFace does not produce a reliable low-FAR improvement.
+
+For M4 minus M1, the paired mean deltas are $+0.43$ percentage points for Rank-1 and $+0.88$ percentage points for TAR@FAR=$10^{-3}$, while EER is $+0.47$ percentage points, which is worse for M4. For M4 minus M6, the paired means favor M4 on Rank-1 ($+1.61$ percentage points), EER ($-0.54$ percentage points), and TAR@FAR=$10^{-3}$ ($+2.94$ percentage points). The bootstrap intervals remain wide because there are only six paired units, so these results should be treated as component-level paired evidence rather than formal superiority claims.
+
+\subsection{Seen-Identity Diagnostic Context}
+
+For completeness, Table~\ref{tab:seen_identity_ablation_scope} reports the earlier Tongji seed 42 diagnostic ablation under the original seen-identity protocol. These results are useful for understanding the development path of the project, but they are not the final evidence because the protocol permits identity overlap between development and test partitions.
+
+\begin{table*}[t]
 \centering
-\caption{Diagnostic Tongji seed42 ablation under the original seen-identity protocol. These results are not the final subject-disjoint evidence.}
-\label{tab:ablation_scope}
-\resizebox{\columnwidth}{!}{
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\caption{Diagnostic Tongji seed 42 ablation under the original seen-identity protocol. These results are not the final palm-class-disjoint evidence.}
+\label{tab:seen_identity_ablation_scope}
 \begin{tabular}{llcccccc}
 \toprule
-Method & Description & Rank-1 & Rank-5 & Macro-F1 & EER & TAR@1e-2 & TAR@1e-3 \\
+Method & Description & Rank-1 & Rank-5 & Macro-F1 & EER & TAR@$10^{-2}$ & TAR@$10^{-3}$ \\
 \midrule
-B1 & ResNet18 + CE + SupCon & 93.39 & 95.47 & 92.43 & 2.30 & 96.23 & 89.75 \\
-B4 & ResNet18 + ArcFace & 94.35 & 96.40 & 93.65 & 2.03 & 96.83 & 91.86 \\
-B6 & ResNet18 + BNNeck + ArcFace & 96.80 & 97.88 & 96.40 & 1.14 & 98.77 & 96.53 \\
-B7 & ResNet18 + BNNeck + ArcFace + light SupCon & 96.97 & 97.98 & 96.60 & 1.13 & 98.77 & 96.50 \\
+M1 & ResNet18 + CE + SupCon & 93.39 & 95.47 & 92.43 & 2.30 & 96.23 & 89.75 \\
+M2 & ResNet18 + ArcFace & 94.35 & 96.40 & 93.65 & 2.03 & 96.83 & 91.86 \\
+M6 & ResNet18 + BNNeck + ArcFace & 96.80 & 97.88 & 96.40 & 1.14 & 98.77 & 96.53 \\
+M7 & ResNet18 + BNNeck + ArcFace + light SupCon & 96.97 & 97.98 & 96.60 & 1.13 & 98.77 & 96.50 \\
 \bottomrule
 \end{tabular}%
-}
-\end{table}
+\end{table*}
 
-The diagnostic ablation shows why B6 was worth evaluating under a stricter protocol. ArcFace and BNNeck improved the reported seen-identity ablation metrics, and light SupCon in B7 did not materially change the result relative to B6. However, this ablation should be read as hyperparameter and architectural evidence, not as proof that B6 is universally superior.
+The seen-identity diagnostic shows why M6 was worth evaluating under a stricter protocol: ArcFace and BNNeck improved the original diagnostic metrics, and light SupCon in M7 did not materially change the result relative to M6. However, the strict palm-class-disjoint ablation reverses the interpretation. The primary evidence is therefore the strict protocol, under which the highest observed tested component combination on the selected strict-protocol metrics is BNNeck + CE and the ArcFace-based variants are not consistently superior.
 
-The subject--disjoint Tongji evaluation in Section~\ref{sec:results} is the decisive evidence for the final paper claim. Under that protocol, B6 does not improve over B1 overall. Therefore, the ablation supports a protocol-sensitivity interpretation rather than a final method-dominance claim.
+\input{sections/strict_tongji_score_figures}

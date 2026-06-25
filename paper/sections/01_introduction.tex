@@ -1,17 +1,16 @@
 \section{Introduction}
 
-Palmprint recognition is commonly evaluated as an identification and verification problem, and recent deep-learning surveys describe a broad shift from handcrafted texture descriptors toward learned feature representations \cite{gao2025deeplearning}. Cross-session recognition is a challenging setting because acquisition changes can alter illumination, pose, deformation, and sensor conditions between recording sessions. In the PALM\_CGK\_BASE project, the Tongji protocol separates session directions into S1$\rightarrow$S2 and S2$\rightarrow$S1, enabling a direct test of session shift.
+Contactless palmprint recognition is a biometric matching problem in which both identification accuracy and low-false-accept verification behavior matter. In practice, a system may be required to retrieve the correct gallery identity while also operating at strict false-acceptance rates under changes in illumination, pose, deformation, region-of-interest quality, and acquisition session. These requirements make the evaluation protocol a central part of the scientific claim. A component that improves performance when development and test identities overlap may not preserve the same ranking when the test palms are held out, the gallery and probe come from different sessions, and the operating point is constrained by a low empirical false-accept rate.
 
-The current strong baseline is B1, a ResNet18 model trained with cross entropy and supervised contrastive learning \cite{khosla2020supervised}. The evaluated variant is B6, which combines a ResNet18 backbone, a 256-D embedding projection, BNNeck \cite{luo2019strong}, and an ArcFace normalized classifier \cite{deng2019arcface}. During evaluation, the post-BN embedding is L2-normalized and compared with cosine similarity.
+Recent palmprint systems increasingly reuse representation-learning components developed for face recognition and person re-identification, including angular-margin classifiers, supervised contrastive losses, and normalization necks. These components are plausible choices for palmprint embeddings, but their effect is not protocol-independent. In a biometric setting, the relevant question is not only whether a component improves a diagnostic split, but whether the improvement remains under held-out identities or palms, cross-session gallery/probe construction, and conservative verification thresholds. This paper addresses that question through an audited component-level evaluation rather than by proposing a new architecture.
 
-The central result is protocol-sensitive. BNNeck + ArcFace improves the original seen-identity Tongji protocol, but it does not improve over CE + SupCon overall under the stricter development/test subject-disjoint Tongji protocol. Under this stricter protocol, B6 trails B1 by 1.18 percentage points in bidirectional three-seed Rank-1 and has an EER that is 1.01 percentage points worse.
+We ask a specific protocol-level question: do conclusions about common recognition heads and losses remain stable when evaluation moves from a seen-identity diagnostic setting to a held-out palm-class cross-session protocol? The question is intentionally narrower than state-of-the-art palmprint recognition. Its importance is methodological: if component rankings change under different split and threshold policies, then claims about recognition-head improvements must be tied to the protocol under which they were measured.
 
-This paper therefore reframes the method evidence as protocol-sensitive. The test protocol matters: results that look favorable in a seen-identity setting do not necessarily transfer to held-out subjects at cross-session operating points. The IITD subject-disjoint within-dataset evaluation is used only as secondary validation, where the result is mixed and does not support a broad dominance claim.
-
-The contributions of this paper are:
-\begin{itemize}
-    \item A subject-disjoint cross-session evaluation of B1 CE + SupCon and B6 BNNeck + ArcFace on Tongji.
-    \item A protocol-sensitivity analysis showing that BNNeck + ArcFace is not universally superior under held-out subject evaluation.
-    \item An IITD subject-disjoint within-dataset secondary validation showing a mixed/near-tie result.
-    \item Reproducible splits, configs, and result summaries for the scoped evaluation.
-\end{itemize}
+This paper makes four contributions:
+\begin{enumerate}
+    \item It defines and audits a held-out palm-class Tongji cross-session protocol with bidirectional S1$\rightarrow$S2 and S2$\rightarrow$S1 evaluation, explicit gallery/probe construction, split hashes, and overlap checks.
+    \item It evaluates a controlled ResNet18 component matrix covering cross-entropy, supervised contrastive learning, BNNeck, angular-margin supervision (ArcFace, CosFace), and selected combinations under identical checkpoint-selection and matching policies.
+    \item It reports conservative low-FAR verification metrics, including TAR@FAR computed only at thresholds whose empirical false-accept rate does not exceed the target.
+    \item It analyzes protocol sensitivity: the BNNeck+ArcFace configuration that appears favorable in a seen-identity diagnostic setting does not consistently improve under held-out palm-class cross-session evaluation, and the observed component behavior differs across session direction and operating point.
+\end{enumerate}
+The paper is therefore a reproducible empirical evaluation, not a new-architecture or state-of-the-art performance claim.

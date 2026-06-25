@@ -1,0 +1,21 @@
+\begin{table}[t]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\caption{Paired statistical evidence for M6 minus M1 on Tongji palm-class-disjoint cross-session evaluation. Deltas are in percentage points over six paired seed-direction units. Positive EER is worse for M6; positive values are better for all other metrics.}
+\label{tab:paired_statistics_b6_vs_b1}
+\resizebox{\columnwidth}{!}{
+\begin{tabular}{lccc}
+\toprule
+Metric & Mean $\Delta$ & 95\% bootstrap CI & Sign-flip $p$ \\
+\midrule
+Rank-1 & -1.18 & [-3.32, +1.26] & 0.4688 \\
+Rank-5 & -1.00 & [-2.35, +0.39] & 0.2500 \\
+Macro-F1 & -1.31 & [-3.67, +1.44] & 0.4688 \\
+EER & +1.01 & [+0.48, +1.52] & 0.0312 \\
+TAR@FAR=1e-2 & -2.39 & [-5.29, +0.58] & 0.2500 \\
+TAR@FAR=1e-3 & -2.07 & [-8.47, +3.62] & 0.5625 \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}

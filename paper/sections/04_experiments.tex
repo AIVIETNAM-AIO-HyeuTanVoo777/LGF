@@ -2,44 +2,60 @@
 
 \subsection{Datasets and Protocols}
 
-The primary evaluation uses the segmented Tongji palmprint dataset. The repository manifest contains 12,000 Tongji images from 600 palms/classes, with 6,000 images in session 1 and 6,000 images in session 2. The recorded image size is $128 \times 128$. We evaluate two cross-session directions:
+The primary evaluation uses the segmented Tongji palmprint dataset \cite{zhang2017tongji}. The repository manifest contains 12,000 Tongji images from 600 palms/classes, with 6,000 images in session 1 and 6,000 images in session 2. The recorded image size is $128 \times 128$. We evaluate two cross-session directions:
 \begin{itemize}
-    \item S1$\rightarrow$S2: training, validation, and gallery data from session 1; probe data from session 2.
-    \item S2$\rightarrow$S1: training, validation, and gallery data from session 2; probe data from session 1.
+    \item S1$\rightarrow$S2: development training/validation images are drawn from session 1 development palm classes, while final held-out evaluation uses session 1 images as gallery and session 2 images as probe for held-out palm classes.
+    \item S2$\rightarrow$S1: development training/validation images are drawn from session 2 development palm classes, while final held-out evaluation uses session 2 images as gallery and session 1 images as probe for held-out palm classes.
 \end{itemize}
 The main reported Tongji numbers are bidirectional averages over S1$\rightarrow$S2 and S2$\rightarrow$S1 with seeds 42, 2026, and 2705.
 
-IITD within split is used as a secondary validation. The repository manifest contains 2,601 IITD images from 460 palms/classes, with all samples recorded as session 1 and image size $150 \times 150$. The B6 IITD result is a seed42 secondary check rather than a multi-seed IITD claim. IITD is treated as a near-saturated within-dataset setting, not as the primary contribution evidence.
+The IITD palm-class-disjoint within-session protocol is used as secondary validation. The repository manifest contains 2,601 IITD images from 460 palms/classes \cite{iitd_touchless_palmprint}, with all samples recorded as session 1 and image size $150 \times 150$. Splits are constructed over seeds 42, 2026, and 2705. Because IITD is single-session in the current manifest, it is interpreted as within-session palm-class-disjoint validation rather than cross-session evidence.
 
 \begin{table}[t]
 \centering
-\caption{Dataset split sizes used by the paper experiments.}
+\scriptsize
+\setlength{\tabcolsep}{4pt}
+\caption{Dataset split sizes and classes/subjects partitioning used by the experiments. For IITD, split sizes vary slightly across seeds; values for Seed 42 are reported.}
 \label{tab:split_sizes}
-\begin{tabular}{lrrrrr}
+\begin{tabular}{lrrrrrccc}
 \hline
-Protocol & Train & Val & Gallery & Probe & Support \\
+Dataset & Direction & Train (Images) & Val (Images) & Gallery (Images) & Probe (Images) & Dev Classes & Test Classes & Claim \\
 \hline
-Tongji S1$\rightarrow$S2 & 4,800 & 1,200 & 6,000 & 6,000 & 0 \\
-Tongji S2$\rightarrow$S1 & 4,800 & 1,200 & 6,000 & 6,000 & 0 \\
-IITD within & 1,681 & 460 & 1,681 & 460 & 0 \\
+Tongji & S1$\rightarrow$S2 & 3,840 & 960 & 1,200 & 1,200 & 480 & 120 & palm-class-disjoint \\
+Tongji & S2$\rightarrow$S1 & 3,840 & 960 & 1,200 & 1,200 & 480 & 120 & palm-class-disjoint \\
+IITD & within-session & 1,670 & 417 & 238 & 276 & 368 & 92 & palm-class-disjoint \\
 \hline
 \end{tabular}
 \end{table}
 
+\input{sections/rankb_protocol_audit_table}
+
+Palm-class and subject-ID fields are parsed from the repository manifest before split construction. The identity/parser audit documents the manifest fields used for \texttt{path}, \texttt{session}, \texttt{hand}, \texttt{subject\_id}, \texttt{palm\_id}, \texttt{class\_id}, and \texttt{sample\_id}. For each seed, it verifies zero image-level, palm-class, palm-ID, and subject-ID overlap between development and held-out test partitions. The manifest subject-field audit also reports zero overlap, but because the repository does not provide an independently verified person-level identifier beyond the manifest fields, we conservatively state the protocol claim as palm-class-disjoint.
+
+\begin{table}[t]
+\centering
+\caption{Schematic of the audited Tongji evaluation protocol. A palm class denotes one hand/palm instance in the manifest-level recognition labels. The split is claimed as palm-class-disjoint; independently verified person-disjointness is not asserted.}
+\label{tab:tongji_protocol_schematic}
+\begin{tabular}{lll}
+\toprule
+Source & Partition & Use \\
+\midrule
+Manifest palm classes & Development classes & Train/validation and checkpoint selection \\
+Manifest palm classes & Held-out classes, S1$\rightarrow$S2 & Session 1 gallery, Session 2 probe \\
+Manifest palm classes & Held-out classes, S2$\rightarrow$S1 & Session 2 gallery, Session 1 probe \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+A gallery/probe construction audit further verifies the held-out evaluation partitions. For Tongji, S1$\rightarrow$S2 uses session 1 as gallery and session 2 as probe, while S2$\rightarrow$S1 reverses this direction. For the corrected IITD within-session split, every held-out palm class appears in both gallery and probe with zero image overlap. IITD therefore remains secondary within-session validation rather than cross-session evidence.
+
 \subsection{Compared Methods}
 
-The paper compares the following methods:
-\begin{itemize}
-    \item B1: ResNet18 + cross entropy + supervised contrastive learning.
-    \item B2: FixedGaborResNet18.
-    \item B4: ResNet18 + ArcFace.
-    \item B6: ResNet18 + BNNeck + ArcFace.
-    \item B7: ResNet18 + BNNeck + ArcFace + light SupCon.
-\end{itemize}
+The main strict-protocol comparison focuses on the M1/M6 comparison because M1 is the standard CE + SupCon baseline and M6 is the BNNeck + ArcFace configuration. Section~\ref{sec:ablation} reports the complete strict Tongji component ablation over M0, M1, M2, M3, M4, M6, and M7 across both session directions and three seeds. A fixed-Gabor texture baseline is included as a palmprint-specific reference point under the same strict Tongji gallery/probe splits. For this baseline, each segmented image is resized to $128\times128$, normalized, filtered with an eight-orientation Gabor bank, converted to magnitude responses, average-pooled to an $8\times8$ grid per orientation, standardized using only the training partition of the corresponding seed-direction split, L2-normalized, and matched with cosine similarity. The resulting feature dimensionality is 512, and the baseline uses no learned checkpoint.
 
 \subsection{Training Recipe}
 
-The common training recipe used by the final compared Tongji runs is:
+The common training recipe used by the final learned ResNet Tongji runs is:
 \begin{itemize}
     \item epochs: 60;
     \item learning rate: $1 \times 10^{-4}$;
@@ -52,16 +68,42 @@ The common training recipe used by the final compared Tongji runs is:
     \item Tongji seeds: 42, 2026, 2705.
 \end{itemize}
 
-B1 uses a ResNet18 baseline trained with cross entropy and supervised contrastive learning, with $\lambda_{\mathrm{supcon}}=0.10$ and temperature 0.07. B6 uses ResNet18 + BNNeck + ArcFace, with ArcFace scale $s=30.0$, margin $m=0.5$, $\lambda_{\mathrm{supcon}}=0.0$, and temperature 0.07 retained in the config for compatibility. B7 adds a light supervised contrastive term for the ablation comparison.
+M0 uses ResNet18 with cross entropy only. M1 adds supervised contrastive learning with $\lambda_{\mathrm{supcon}}=0.10$ and temperature 0.07. M2 uses ResNet18 with ArcFace supervision. M3 uses ResNet18 with CosFace supervision. M4 uses ResNet18 + BNNeck with cross entropy only. M6 uses ResNet18 + BNNeck + ArcFace. M7 adds a light supervised contrastive term with $\lambda_{\mathrm{supcon}}=0.02$ to the M6 setup.
 
 \subsection{Checkpoint and Evaluation Protocol}
 
-Evaluation uses the \texttt{best.pt} checkpoint produced by the training script. For B6, the config selects the post-BN embedding for evaluation. Matching is performed with cosine similarity over normalized embeddings. The reported metrics are Rank-1, Rank-5, Macro-F1, EER, TAR@FAR=1e-2, TAR@FAR=1e-3, parameter count, FLOPs, and average inference latency. TAR@FAR=1e-3 is emphasized because it measures strict low-FAR verification behavior.
+For learned ResNet variants, evaluation uses the \texttt{best.pt} checkpoint produced by the training script. For every strict Tongji learned run, \texttt{best.pt} is selected using only the validation split from development palm classes. Held-out gallery and probe samples are not used for checkpoint selection, early stopping, hyperparameter selection, threshold selection, or training-time model comparison. The checkpoint-selection audit confirms that all final strict Tongji checkpoints are selected by validation Rank-1 without gallery/probe/test influence. For BNNeck variants (M4, M6, M7), the post-BN embedding is selected for evaluation. Matching is performed with cosine similarity over normalized embeddings. The reported metrics are Rank-1, Rank-5, Macro-F1, EER, TAR@FAR=$10^{-2}$, and TAR@FAR=$10^{-3}$.
+
+Verification thresholds are swept over observed cosine scores using \texttt{sklearn.metrics.roc\_curve}. EER is computed by interpolating the ROC curve with Brent root finding when possible, with a nearest $|\mathrm{FPR}-\mathrm{FNR}|$ fallback. TAR@FAR is computed using a conservative empirical-FAR rule: among all swept thresholds whose empirical false-accept rate is less than or equal to the target FAR, we report the maximum observed true-accept rate. The selected threshold, empirical FAR, target FAR, number of genuine pairs, number of impostor pairs, and FAR resolution are exported for every run. We do not use the nearest ROC point if that point exceeds the target FAR. TAR@FAR=$10^{-3}$ is emphasized because it measures strict low-FAR verification behavior.
+
+\subsection{Evaluation Metrics}
+
+Let $x_i \in \mathbb{R}^d$ be the embedding vector extracted for image $i$. Embeddings are $L_2$-normalized: $\hat{x}_i = x_i / \lVert x_i \rVert_2$. The similarity between two images is computed using cosine similarity: $S(\hat{x}_1, \hat{x}_2) = \hat{x}_1^T \hat{x}_2$. The following evaluation metrics are defined:
+\begin{itemize}
+    \item \textbf{Rank-$k$ Accuracy}: The percentage of probe images for which the true matching identity is within the top-$k$ most similar gallery templates. We report Rank-1 and Rank-5 accuracies.
+    \item \textbf{Macro-F1}: For each probe image, the predicted identity is the identity of the nearest gallery template under cosine similarity. Macro-F1 is computed over probe identities from these nearest-gallery predictions.
+    \item \textbf{False Accept Rate (FAR(t))} at similarity threshold $t$: The ratio of impostor pairs incorrectly accepted as genuine matches:
+    \begin{equation}
+        \mathrm{FAR}(t) = \frac{\#\{\text{Impostor Similarities} \ge t\}}{\#\text{Total Impostor Pairs}}
+    \end{equation}
+    \item \textbf{False Reject Rate (FRR(t))} at similarity threshold $t$: The ratio of genuine pairs incorrectly rejected:
+    \begin{equation}
+        \mathrm{FRR}(t) = \frac{\#\{\text{Genuine Similarities} < t\}}{\#\text{Total Genuine Pairs}}
+    \end{equation}
+    \item \textbf{True Accept Rate (TAR(t))}: The verification rate defined as $1 - \mathrm{FRR}(t)$.
+    \item \textbf{Equal Error Rate (EER)}: The error rate at the threshold $t_{\mathrm{EER}}$ where FAR and FRR are equal.
+    \item \textbf{TAR @ FAR}: The True Accept Rate at specific false acceptance rate constraints: $\mathrm{TAR@FAR}=10^{-2}$ and $\mathrm{TAR@FAR}=10^{-3}$.
+\end{itemize}
 
 \subsection{Hardware and Software Evidence}
 
-The verified local evidence records CUDA execution on an NVIDIA GeForce RTX 4050 Laptop GPU with 6GB VRAM, PyTorch 2.12.0+cu126, and the Conda environment \texttt{palm\_lgf}. The current repository evidence does not track OS, CPU, or RAM details for the final B6 runs, so those fields are omitted from the paper draft.
+The verified local evidence records execution on Windows 11 with Python 3.13.13, PyTorch 2.12.0+cu126, and CUDA 12.6. Computations were run on an NVIDIA GeForce RTX 4050 Laptop GPU (6GB VRAM) and an AMD Ryzen 7 processor with 16GB RAM.
 
 \subsection{Reproducibility}
 
-The experiments are configured through YAML files, split JSON files, and scripts in the repository. The relevant training and evaluation entry points are \texttt{scripts/train\_lgf.py} and \texttt{scripts/eval\_embedding.py}. Subject-disjoint split construction and audit are supported by \texttt{scripts/make\_tongji\_iitd\_disjoint\_splits.py} and \texttt{scripts/rank\_b\_split\_audit\_and\_iitd\_fix.py}. The final paper tables are recorded in \texttt{docs/results/paper\_ready\_core\_results\_tables.md}, with raw Tongji and IITD summaries in \texttt{docs/results/tongji\_subject\_disjoint\_metrics\_raw.md} and \texttt{docs/results/iitd\_subject\_disjoint\_summary.md}. Raw segmented data, experiment directories, and checkpoint tensors are not committed; the repository tracks configs, split JSON files, metadata, scripts, and saved result summaries.
+\paragraph{Reproducibility artifacts.}
+We provide split hashes, checkpoint-selection audits, metric-threshold audits, and scripts used to generate the reported tables and figures. The released audit files record manifest-level overlap checks, gallery/probe construction checks, training-configuration checks, and the exact genuine/impostor comparison counts used for low-FAR estimates. Raw segmented data, experiment directories, checkpoint tensors, score tensors, and exported submission zips are not committed.
+
+\input{sections/training_config_table}
+
+Table~\ref{tab:training_config_summary} summarizes the method-level training configuration used for the final strict Tongji component ablation. This table is generated from the configs listed in \texttt{audit\_artifacts/manifests/run\_manifest.csv}.
