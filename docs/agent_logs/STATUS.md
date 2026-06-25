@@ -1,15 +1,25 @@
 # STATUS
 
-- **Current Step**: Step 1 - Protocol Lock and Repository Audit (`01_PROTOCOL_LOCK_AND_REPO_AUDIT.md`)
+- **Current Step**: Step 2 - Conservative TAR@FAR Metric (`02_METRIC_CONSERVATIVE_TAR_FAR.md`)
 - **Modified Files**:
-  - `docs/protocols/rankb_protocol_lock.md` (created)
-  - `docs/agent_logs/000_initial_repo_inventory.md` (created)
-  - `docs/agent_logs/STATUS.md` (created)
+  - `palmrec/evaluation/metrics.py` (modified: added optimized vectorized `conservative_tar_at_far` implementation)
+  - `palmrec/evaluation/__init__.py` (modified: exported `conservative_tar_at_far`)
+  - `scripts/eval_embedding.py` (modified: routed through `conservative_tar_at_far`)
+  - `scripts/evaluate_gabor_strict_tongji_baseline.py` (modified: routed through `conservative_tar_at_far`)
+  - `scripts/audit_metric_thresholds.py` (modified: routed through `conservative_tar_at_far`)
+  - `tests/test_metrics_tar_far.py` (modified: added comprehensive unit tests for conservative TAR@FAR)
+  - `scripts/export_threshold_audit.py` (created: exports correct threshold audit format)
+  - `docs/audits/threshold_audit.csv` (created)
+  - `docs/agent_logs/metric_recompute_decision.md` (created)
+  - `paper/sections/04_experiments.tex` (modified: replaced TAR@FAR LaTeX wording)
+  - `docs/agent_logs/STATUS.md` (modified)
 - **Commands Run**:
-  - `git rev-parse --show-toplevel; git branch --show-current; git rev-parse HEAD; git status --short; python --version`
-  - `git checkout -b rankb-protocol-study-revision`
-  - `New-Item -ItemType Directory -Force docs/agent_logs, docs/audits, docs/results, docs/protocols`
-  - `python scripts/audit_rankb_protocol.py`
-- **Pass/Fail Status**: PASS (Protocol audit successfully checked all 9 splits with 0 failures)
+  - `python -m pytest tests/test_metrics_tar_far.py -v`
+  - `python scripts/export_threshold_audit.py`
+  - `python -c "import pandas as pd; p='docs/audits/threshold_audit.csv'; df=pd.read_csv(p); assert (df['empirical_far'] <= df['far_target'] + 1e-12).all()"`
+  - `python scripts/audit_metric_thresholds.py`
+  - `python scripts/evaluate_gabor_strict_tongji_baseline.py`
+  - `python scripts/aggregate_strict_ablation_results.py; python scripts/aggregate_iitd_rerun_results.py`
+- **Pass/Fail Status**: PASS
 - **Unresolved Issues**: None
-- **Next Action**: Execute Step 2 - Conservative TAR@FAR Metric (`02_METRIC_CONSERVATIVE_TAR_FAR.md`)
+- **Next Action**: Execute Step 3 - Pairwise Statistical Test revision (`03_PAIRWISE_STATISTICAL_TEST.md`)

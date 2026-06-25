@@ -62,6 +62,65 @@ def calculate_eer(
     return float(eer), float(eer_threshold)
 
 
+def conservative_tar_at_far(genuine_scores, impostor_scores, target_far, eps=1e-12):
+    genuine_scores = np.asarray(genuine_scores, dtype=np.float64)
+    impostor_scores = np.asarray(impostor_scores, dtype=np.float64)
+    if genuine_scores.size == 0:
+        raise ValueError("genuine_scores is empty")
+    if impostor_scores.size == 0:
+        raise ValueError("impostor_scores is empty")
+    if not (0.0 <= target_far <= 1.0):
+        raise ValueError(f"target_far must be in [0,1], got {target_far}")
+
+    # Sort genuine and impostor scores
+    gen_sorted = np.sort(genuine_scores)
+    imp_sorted = np.sort(impostor_scores)
+
+    # Get unique thresholds, including sentinels
+    unique_thresholds = np.unique(np.concatenate([gen_sorted, imp_sorted]))
+    thresholds = np.concatenate([[np.inf], unique_thresholds[::-1], [-np.inf]])
+
+    # Vectorized computation of empirical FAR and TAR
+    imp_counts = imp_sorted.size - np.searchsorted(imp_sorted, thresholds, side='left')
+    gen_counts = gen_sorted.size - np.searchsorted(gen_sorted, thresholds, side='left')
+
+    empirical_fars = imp_counts / imp_sorted.size
+    tars = gen_counts / gen_sorted.size
+
+    # Filter by FAR constraint
+    valid = empirical_fars <= target_far + eps
+    if not np.any(valid):
+        raise RuntimeError("No threshold satisfies conservative FAR constraint")
+
+    valid_indices = np.where(valid)[0]
+    valid_tars = tars[valid_indices]
+
+    # Find maximum TAR
+    max_tar = np.max(valid_tars)
+    # Get all indices with max TAR (within epsilon)
+    tie_indices = valid_indices[np.abs(valid_tars - max_tar) <= eps]
+    
+    # Among ties, select the one with the maximum empirical FAR
+    best_idx = tie_indices[np.argmax(empirical_fars[tie_indices])]
+
+    best_tar = float(tars[best_idx])
+    best_threshold = float(thresholds[best_idx])
+    best_far = float(empirical_fars[best_idx])
+
+    if best_far > target_far + eps:
+        raise AssertionError(f"Conservative FAR violated: {best_far} > {target_far}")
+
+    return {
+        "tar": best_tar,
+        "threshold": best_threshold,
+        "empirical_far": best_far,
+        "target_far": float(target_far),
+        "n_genuine": int(genuine_scores.size),
+        "n_impostor": int(impostor_scores.size),
+        "far_step": float(1.0 / impostor_scores.size),
+    }
+
+
 def tar_at_far_conservative(
     fpr: np.ndarray,
     tpr: np.ndarray,

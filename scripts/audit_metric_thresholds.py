@@ -16,7 +16,7 @@ ROOT = Path(".").resolve()
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from palmrec.evaluation.metrics import tar_at_far_conservative
+from palmrec.evaluation.metrics import tar_at_far_conservative, conservative_tar_at_far
 
 STRICT_TONGJI_RUNS_CSV = ROOT / "docs/results/strict_tongji_ablation_runs.csv"
 IITD_RUNS_CSV = ROOT / "docs/results/iitd_subject_disjoint_rerun_runs.csv"
@@ -126,8 +126,9 @@ def evidence_rows_for_run(
         nearest_empirical_far = float(fpr[nearest_idx])
         nearest_tar = float(tpr[nearest_idx])
         nearest_threshold = float(thresholds[nearest_idx])
-
-        conservative = tar_at_far_conservative(fpr, tpr, thresholds, target_far)
+        pos_scores = y_scores[y_true == 1]
+        neg_scores = y_scores[y_true == 0]
+        conservative = conservative_tar_at_far(pos_scores, neg_scores, target_far)
         empirical_far = float(conservative["empirical_far"])
         tar = float(conservative["tar"])
         selected_threshold = float(conservative["threshold"])

@@ -17,7 +17,7 @@ ROOT = Path(".").resolve()
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from palmrec.evaluation.metrics import tar_at_far_conservative
+from palmrec.evaluation.metrics import tar_at_far_conservative, conservative_tar_at_far
 from palmrec.datasets.palm_dataset import PalmDataset
 from palmrec.models.baselines import ResNet18Baseline
 
@@ -249,8 +249,8 @@ def main():
             pass
             
         # Conservative TAR @ FAR: selected empirical FPR never exceeds the target FAR.
-        tar_1e2_info = tar_at_far_conservative(fpr, tpr, thresholds, 1e-2)
-        tar_1e3_info = tar_at_far_conservative(fpr, tpr, thresholds, 1e-3)
+        tar_1e2_info = conservative_tar_at_far(pos_scores, neg_scores, 1e-2)
+        tar_1e3_info = conservative_tar_at_far(pos_scores, neg_scores, 1e-3)
         tar_1e2 = tar_1e2_info["tar"]
         tar_1e3 = tar_1e3_info["tar"]
         
