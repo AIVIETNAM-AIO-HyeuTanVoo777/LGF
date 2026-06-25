@@ -1,36 +1,15 @@
 # Gallery/Probe Construction Audit
 
-## Scope
+Detailed audit of gallery and probe partitions, class support, and session-direction verification.
 
-This audit verifies that final gallery/probe partitions are constructed as closed-set enrollment/probe splits over the same held-out palm classes, with no image overlap and with the expected session direction.
-
-## Evaluation-code evidence
-
-The evaluation script loads `gallery` and `probe` partitions separately, extracts embeddings, computes a probe-by-gallery cosine similarity matrix, uses class-label equality for Rank-k matching, and derives EER/TAR from genuine/impostor probe-gallery pairs.
-
-## Verdict counts
-
-| Verdict | Count |
-|---|---:|
-| PASS | 9 |
-| FAIL | 0 |
-
-## Split-level audit
-
-| Dataset | Direction | Seed | Gallery images | Probe images | Gallery classes | Probe classes | Image overlap | Gallery sessions | Probe sessions | Status | Verdict |
-|---|---|---:|---:|---:|---:|---:|---:|---|---|---|---|
-| Tongji | S1->S2 | 42 | 1200 | 1200 | 120 | 120 | 0 | session1 | session2 | cross-session | PASS |
-| Tongji | S1->S2 | 2026 | 1200 | 1200 | 120 | 120 | 0 | session1 | session2 | cross-session | PASS |
-| Tongji | S1->S2 | 2705 | 1200 | 1200 | 120 | 120 | 0 | session1 | session2 | cross-session | PASS |
-| Tongji | S2->S1 | 42 | 1200 | 1200 | 120 | 120 | 0 | session2 | session1 | cross-session | PASS |
-| Tongji | S2->S1 | 2026 | 1200 | 1200 | 120 | 120 | 0 | session2 | session1 | cross-session | PASS |
-| Tongji | S2->S1 | 2705 | 1200 | 1200 | 120 | 120 | 0 | session2 | session1 | cross-session | PASS |
-| IITD | within-session | 42 | 238 | 276 | 92 | 92 | 0 | session1 | session1 | within-session-only | PASS |
-| IITD | within-session | 2026 | 251 | 276 | 92 | 92 | 0 | session1 | session1 | within-session-only | PASS |
-| IITD | within-session | 2705 | 242 | 276 | 92 | 92 | 0 | session1 | session1 | within-session-only | PASS |
-
-## Interpretation
-
-All audited splits use matching gallery/probe palm-class sets with disjoint images. Tongji splits are cross-session in the intended direction; IITD is within-session only and must remain secondary validation rather than cross-session evidence.
-
-Detailed machine-readable rows are stored in `docs/audits/gallery_probe_audit.csv`.
+| split_file                                     |   gallery_images |   probe_images |   gallery_classes |   probe_classes | every_probe_class_has_gallery_support   | every_gallery_class_has_probe_support   | direction_mismatch   | status   |
+|:-----------------------------------------------|-----------------:|---------------:|------------------:|----------------:|:----------------------------------------|:----------------------------------------|:---------------------|:---------|
+| iitd_subject_disjoint_within_seed2026.json     |              251 |            276 |                92 |              92 | yes                                     | yes                                     | False                | PASS     |
+| iitd_subject_disjoint_within_seed2705.json     |              242 |            276 |                92 |              92 | yes                                     | yes                                     | False                | PASS     |
+| iitd_subject_disjoint_within_seed42.json       |              238 |            276 |                92 |              92 | yes                                     | yes                                     | False                | PASS     |
+| tongji_subject_disjoint_s1_to_s2_seed2026.json |             1200 |           1200 |               120 |             120 | yes                                     | yes                                     | False                | PASS     |
+| tongji_subject_disjoint_s1_to_s2_seed2705.json |             1200 |           1200 |               120 |             120 | yes                                     | yes                                     | False                | PASS     |
+| tongji_subject_disjoint_s1_to_s2_seed42.json   |             1200 |           1200 |               120 |             120 | yes                                     | yes                                     | False                | PASS     |
+| tongji_subject_disjoint_s2_to_s1_seed2026.json |             1200 |           1200 |               120 |             120 | yes                                     | yes                                     | False                | PASS     |
+| tongji_subject_disjoint_s2_to_s1_seed2705.json |             1200 |           1200 |               120 |             120 | yes                                     | yes                                     | False                | PASS     |
+| tongji_subject_disjoint_s2_to_s1_seed42.json   |             1200 |           1200 |               120 |             120 | yes                                     | yes                                     | False                | PASS     |

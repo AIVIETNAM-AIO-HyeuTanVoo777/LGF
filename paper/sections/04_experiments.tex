@@ -17,13 +17,13 @@ The IITD palm-class-disjoint within-session protocol is used as secondary valida
 \setlength{\tabcolsep}{4pt}
 \caption{Dataset split sizes and classes/subjects partitioning used by the experiments. For IITD, split sizes vary slightly across seeds; values for Seed 42 are reported.}
 \label{tab:split_sizes}
-\begin{tabular}{lrrrrcc}
+\begin{tabular}{lrrrrrccc}
 \hline
-Protocol & Train (Images) & Val (Images) & Gallery (Images) & Probe (Images) & Dev Classes & Test Classes \\
+Dataset & Direction & Train (Images) & Val (Images) & Gallery (Images) & Probe (Images) & Dev Classes & Test Classes & Claim \\
 \hline
-Tongji S1$\rightarrow$S2 (Disjoint) & 3,840 & 960 & 1,200 & 1,200 & 480 & 120 \\
-Tongji S2$\rightarrow$S1 (Disjoint) & 3,840 & 960 & 1,200 & 1,200 & 480 & 120 \\
-IITD within (Disjoint) & 1,670 & 417 & 238 & 276 & 368 & 92 \\
+Tongji & S1$\rightarrow$S2 & 3,840 & 960 & 1,200 & 1,200 & 480 & 120 & palm-class-disjoint \\
+Tongji & S2$\rightarrow$S1 & 3,840 & 960 & 1,200 & 1,200 & 480 & 120 & palm-class-disjoint \\
+IITD & within-session & 1,670 & 417 & 238 & 276 & 368 & 92 & palm-class-disjoint \\
 \hline
 \end{tabular}
 \end{table}
@@ -33,7 +33,7 @@ IITD within (Disjoint) & 1,670 & 417 & 238 & 276 & 368 & 92 \\
 \input{../docs/audits/rankb_protocol_audit_table}
 
 
-Palm-class and subject-ID fields are parsed from the repository manifest before split construction. The identity/parser audit documents the manifest fields used for \texttt{path}, \texttt{session}, \texttt{hand}, \texttt{subject\_id}, \texttt{palm\_id}, \texttt{class\_id}, and \texttt{sample\_id}. For each seed, it verifies zero image-level, palm-class, palm-ID, and subject-ID overlap between development and held-out test partitions. Because the repository does not provide an independently verified person-level identifier beyond the manifest fields, the final claim remains conservatively scoped as palm-class-disjoint rather than person-disjoint.
+Palm-class and subject-ID fields are parsed from the repository manifest before split construction. The identity/parser audit documents the manifest fields used for \texttt{path}, \texttt{session}, \texttt{hand}, \texttt{subject\_id}, \texttt{palm\_id}, \texttt{class\_id}, and \texttt{sample\_id}. For each seed, it verifies zero image-level, palm-class, palm-ID, and subject-ID overlap between development and held-out test partitions. The manifest subject-field audit also reports zero overlap, but because the repository does not provide an independently verified person-level identifier beyond the manifest fields, we conservatively state the protocol claim as palm-class-disjoint.
 
 \begin{table}[t]
 \centering
