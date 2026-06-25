@@ -72,7 +72,7 @@ To collect raw JSON metrics and generate LaTeX tables:
 
 ## 8. Metric Implementation
 - **Canonical metric implementation**: Vectorized conservative TAR@FAR metric is defined in `palmrec/evaluation/metrics.py` under the function `conservative_tar_at_far`.
-- **Unit test file**: Verification of correct/conservative metric behavior is in `tests/test_metrics.py`.
+- **Unit test file**: Verification of correct/conservative metric behavior is in `tests/test_metrics_tar_far.py`.
 
 ## 9. Generated Results Artifacts
 - **Tongji main results**: [main_tongji_results.csv](file:///D:/0.Research/PALM_CGK_BASE/PALM_CGK_BASE/docs/results/main_tongji_results.csv)

@@ -1,13 +1,22 @@
 # STATUS
 
-- **Current Step**: Step 12 - Commit Plan (`12_COMMIT_PLAN.md`)
+- **Current Step**: Final Verification Pass (`12_COMMIT_PLAN.md`)
 - **Modified Files**:
+  - `docs/reproducibility_manifest.md` (modified)
+  - `docs/results/rankb_run_manifest.csv` (modified)
+  - `docs/agent_logs/experiment_matrix_integrity_audit.md` (created)
+  - `docs/agent_logs/method_label_consistency_audit.md` (created)
+  - `docs/agent_logs/final_metric_consistency_audit.md` (created)
+  - `docs/agent_logs/final_protocol_isolation_audit.md` (created)
+  - `docs/agent_logs/latex_source_integrity_audit.md` (created)
+  - `docs/agent_logs/overleaf_compile_required.md` (created)
+  - `docs/agent_logs/final_readiness_report.md` (modified)
   - `docs/agent_logs/STATUS.md` (modified)
-  - `paper_overleaf_upload.zip` (regenerated)
 - **Commands Run**:
-  - `git tag rankb-submission-candidate-20260625`
-  - `python build_overleaf_package.py`
-  - `python -c ...` (verified zip files)
+  - `python -m pytest -v` (passed)
+  - `python scripts/export_threshold_audit.py` (passed)
+  - `python scripts/audit_splits.py` (passed)
+  - `python scripts/audit_checkpoint_selection.py` (passed)
 - **Pass/Fail Status**: PASS
 - **Unresolved Issues**: None
-- **Next Action**: Conclude task execution and summarize outcomes.
+- **Next Action**: Commit all verification artifacts and complete the task.
