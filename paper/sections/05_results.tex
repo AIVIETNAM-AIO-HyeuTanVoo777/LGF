@@ -60,6 +60,10 @@ To inspect low-FAR behavior beyond aggregate TAR values, Table~\ref{tab:strict_t
 The diagnostics refine the interpretation of the ablation results. B5 has the highest observed mean among the tested variants by Rank-1 and TAR@FAR=$10^{-3}$, but B1 has the highest d-prime, indicating the largest average separation between genuine and impostor scores. B5 instead has the lowest impostor mean among the tested variants, which is consistent with its favorable low-FAR recognition result. B6 and B7 do not improve the score-distribution diagnostics over B1; their d-prime values are lower and their score-tail behavior does not support a reliable ArcFace-based advantage under the strict protocol.
 
 
+\input{sections/strict_tongji_failure_tail_table}
+
+Table~\ref{tab:strict_tongji_failure_tail} explains why the low-FAR ranking differs from the average-separation view. In S1$\rightarrow$S2, B5 reduces the high-impostor-score tail relative to B1 and gains +7.16 percentage points in TAR@FAR=$10^{-3}$ despite a lower genuine mean and lower d-prime. In S2$\rightarrow$S1, the same B5 comparison loses -5.40 percentage points at TAR@FAR=$10^{-3}$, showing that the BNNeck+CE benefit is direction-dependent rather than direction-invariant. B6 shows the same asymmetry more weakly: it has only a small S1$\rightarrow$S2 low-FAR gain and a clear S2$\rightarrow$S1 degradation relative to B1. These score-tail deltas support the interpretation that ArcFace and BNNeck affect the impostor tail and score calibration differently across session order, rather than producing a uniform improvement in embedding quality.
+
 \subsection{IITD Secondary Palm-Class-Disjoint Validation}
 
 The IITD experiment is retained only as secondary within-session validation, not as cross-session evidence. After the gallery/probe construction audit revealed that the previous IITD held-out split did not guarantee matching gallery and probe palm-class sets, the IITD split generator was corrected and B1/B6 were rerun over seeds 42, 2026, and 2705. In the corrected split, every held-out IITD palm class appears in both gallery and probe, with zero image overlap.
