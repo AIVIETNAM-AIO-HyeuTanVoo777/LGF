@@ -1,4 +1,4 @@
 method,method_label,palmprint_specific,learned,direction,n,rank1_pp_mean_std,rank5_pp_mean_std,macro_f1_pp_mean_std,eer_pp_mean_std,tar_far_1e_2_pp_mean_std,tar_far_1e_3_pp_mean_std,comment
-B8,ResNet18 + CosFace,No,Yes,S1->S2,3,92.361 +/- 1.754,96.083 +/- 1.429,91.395 +/- 2.124,5.150 +/- 0.213,87.122 +/- 0.585,71.703 +/- 0.959,Generic learned margin-loss baseline; not palmprint-specific.
-B8,ResNet18 + CosFace,No,Yes,S2->S1,3,92.889 +/- 1.143,96.139 +/- 0.977,91.908 +/- 1.441,4.844 +/- 0.350,88.514 +/- 1.254,74.619 +/- 1.524,Generic learned margin-loss baseline; not palmprint-specific.
-B8,ResNet18 + CosFace,No,Yes,Both,6,92.625 +/- 1.504,96.111 +/- 1.224,91.651 +/- 1.833,4.997 +/- 0.328,87.818 +/- 1.200,73.161 +/- 1.936,Generic learned margin-loss baseline; not palmprint-specific.
+M3,ResNet18 + CosFace,No,Yes,S1->S2,3,92.361 +/- 1.754,96.083 +/- 1.429,91.395 +/- 2.124,5.150 +/- 0.213,87.122 +/- 0.585,71.703 +/- 0.959,Generic learned margin-loss baseline; not palmprint-specific.
+M3,ResNet18 + CosFace,No,Yes,S2->S1,3,92.889 +/- 1.143,96.139 +/- 0.977,91.908 +/- 1.441,4.844 +/- 0.350,88.514 +/- 1.254,74.619 +/- 1.524,Generic learned margin-loss baseline; not palmprint-specific.
+M3,ResNet18 + CosFace,No,Yes,Both,6,92.625 +/- 1.504,96.111 +/- 1.224,91.651 +/- 1.833,4.997 +/- 0.328,87.818 +/- 1.200,73.161 +/- 1.936,Generic learned margin-loss baseline; not palmprint-specific.

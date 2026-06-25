@@ -10,9 +10,9 @@ Contactless palmprint recognition is more difficult than contact-based recogniti
 
 \subsection{Metric Learning for Biometric Embeddings}
 
-Biometric recognition systems depend on embedding geometry: genuine pairs should remain close while impostor pairs should be separated, especially at strict false-acceptance operating points. Supervised contrastive learning explicitly pulls same-class examples together and pushes different-class examples apart \cite{khosla2020supervised}. The B1 baseline in this project uses this idea together with cross entropy, forming a strong baseline for the Tongji cross-session protocol.
+Biometric recognition systems depend on embedding geometry: genuine pairs should remain close while impostor pairs should be separated, especially at strict false-acceptance operating points. Supervised contrastive learning explicitly pulls same-class examples together and pushes different-class examples apart \cite{khosla2020supervised}. The M1 baseline in this project uses this idea together with cross entropy, forming a strong baseline for the Tongji cross-session protocol.
 
-Margin-based normalized classifiers provide another route to discriminative embeddings. ArcFace adds an angular margin to normalized features and class weights, encouraging separation in angular space \cite{deng2019arcface}. BNNeck was introduced in person re-identification as a normalization neck that separates feature spaces used for metric comparison and classification supervision \cite{luo2019strong}. B6 adapts these two ideas to the palmprint setting: ArcFace shapes the angular classifier geometry, while BNNeck provides the post-BN embedding used for cosine verification.
+Margin-based normalized classifiers provide another route to discriminative embeddings. ArcFace adds an angular margin to normalized features and class weights, encouraging separation in angular space \cite{deng2019arcface}. BNNeck was introduced in person re-identification as a normalization neck that separates feature spaces used for metric comparison and classification supervision \cite{luo2019strong}. M6 combines these two ideas to the palmprint setting: ArcFace shapes the angular classifier geometry, while BNNeck provides the post-BN embedding used for cosine verification.
 
 \subsection{Cross-Session and Protocol-Sensitive Evaluation}
 

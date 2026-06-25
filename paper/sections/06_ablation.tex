@@ -40,3 +40,5 @@ M7 & ResNet18 + BNNeck + ArcFace + light SupCon & 96.97 & 97.98 & 96.60 & 1.13 &
 \end{table*}
 
 The seen-identity diagnostic shows why M6 was worth evaluating under a stricter protocol: ArcFace and BNNeck improved the original diagnostic metrics, and light SupCon in M7 did not materially change the result relative to M6. However, the strict palm-class-disjoint ablation reverses the interpretation. The primary evidence is therefore the strict protocol, under which the highest observed tested component combination on the selected strict-protocol metrics is BNNeck + CE and the ArcFace-based variants are not consistently superior.
+
+\input{sections/strict_tongji_score_figures}

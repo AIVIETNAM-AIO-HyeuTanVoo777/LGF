@@ -1,8 +1,8 @@
 # Strict Tongji Additional Baselines
 
-This table adds B8, a generic learned CosFace baseline, outside the B0--B7 component matrix.
+This table adds M3, a generic learned CosFace baseline, outside the M0--M7 component matrix.
 
-B8 is not palmprint-specific. It is included as a stronger generic metric-learning baseline using the existing margin-head training path.
+M3 is not palmprint-specific. It is included as a stronger generic metric-learning baseline using the existing margin-head training path.
 
 ## Summary
 
@@ -25,5 +25,5 @@ B8 is not palmprint-specific. It is included as a stronger generic metric-learni
 
 ## Claim boundary
 
-- Safe: B8 is an additional generic learned CosFace baseline under the same strict Tongji protocol.
-- Unsafe: B8 is a palmprint-specific baseline, PalmNet/CompNet/Competitive-Code replacement, or state-of-the-art method.
+- Safe: M3 is an additional generic learned CosFace baseline under the same strict Tongji protocol.
+- Unsafe: M3 is a palmprint-specific baseline, PalmNet/CompNet/Competitive-Code replacement, or state-of-the-art method.

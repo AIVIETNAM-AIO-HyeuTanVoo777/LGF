@@ -191,6 +191,10 @@ def md_table(rows: list[dict[str, Any]], fields: list[str]) -> str:
 
 def tex_escape(s: Any) -> str:
     text = str(s)
+    if text == "S1->S2":
+        return r"S1$\to$S2"
+    if text == "S2->S1":
+        return r"S2$\to$S1"
     repl = {
         "\\": r"\textbackslash{}",
         "&": r"\&",

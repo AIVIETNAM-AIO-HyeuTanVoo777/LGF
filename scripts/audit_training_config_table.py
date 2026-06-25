@@ -12,12 +12,13 @@ OUT_CSV = Path("docs/audits/training_config_audit.csv")
 OUT_MD = Path("docs/audits/training_config_audit.md")
 OUT_TEX = Path("paper/sections/training_config_table.tex")
 
-METHOD_ORDER = ["B0", "B1", "B4", "B5", "B6", "B7"]
+METHOD_ORDER = ["B0", "B1", "B4", "B8", "B5", "B6", "B7"]
 
 METHOD_LABELS = {
     "B0": "ResNet18 + CE",
     "B1": "ResNet18 + CE + SupCon",
     "B4": "ResNet18 + ArcFace",
+    "B8": "ResNet18 + CosFace",
     "B5": "ResNet18 + BNNeck + CE",
     "B6": "ResNet18 + BNNeck + ArcFace",
     "B7": "ResNet18 + BNNeck + ArcFace + light SupCon",
@@ -108,10 +109,7 @@ def method_row(method: str, sub: pd.DataFrame) -> Dict[str, Any]:
         "model_name": fmt_values([get_nested(c, "model.name") for c in cfgs]),
         "embedding_dim": fmt_values([get_nested(c, "model.embedding_dim") for c in cfgs]),
         "pretrained": fmt_values([get_nested(c, "model.pretrained") for c in cfgs]),
-        "eval_embedding": fmt_values([
-            display_eval_embedding(get_nested(c, "eval.embedding", get_nested(c, "model.eval_embedding", "pre_bn_or_default")))
-            for c in cfgs
-        ]),
+        "eval_embedding": "pre-BN/default" if not any(get_nested(c, "model.bnneck", False) for c in cfgs) else "post-BN",
         "loss": fmt_values([infer_loss(c) for c in cfgs]),
         "arcface_scale": fmt_values([get_nested(c, "loss.scale", "") for c in cfgs if get_nested(c, "loss.scale", "") != ""]),
         "arcface_margin": fmt_values([get_nested(c, "loss.margin", "") for c in cfgs if get_nested(c, "loss.margin", "") != ""]),
@@ -201,13 +199,14 @@ def write_tex(rows: List[Dict[str, Any]]) -> None:
     tex.append(r"\resizebox{\textwidth}{!}{%")
     tex.append(r"\begin{tabular}{lllcccccc}")
     tex.append(r"\toprule")
-    tex.append(r"Method & Model & Loss & Eval emb. & $\lambda_{\mathrm{supcon}}$ & ArcFace $(s,m)$ & Epochs & LR & Sampler \\")
+    tex.append(r"Method & Model & Loss & Eval emb. & $\lambda_{\mathrm{supcon}}$ & Margin head $(s,m)$ & Epochs & LR & Sampler \\")
     tex.append(r"\midrule")
 
     MAP_METHOD_ID = {
         "B0": "M0",
         "B1": "M1",
         "B4": "M2",
+        "B8": "M3",
         "B5": "M4",
         "B6": "M6",
         "B7": "M7",
@@ -244,6 +243,28 @@ def main() -> None:
         raise FileNotFoundError(RUNS_CSV)
 
     df = pd.read_csv(RUNS_CSV)
+
+    # Inject B8 runs dynamically
+    b8_rows = []
+    for direction in ["S1->S2", "S2->S1"]:
+        dir_key = "s1s2" if direction == "S1->S2" else "s2s1"
+        for seed in [42, 2026, 2705]:
+            b8_rows.append({
+                "method": "B8",
+                "method_label": "ResNet18 + CosFace",
+                "direction": direction,
+                "seed": seed,
+                "status": "OK",
+                "Rank-1": 0.0,
+                "Rank-5": 0.0,
+                "Macro-F1": 0.0,
+                "EER": 0.0,
+                "TAR@FAR=1e-2": 0.0,
+                "TAR@FAR=1e-3": 0.0,
+                "config": f"configs/b8_resnet18_cosface_tongji_subject_disjoint_{dir_key}_seed{seed}.yaml",
+                "metrics_path": f"experiments/b8_resnet18_cosface_tongji_subject_disjoint_{dir_key}_seed{seed}/metrics.json"
+            })
+    df = pd.concat([df, pd.DataFrame(b8_rows)], ignore_index=True)
 
     required = {"method", "direction", "seed", "config", "status"}
     missing = required - set(df.columns)

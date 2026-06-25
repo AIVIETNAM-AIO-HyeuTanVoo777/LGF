@@ -104,9 +104,9 @@ def main() -> None:
         p_sign = exact_sign_flip_p(values)
 
         if directionality == "higher_is_better":
-            interpretation = "B6 better" if mu > 0 else "B6 worse"
+            interpretation = "M6 better" if mu > 0 else "M6 worse"
         else:
-            interpretation = "B6 worse" if mu > 0 else "B6 better"
+            interpretation = "M6 worse" if mu > 0 else "M6 better"
 
         out_rows.append({
             "metric": metric_name,
@@ -138,15 +138,15 @@ def main() -> None:
         writer.writerows(out_rows)
 
     md = []
-    md.append("# Paired Statistical Evidence: B6 vs B1")
+    md.append("# Paired Statistical Evidence: M6 vs M1")
     md.append("")
     md.append("## Scope")
     md.append("- Dataset: Tongji.")
     md.append("- Protocol: palm-class-disjoint cross-session evaluation.")
     md.append("- Paired units: six seed-direction units: S1->S2 and S2->S1 for seeds 42, 2026, and 2705.")
-    md.append("- Delta definition: B6 minus B1.")
-    md.append("- Positive Rank/TAR/Macro-F1 deltas favor B6.")
-    md.append("- Positive EER deltas indicate worse performance for B6.")
+    md.append("- Delta definition: M6 minus M1.")
+    md.append("- Positive Rank/TAR/Macro-F1 deltas favor M6.")
+    md.append("- Positive EER deltas indicate worse performance for M6.")
     md.append(f"- Bootstrap CI: percentile bootstrap over paired units, {BOOTSTRAP_SAMPLES} resamples, seed {BOOTSTRAP_SEED}.")
     md.append("- Permutation test: exact two-sided sign-flip test over the six paired deltas.")
     md.append("- Because n=6, p-values are coarse and should be treated as uncertainty diagnostics, not definitive significance claims.")
@@ -167,7 +167,7 @@ def main() -> None:
     md.append("")
     md.append("## Interpretation")
     md.append("- The mean paired deltas are negative for Rank-1, Rank-5, Macro-F1, TAR@FAR=1e-2, and TAR@FAR=1e-3, and positive for EER.")
-    md.append("- This direction of change is consistently unfavorable to B6 on the bidirectional average.")
+    md.append("- This direction of change is consistently unfavorable to M6 on the bidirectional average.")
     md.append("- However, the bootstrap intervals are wide because there are only six paired units.")
     md.append("- Therefore the paper should report these results as paired uncertainty evidence, not as a strong formal significance claim.")
     md.append("")
@@ -178,7 +178,7 @@ def main() -> None:
     tex.append(r"\centering")
     tex.append(r"\scriptsize")
     tex.append(r"\setlength{\tabcolsep}{3pt}")
-    tex.append(r"\caption{Paired statistical evidence for B6 minus B1 on Tongji palm-class-disjoint cross-session evaluation. Deltas are in percentage points over six paired seed-direction units. Positive EER is worse for B6; positive values are better for all other metrics.}")
+    tex.append(r"\caption{Paired statistical evidence for M6 minus M1 on Tongji palm-class-disjoint cross-session evaluation. Deltas are in percentage points over six paired seed-direction units. Positive EER is worse for M6; positive values are better for all other metrics.}")
     tex.append(r"\label{tab:paired_statistics_b6_vs_b1}")
     tex.append(r"\resizebox{\columnwidth}{!}{")
     tex.append(r"\begin{tabular}{lccc}")

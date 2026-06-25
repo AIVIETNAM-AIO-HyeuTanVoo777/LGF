@@ -1,6 +1,6 @@
 \begin{table}[t]
 \centering
-\caption{Additional generic CosFace baseline under the strict Tongji palm-class-disjoint protocol. B8 is a learned margin-loss comparator, not a palmprint-specific architecture or a reimplementation of PalmNet, CompNet, or Competitive Code. Values are mean $\pm$ standard deviation over the listed seed-direction units. Lower EER is better; higher Rank-1 and TAR are better.}
+\caption{Additional generic CosFace baseline under the strict Tongji palm-class-disjoint protocol. M3 is a learned margin-loss comparator, not a palmprint-specific architecture or a reimplementation of PalmNet, CompNet, or Competitive Code. Values are mean $\pm$ standard deviation over the listed seed-direction units. Lower EER is better; higher Rank-1 and TAR are better.}
 \label{tab:strict_tongji_additional_baselines}
 \small
 \setlength{\tabcolsep}{4pt}
@@ -8,9 +8,9 @@
 \toprule
 Method & Direction & $n$ & Rank-1 (\%) & EER (\%) & TAR@FAR=$10^{-3}$ (\%) \\
 \midrule
-B8 ResNet18 + CosFace & S1$\rightarrow$S2 & 3 & 92.36 $\pm$ 1.75 & 5.15 $\pm$ 0.21 & 71.70 $\pm$ 0.96 \\
-B8 ResNet18 + CosFace & S2$\rightarrow$S1 & 3 & 92.89 $\pm$ 1.14 & 4.84 $\pm$ 0.35 & 74.62 $\pm$ 1.52 \\
-B8 ResNet18 + CosFace & Both & 6 & 92.63 $\pm$ 1.50 & 5.00 $\pm$ 0.33 & 73.16 $\pm$ 1.94 \\
+M3 ResNet18 + CosFace & S1$\rightarrow$S2 & 3 & 92.36 $\pm$ 1.75 & 5.15 $\pm$ 0.21 & 71.70 $\pm$ 0.96 \\
+M3 ResNet18 + CosFace & S2$\rightarrow$S1 & 3 & 92.89 $\pm$ 1.14 & 4.84 $\pm$ 0.35 & 74.62 $\pm$ 1.52 \\
+M3 ResNet18 + CosFace & Both & 6 & 92.63 $\pm$ 1.50 & 5.00 $\pm$ 0.33 & 73.16 $\pm$ 1.94 \\
 \bottomrule
 \end{tabular}
 \end{table}

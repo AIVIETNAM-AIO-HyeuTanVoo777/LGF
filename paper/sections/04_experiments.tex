@@ -4,8 +4,8 @@
 
 The primary evaluation uses the segmented Tongji palmprint dataset \cite{zhang2017tongji}. The repository manifest contains 12,000 Tongji images from 600 palms/classes, with 6,000 images in session 1 and 6,000 images in session 2. The recorded image size is $128 \times 128$. We evaluate two cross-session directions:
 \begin{itemize}
-    \item S1$\rightarrow$S2: training, validation, and gallery data from session 1; probe data from session 2.
-    \item S2$\rightarrow$S1: training, validation, and gallery data from session 2; probe data from session 1.
+    \item S1$\rightarrow$S2: development training/validation images are drawn from session 1 development palm classes, while final held-out evaluation uses session 1 images as gallery and session 2 images as probe for held-out palm classes.
+    \item S2$\rightarrow$S1: development training/validation images are drawn from session 2 development palm classes, while final held-out evaluation uses session 2 images as gallery and session 1 images as probe for held-out palm classes.
 \end{itemize}
 The main reported Tongji numbers are bidirectional averages over S1$\rightarrow$S2 and S2$\rightarrow$S1 with seeds 42, 2026, and 2705.
 
