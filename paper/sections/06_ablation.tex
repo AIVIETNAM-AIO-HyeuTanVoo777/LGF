@@ -34,8 +34,12 @@ Figures~\ref{fig:strict_tongji_roc_by_direction}--\ref{fig:strict_tongji_score_h
 
 \input{sections/paired_statistics_component_ablation_table}
 
-
 Table~\ref{tab:paired_statistics_component_ablation} reports paired uncertainty for the key component comparisons over the same six seed-direction units. For B5 minus B1, the paired mean deltas are +0.43 percentage points for Rank-1 and +0.88 percentage points for TAR@FAR=$10^{-3}$, while EER is +0.47 percentage points, which is worse for B5. For B5 minus B6, the paired means favor B5 on Rank-1 (+1.61 percentage points), EER (-0.54 percentage points), and TAR@FAR=$10^{-3}$ (+2.94 percentage points). The bootstrap intervals remain wide because there are only six paired units, so these results should be treated as component-level paired evidence rather than formal superiority claims.
+
+\input{sections/strict_tongji_additional_baselines_table}
+
+Table~\ref{tab:strict_tongji_additional_baselines} adds B8, a ResNet18 + CosFace baseline, as an additional generic learned margin-loss comparator under the same strict Tongji protocol. B8 is outside the original B0--B7 component matrix and is not palmprint-specific. Its bidirectional mean Rank-1 is 92.63\%, with 5.00\% EER and 73.16\% TAR@FAR=$10^{-3}$. Thus, CosFace is competitive with the tested learned baselines at the low-FAR operating point, but it does not change the main interpretation: the evidence remains protocol-scoped, and no margin-loss variant is claimed to provide dataset-independent superiority.
+
 
 \subsection{Seen-Identity Diagnostic Context}
 
