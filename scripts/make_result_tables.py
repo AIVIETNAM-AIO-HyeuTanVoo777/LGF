@@ -221,13 +221,17 @@ def main():
     with open(iitd_tex, "w", encoding="utf-8") as f:
         f.write("\\begin{table}[t]\n")
         f.write("\\centering\n")
-        f.write("\\caption{Secondary within-session evaluation on the corrected IITD split. ")
-        f.write("Values are mean $\\pm$ standard deviation in percent over three seeds. ")
-        f.write("This validation remains within-session and is not cross-session evidence.}\n")
+        f.write("\\caption{Secondary within-session evaluation on the corrected IITD split. "
+                "Values are mean $\\pm$ standard deviation in percent over three seeds. "
+                "This validation remains within-session and is not cross-session evidence. "
+                "TAR columns denote TAR@FAR at the indicated FAR target.}\n")
         f.write("\\label{tab:iitd_subject_disjoint}\n")
-        f.write("\\begin{tabular}{llcccccc}\n")
+        f.write("\\small\n")
+        f.write("\\setlength{\\tabcolsep}{4pt}\n")
+        f.write("\\resizebox{\\linewidth}{!}{%\n")
+        f.write("\\begin{tabular}{lcccccc}\n")
         f.write("\\toprule\n")
-        f.write("Method & Description & Rank-1 (\\%) & Rank-5 (\\%) & Macro-F1 (\\%) & EER (\\%) & TAR@FAR=$10^{-2}$ & TAR@FAR=$10^{-3}$ \\\\\n")
+        f.write("Method & Rank-1 (\\%) & Rank-5 (\\%) & Macro-F1 (\\%) & EER (\\%) & TAR@$10^{-2}$ & TAR@$10^{-3}$ \\\\\n")
         f.write("\\midrule\n")
         
         for m_id in ["M1", "M6"]:
@@ -242,8 +246,7 @@ def main():
             tar3s = [float(r["tar_far_1e_3"]) for r in runs]
             
             escaped_m_id = latex_escape_text(m_id)
-            escaped_desc = latex_escape_text(method_desc[m_id])
-            f.write(f"{escaped_m_id} & {escaped_desc} & ")
+            f.write(f"{escaped_m_id} & ")
             f.write(f"{format_stat(np.mean(r1s), np.std(r1s, ddof=1))} & ")
             f.write(f"{format_stat(np.mean(r5s), np.std(r5s, ddof=1))} & ")
             f.write(f"{format_stat(np.mean(f1s), np.std(f1s, ddof=1))} & ")
@@ -253,6 +256,7 @@ def main():
             
         f.write("\\bottomrule\n")
         f.write("\\end{tabular}%\n")
+        f.write("}\n")
         f.write("\\end{table}\n")
     print(f"Wrote {iitd_tex}")
     
@@ -261,14 +265,18 @@ def main():
     with open(palm_tex, "w", encoding="utf-8") as f:
         f.write("\\begin{table}[t]\n")
         f.write("\\centering\n")
-        f.write("\\caption{Gabor reference baseline performance on strict Tongji split. ")
-        f.write("Values are mean $\\pm$ standard deviation in percent over six seed-direction units.}\n")
+        f.write("\\caption{Gabor reference baseline performance on the strict Tongji split. "
+                "Values are mean $\\pm$ standard deviation in percent over six seed-direction units. "
+                "TAR columns denote TAR@FAR at the indicated FAR target.}\n")
         f.write("\\label{tab:palmprint_specific_baseline}\n")
-        f.write("\\begin{tabular}{llcccccc}\n")
+        f.write("\\small\n")
+        f.write("\\setlength{\\tabcolsep}{4pt}\n")
+        f.write("\\resizebox{\\linewidth}{!}{%\n")
+        f.write("\\begin{tabular}{lcccccc}\n")
         f.write("\\toprule\n")
-        f.write("Method & Description & Rank-1 (\\%) & Rank-5 (\\%) & Macro-F1 (\\%) & EER (\\%) & TAR@FAR=$10^{-2}$ & TAR@FAR=$10^{-3}$ \\\\\n")
+        f.write("Method & Rank-1 (\\%) & Rank-5 (\\%) & Macro-F1 (\\%) & EER (\\%) & TAR@$10^{-2}$ & TAR@$10^{-3}$ \\\\\n")
         f.write("\\midrule\n")
-        
+
         runs = gabor_list
         if runs:
             r1s = [float(r["rank1"]) for r in runs]
@@ -277,20 +285,21 @@ def main():
             eers = [float(r["eer"]) for r in runs]
             tar2s = [float(r["tar_far_1e_2"]) for r in runs]
             tar3s = [float(r["tar_far_1e_3"]) for r in runs]
-            
-            f.write(f"Gabor & Fixed Gabor Reference & ")
+
+            f.write("Gabor & ")
             f.write(f"{format_stat(np.mean(r1s), np.std(r1s, ddof=1))} & ")
             f.write(f"{format_stat(np.mean(r5s), np.std(r5s, ddof=1))} & ")
             f.write(f"{format_stat(np.mean(f1s), np.std(f1s, ddof=1))} & ")
             f.write(f"{format_stat(np.mean(eers), np.std(eers, ddof=1), True)} & ")
             f.write(f"{format_stat(np.mean(tar2s), np.std(tar2s, ddof=1))} & ")
             f.write(f"{format_stat(np.mean(tar3s), np.std(tar3s, ddof=1))} \\\\\n")
-            
+
         f.write("\\bottomrule\n")
         f.write("\\end{tabular}%\n")
+        f.write("}\n")
         f.write("\\end{table}\n")
     print(f"Wrote {palm_tex}")
-    
+
     return 0
 
 if __name__ == "__main__":
