@@ -1,13 +1,27 @@
 # STATUS
 
-- **Current Step**: Step 5 - Design Execution Plan for Experiment Matrix (`05_EXPERIMENT_MATRIX_AND_RUN_PLAN.md`)
+- **Current Step**: Step 6 - Result Collection and Statistics Tables (`06_RESULT_COLLECTION_STATISTICS_TABLES.md`)
 - **Modified Files**:
-  - `configs/rankb_final/` (created and populated with 48 paper-friendly YAML configuration files)
-  - `docs/results/rankb_run_manifest.csv` (created: records the 48 study runs with split hashes, configs, and output dirs)
-  - `docs/agent_logs/excluded_runs.md` (created: reports zero exclusions)
+  - `scripts/collect_results.py` (created)
+  - `scripts/compute_paired_statistics.py` (created)
+  - `scripts/make_result_tables.py` (created)
+  - `docs/results/main_tongji_results.csv` (created)
+  - `docs/results/tongji_directional_results.csv` (created)
+  - `docs/results/paired_deltas.csv` (created)
+  - `docs/results/iitd_secondary_results.csv` (created)
+  - `docs/results/score_tail_diagnostics.csv` (created)
+  - `docs/results/classical_reference_results.csv` (created)
+  - `docs/results/table_generation_manifest.md` (created)
+  - `paper/sections/strict_tongji_ablation_table.tex` (modified)
+  - `paper/sections/strict_tongji_ablation_by_direction_table.tex` (modified)
+  - `paper/sections/paired_statistics_component_ablation_table.tex` (modified)
+  - `paper/sections/iitd_subject_disjoint_table.tex` (modified)
+  - `paper/sections/palmprint_specific_baseline_table.tex` (modified)
   - `docs/agent_logs/STATUS.md` (modified)
 - **Commands Run**:
-  - `python scripts/build_rankb_run_manifest.py`
+  - `python scripts/collect_results.py --manifest docs/results/rankb_run_manifest.csv --out-dir docs/results`
+  - `python scripts/compute_paired_statistics.py --input docs/results/main_tongji_results.csv --out docs/results/paired_deltas.csv`
+  - `python scripts/make_result_tables.py --results-dir docs/results --out-dir paper/sections`
 - **Pass/Fail Status**: PASS
 - **Unresolved Issues**: None
-- **Next Action**: Execute Step 6 - Result Collection and Statistics Tables (`06_RESULT_COLLECTION_STATISTICS_TABLES.md`)
+- **Next Action**: Execute Step 7 - Reproducibility Manifest (`07_REPRODUCIBILITY_MANIFEST.md`)
