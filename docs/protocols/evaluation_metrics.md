@@ -47,3 +47,7 @@ To present robust and unbiased summaries, we aggregate metrics as follows:
    - For each metric, compute the mean and standard deviation (std) across all 3 seeds (and both directions for Tongji, resulting in 6 evaluation instances in total).
 3. **Paired Delta Evaluation**:
    - When comparing a metric-learning variant (e.g. BNNeck + ArcFace) against a baseline (e.g. CE + SupCon), we compute the direct difference (Delta) for each seed/direction pair before averaging, highlighting the variance in improvement.
+
+## TAR@FAR threshold convention
+
+TAR@FAR is computed with the conservative empirical-FAR rule: among ROC points with empirical FAR less than or equal to the target, the reported TAR is the maximum observed TPR.

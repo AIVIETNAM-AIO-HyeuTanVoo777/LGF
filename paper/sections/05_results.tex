@@ -14,14 +14,14 @@ Table~\ref{tab:tongji_palm_class_disjoint} reports the primary Tongji cross-sess
 \toprule
 Method & Rank-1 & Rank-5 & Macro-F1 & EER & TAR@FAR=$10^{-2}$ & TAR@FAR=$10^{-3}$ \\
 \midrule
-B1 ResNet18 + CE + SupCon & 93.39 $\pm$ 2.11 & 96.96 $\pm$ 0.96 & 92.71 $\pm$ 2.36 & 4.25 $\pm$ 0.44 & 88.62 $\pm$ 2.35 & 71.76 $\pm$ 5.49 \\
-B6 ResNet18 + BNNeck + ArcFace & 92.21 $\pm$ 1.69 & 95.96 $\pm$ 0.99 & 91.41 $\pm$ 1.84 & 5.27 $\pm$ 0.49 & 86.23 $\pm$ 2.34 & 69.69 $\pm$ 4.64 \\
+B1 ResNet18 + CE + SupCon & 93.39 $\pm$ 2.11 & 96.96 $\pm$ 0.96 & 92.71 $\pm$ 2.36 & 4.25 $\pm$ 0.44 & 88.63 $\pm$ 2.35 & 71.77 $\pm$ 5.49 \\
+B6 ResNet18 + BNNeck + ArcFace & 92.21 $\pm$ 1.69 & 95.96 $\pm$ 0.99 & 91.41 $\pm$ 1.84 & 5.27 $\pm$ 0.49 & 86.24 $\pm$ 2.34 & 69.71 $\pm$ 4.64 \\
 \bottomrule
 \end{tabular}%
 }
 \end{table*}
 
-Under this stricter protocol, B6 does not improve over B1 overall. Relative to B1, B6 changes Rank-1 by -1.18 percentage points, Rank-5 by -1.00 percentage point, Macro-F1 by -1.31 percentage points, EER by +1.01 percentage points (worse), TAR@FAR=$10^{-2}$ by -2.39 percentage points, and TAR@FAR=$10^{-3}$ by -2.07 percentage points. The result therefore does not support a general-improvement claim for BNNeck + ArcFace under held-out palm-class evaluation.
+Under this stricter protocol, B6 does not improve over B1 overall. Relative to B1, B6 changes Rank-1 by -1.18 percentage points, Rank-5 by -1.00 percentage point, Macro-F1 by -1.31 percentage points, EER by +1.01 percentage points (worse), TAR@FAR=$10^{-2}$ by -2.39 percentage points, and TAR@FAR=$10^{-3}$ by -2.06 percentage points. The result therefore does not support a general-improvement claim for BNNeck + ArcFace under held-out palm-class evaluation.
 
 
 
@@ -40,13 +40,13 @@ Table~\ref{tab:paired_statistics_b6_vs_b1} reports paired uncertainty estimates 
 \toprule
 Direction & $\Delta$Rank-1 & $\Delta$EER & $\Delta$TAR@FAR=$10^{-3}$ \\
 \midrule
-S1$\rightarrow$S2 & -0.14 & +0.85 & +1.19 \\
+S1$\rightarrow$S2 & -0.14 & +0.85 & +1.20 \\
 S2$\rightarrow$S1 & -2.22 & +1.18 & -5.33 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Table~\ref{tab:tongji_directional_delta} shows that the average degradation is direction-dependent. In S1$\rightarrow$S2, B6 is close to B1 in Rank-1 (-0.14 pp) and has a limited strict low-FAR gain (+1.19 pp in TAR@FAR=$10^{-3}$), but its EER is higher by +0.85 pp. In S2$\rightarrow$S1, B6 trails B1 more consistently, with -2.22 pp in Rank-1, +1.18 pp in EER, and -5.33 pp in TAR@FAR=$10^{-3}$. The bidirectional average should therefore be read as hiding directional asymmetry rather than as a single uniform failure mode.
+Table~\ref{tab:tongji_directional_delta} shows that the average degradation is direction-dependent. In S1$\rightarrow$S2, B6 is close to B1 in Rank-1 (-0.14 pp) and has a limited strict low-FAR gain (+1.20 pp in TAR@FAR=$10^{-3}$), but its EER is higher by +0.85 pp. In S2$\rightarrow$S1, B6 trails B1 more consistently, with -2.22 pp in Rank-1, +1.18 pp in EER, and -5.33 pp in TAR@FAR=$10^{-3}$. The bidirectional average should therefore be read as hiding directional asymmetry rather than as a single uniform failure mode.
 
 \subsection{Score-Distribution Diagnostics}
 
@@ -67,7 +67,7 @@ Table~\ref{tab:strict_tongji_failure_tail} explains why the low-FAR ranking diff
 \subsection{Palmprint-Specific Fixed-Gabor Reference Baseline}
 \input{sections/palmprint_specific_baseline_table}
 
-Table~\ref{tab:palmprint_specific_gabor_baseline} adds a palmprint-specific fixed Gabor texture reference under the same strict Tongji gallery/probe splits. This baseline is deterministic and uses no learned checkpoint, so it should be interpreted as a protocol-normalized classical texture reference rather than as a reimplementation of PalmNet, CompNet, or Competitive Code. The fixed Gabor baseline reaches a competitive Rank-1 mean of 92.99\%, but its verification behavior is substantially weaker, with 9.61\% EER and 34.37\% TAR@FAR=$10^{-3}$. This contrast supports the need to report both identification and low-FAR verification metrics: a palmprint-specific texture representation can remain competitive for nearest-gallery identification while failing to match learned embeddings in the low-FAR impostor-tail regime.
+Table~\ref{tab:palmprint_specific_gabor_baseline} adds a palmprint-specific fixed Gabor texture reference under the same strict Tongji gallery/probe splits. This baseline is deterministic and uses no learned checkpoint, so it should be interpreted as a protocol-normalized classical texture reference rather than as a reimplementation of PalmNet, CompNet, or Competitive Code. The fixed Gabor baseline reaches a competitive Rank-1 mean of 92.99\%, but its verification behavior is substantially weaker, with 9.61\% EER and 34.38\% TAR@FAR=$10^{-3}$. This contrast supports the need to report both identification and low-FAR verification metrics: a palmprint-specific texture representation can remain competitive for nearest-gallery identification while failing to match learned embeddings in the low-FAR impostor-tail regime.
 
 \subsection{IITD Secondary Palm-Class-Disjoint Validation}
 
@@ -82,14 +82,14 @@ The IITD experiment is retained only as secondary within-session validation, not
 \toprule
 Method & Rank-1 & Rank-5 & Macro-F1 & EER & TAR@FAR=$10^{-2}$ & TAR@FAR=$10^{-3}$ \\
 \midrule
-B1 ResNet18 + CE + SupCon & 97.83 $\pm$ 0.72 & 98.91 $\pm$ 0.36 & 97.70 $\pm$ 0.81 & 3.05 $\pm$ 1.18 & 94.82 $\pm$ 2.86 & 86.17 $\pm$ 7.07 \\
-B6 ResNet18 + BNNeck + ArcFace & 97.95 $\pm$ 1.71 & 98.91 $\pm$ 0.63 & 97.86 $\pm$ 1.80 & 3.24 $\pm$ 1.34 & 94.39 $\pm$ 2.51 & 85.45 $\pm$ 3.85 \\
+B1 ResNet18 + CE + SupCon & 97.83 $\pm$ 0.72 & 98.91 $\pm$ 0.36 & 97.70 $\pm$ 0.81 & 3.05 $\pm$ 1.18 & 94.91 $\pm$ 2.93 & 86.17 $\pm$ 7.07 \\
+B6 ResNet18 + BNNeck + ArcFace & 97.95 $\pm$ 1.71 & 98.91 $\pm$ 0.63 & 97.86 $\pm$ 1.80 & 3.24 $\pm$ 1.34 & 94.43 $\pm$ 2.59 & 85.45 $\pm$ 3.85 \\
 \bottomrule
 \end{tabular}%
 }
 \end{table*}
 
-Table~\ref{tab:iitd_palm_class_disjoint} reports the corrected IITD rerun. B6 is again best interpreted as near-tied with B1 rather than clearly superior. Its mean Rank-1 is 97.95 $\pm$ 1.71 compared with 97.83 $\pm$ 0.72 for B1, corresponding to a small +0.12 percentage-point delta. However, B6 has slightly worse mean EER, 3.24 $\pm$ 1.34 versus 3.05 $\pm$ 1.18 for B1, and lower mean TAR@FAR=$10^{-2}$ and TAR@FAR=$10^{-3}$ by -0.44 and -0.72 percentage points, respectively. The corrected IITD result therefore supports the same conservative interpretation as the primary Tongji evidence: BNNeck + ArcFace is competitive, but not consistently superior.
+Table~\ref{tab:iitd_palm_class_disjoint} reports the corrected IITD rerun. B6 is again best interpreted as near-tied with B1 rather than clearly superior. Its mean Rank-1 is 97.95 $\pm$ 1.71 compared with 97.83 $\pm$ 0.72 for B1, corresponding to a small +0.12 percentage-point delta. However, B6 has slightly worse mean EER, 3.24 $\pm$ 1.34 versus 3.05 $\pm$ 1.18 for B1, and lower mean TAR@FAR=$10^{-2}$ and TAR@FAR=$10^{-3}$ by -0.48 and -0.72 percentage points, respectively. The corrected IITD result therefore supports the same conservative interpretation as the primary Tongji evidence: BNNeck + ArcFace is competitive, but not consistently superior.
 
 \subsection{Result Summary}
 

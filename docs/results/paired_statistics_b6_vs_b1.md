@@ -20,7 +20,7 @@
 | Macro-F1 | -1.31 | 3.62 | [-3.67, +1.44] | 0.4688 | B6 worse |
 | EER | +1.01 | 0.73 | [+0.48, +1.52] | 0.0312 | B6 worse |
 | TAR@FAR=1e-2 | -2.39 | 4.15 | [-5.29, +0.58] | 0.2500 | B6 worse |
-| TAR@FAR=1e-3 | -2.07 | 8.91 | [-8.47, +3.62] | 0.5625 | B6 worse |
+| TAR@FAR=1e-3 | -2.06 | 8.92 | [-8.47, +3.63] | 0.5625 | B6 worse |
 
 ## Interpretation
 - The mean paired deltas are negative for Rank-1, Rank-5, Macro-F1, TAR@FAR=1e-2, and TAR@FAR=1e-3, and positive for EER.
