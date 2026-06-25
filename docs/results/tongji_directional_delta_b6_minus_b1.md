@@ -19,8 +19,8 @@
 
 | Direction | Mean Delta Rank-1 | Mean Delta EER | Mean Delta TAR@FAR=1e-3 |
 |---|---|---|---|
-| s1_to_s2 | -0.14 pp | +0.85 pp | +1.20 pp |
+| s1_to_s2 | -0.14 pp | +0.85 pp | +1.19 pp |
 | s2_to_s1 | -2.22 pp | +1.18 pp | -5.33 pp |
 
 ## Main finding
-For the S1->S2 direction, B6 exhibits a limited verification gain of 1.20 percentage points at TAR@FAR=1e-3, accompanied by a small EER increase (worse) of 0.85 percentage points. For the S2->S1 direction, B6 consistently underperforms B1 across key identification and verification metrics, showing a drop of -2.22 percentage points in Rank-1 accuracy and a degradation of -5.33 percentage points in TAR@FAR=1e-3. The bidirectional average hides this directional asymmetry, where the overall negative delta is heavily driven by the S2->S1 direction.
+For the S1->S2 direction, B6 exhibits a limited verification gain of 1.19 percentage points at TAR@FAR=1e-3, accompanied by a small EER increase (worse) of 0.85 percentage points. For the S2->S1 direction, B6 consistently underperforms B1 across key identification and verification metrics, showing a drop of -2.22 percentage points in Rank-1 accuracy and a degradation of -5.33 percentage points in TAR@FAR=1e-3. The bidirectional average hides this directional asymmetry, where the overall negative delta is heavily driven by the S2->S1 direction.
