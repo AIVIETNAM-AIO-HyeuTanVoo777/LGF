@@ -11,11 +11,11 @@ from typing import Any
 ROOT = Path(".")
 SPLIT_DIR = ROOT / "data" / "splits"
 MANIFEST_PATH = ROOT / "data" / "metadata" / "palm_segmented_manifest.csv"
-OUT_DIR = ROOT / "docs" / "audits"
+OUT_DIR = ROOT / "audit_artifacts" / "protocol"
 
-OUT_CSV = OUT_DIR / "rankb_protocol_audit.csv"
-OUT_MD = OUT_DIR / "rankb_protocol_audit.md"
-OUT_TEX = OUT_DIR / "rankb_protocol_audit_table.tex"
+OUT_CSV = OUT_DIR / "protocol_audit.csv"
+OUT_MD = OUT_DIR / "protocol_audit.md"
+OUT_TEX = OUT_DIR / "protocol_audit_table.tex"
 
 PARTITIONS = ("train", "val", "gallery", "probe")
 DEV_PARTITIONS = ("train", "val")

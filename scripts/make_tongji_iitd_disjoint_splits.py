@@ -264,7 +264,7 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--manifest", default="data/metadata/palm_segmented_manifest.csv")
     ap.add_argument("--out-dir", default="data/splits")
-    ap.add_argument("--audit", default="docs/results/disjoint_identity_split_audit.md")
+    ap.add_argument("--audit", default="audit_artifacts/splits/disjoint_identity_split_audit.md")
     ap.add_argument("--template-split", default="", help="Optional existing split JSON to infer split record format.")
     ap.add_argument("--write", action="store_true", help="Actually write JSON splits. Without this, only audit is printed/written.")
     ap.add_argument("--force", action="store_true", help="Allow overwriting generated split files.")

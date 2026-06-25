@@ -1,0 +1,27 @@
+cff-version: 1.2.0
+message: "If you use this artifact, please cite the accompanying paper."
+type: software
+title: "Audited Protocol-Sensitive Evaluation of Recognition Heads and Losses for Cross-Session Palmprint Recognition"
+authors:
+  - family-names: "Vo"
+    given-names: "Hieu Thang"
+  - family-names: "Nguyen"
+    given-names: "Duc Bao Lam"
+  - family-names: "Nguyen"
+    given-names: "Cong Thinh"
+  - family-names: "Tran"
+    given-names: "Trung Tin"
+license: "MIT"
+preferred-citation:
+  type: conference-paper
+  title: "Audited Protocol-Sensitive Evaluation of Recognition Heads and Losses for Cross-Session Palmprint Recognition"
+  authors:
+    - family-names: "Vo"
+      given-names: "Hieu Thang"
+    - family-names: "Nguyen"
+      given-names: "Duc Bao Lam"
+    - family-names: "Nguyen"
+      given-names: "Cong Thinh"
+    - family-names: "Tran"
+      given-names: "Trung Tin"
+  notes: "DOI unavailable at artifact preparation time."

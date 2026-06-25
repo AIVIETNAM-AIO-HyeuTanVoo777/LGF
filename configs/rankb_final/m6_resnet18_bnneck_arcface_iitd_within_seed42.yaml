@@ -16,6 +16,8 @@ model:
   pretrained: true
   eval_embedding: post_bn
   bnneck: true
+eval:
+  embedding: post_bn
 loss:
   name: arcface
   scale: 30.0

@@ -18,13 +18,13 @@ if str(ROOT) not in sys.path:
 
 from palmrec.evaluation.metrics import tar_at_far_conservative, conservative_tar_at_far
 
-STRICT_TONGJI_RUNS_CSV = ROOT / "docs/results/strict_tongji_ablation_runs.csv"
-IITD_RUNS_CSV = ROOT / "docs/results/iitd_subject_disjoint_rerun_runs.csv"
+STRICT_TONGJI_RUNS_CSV = ROOT / "audit_artifacts/manifests/strict_tongji_ablation_runs.csv"
+IITD_RUNS_CSV = ROOT / "audit_artifacts/manifests/iitd_subject_disjoint_rerun_runs.csv"
 
-STRICT_EVIDENCE_CSV = ROOT / "docs/results/threshold_evidence_strict_tongji.csv"
-IITD_EVIDENCE_CSV = ROOT / "docs/results/threshold_evidence_iitd.csv"
-COMBINED_AUDIT_CSV = ROOT / "docs/audits/metric_threshold_audit.csv"
-OUT_MD = ROOT / "docs/audits/metric_threshold_audit.md"
+STRICT_EVIDENCE_CSV = ROOT / "audit_artifacts/results/threshold_evidence_strict_tongji.csv"
+IITD_EVIDENCE_CSV = ROOT / "audit_artifacts/results/threshold_evidence_iitd.csv"
+COMBINED_AUDIT_CSV = ROOT / "audit_artifacts/metrics/metric_threshold_audit.csv"
+OUT_MD = ROOT / "audit_artifacts/metrics/metric_threshold_audit.md"
 
 TARGET_FARS = [1e-2, 1e-3]
 

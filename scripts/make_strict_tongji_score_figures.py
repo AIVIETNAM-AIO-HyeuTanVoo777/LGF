@@ -13,11 +13,11 @@ import matplotlib.pyplot as plt
 
 from scipy.stats import norm
 
-RUNS_CSV = Path("docs/results/strict_tongji_ablation_runs.csv")
+RUNS_CSV = Path("audit_artifacts/manifests/strict_tongji_ablation_runs.csv")
 
 FIG_DIR = Path("paper/figures")
-OUT_MD = Path("docs/results/strict_tongji_roc_det_score_figures.md")
-OUT_CSV = Path("docs/results/strict_tongji_roc_det_score_figures.csv")
+OUT_MD = Path("audit_artifacts/results/strict_tongji_roc_det_score_figures.md")
+OUT_CSV = Path("audit_artifacts/results/strict_tongji_roc_det_score_figures.csv")
 OUT_TEX = Path("paper/sections/strict_tongji_score_figures.tex")
 
 METHODS = ["B1", "B5", "B6"]
@@ -252,7 +252,7 @@ def write_summary(df: pd.DataFrame, figure_paths: List[Path]) -> None:
     md.append("")
     md.append("This file records reviewer-facing ROC, DET, and score-distribution figures for M1, M4, and M6 under the strict Tongji palm-class-disjoint protocol.")
     md.append("")
-    md.append("- Source run table: `docs/results/strict_tongji_ablation_runs.csv`.")
+    md.append("- Source run table: `audit_artifacts/manifests/strict_tongji_ablation_runs.csv`.")
     md.append("- Source curves: per-run `roc.csv` files from the corresponding experiment directories.")
     md.append("- Source scores: per-run `scores.csv` files; each run has 12,000 genuine and 1,428,000 impostor pairs.")
     md.append("- Curves are seed-averaged by interpolating TPR onto a common log-spaced FPR grid.")

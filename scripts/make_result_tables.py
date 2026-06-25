@@ -5,7 +5,7 @@ import numpy as np
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--results-dir", type=str, default="docs/results")
+    parser.add_argument("--results-dir", type=str, default="audit_artifacts/results")
     parser.add_argument("--out-dir", type=str, default="paper/sections")
     return parser.parse_args()
 

@@ -9,7 +9,7 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = ROOT / "data" / "metadata" / "palm_segmented_manifest.csv"
-OUT_DIR = ROOT / "docs" / "audits"
+OUT_DIR = ROOT / "audit_artifacts" / "protocol"
 OUT_CSV = OUT_DIR / "gallery_probe_audit.csv"
 OUT_MD = OUT_DIR / "gallery_probe_audit.md"
 

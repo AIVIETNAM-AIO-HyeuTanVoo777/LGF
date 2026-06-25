@@ -5,8 +5,8 @@ import numpy as np
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--input", type=str, default="docs/results/main_tongji_results.csv")
-    parser.add_argument("--out", type=str, default="docs/results/paired_deltas.csv")
+    parser.add_argument("--input", type=str, default="audit_artifacts/results/main_tongji_results.csv")
+    parser.add_argument("--out", type=str, default="audit_artifacts/results/paired_deltas.csv")
     return parser.parse_args()
 
 def exact_sign_flip_p(deltas):

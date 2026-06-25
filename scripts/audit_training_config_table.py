@@ -7,21 +7,21 @@ import csv
 import pandas as pd
 import yaml
 
-RUNS_CSV = Path("docs/results/strict_tongji_ablation_runs.csv")
-OUT_CSV = Path("docs/audits/training_config_audit.csv")
-OUT_MD = Path("docs/audits/training_config_audit.md")
+RUNS_CSV = Path("audit_artifacts/manifests/run_manifest.csv")
+OUT_CSV = Path("audit_artifacts/metrics/training_config_audit.csv")
+OUT_MD = Path("audit_artifacts/metrics/training_config_audit.md")
 OUT_TEX = Path("paper/sections/training_config_table.tex")
 
-METHOD_ORDER = ["B0", "B1", "B4", "B8", "B5", "B6", "B7"]
+METHOD_ORDER = ["M0", "M1", "M2", "M3", "M4", "M6", "M7"]
 
 METHOD_LABELS = {
-    "B0": "ResNet18 + CE",
-    "B1": "ResNet18 + CE + SupCon",
-    "B4": "ResNet18 + ArcFace",
-    "B8": "ResNet18 + CosFace",
-    "B5": "ResNet18 + BNNeck + CE",
-    "B6": "ResNet18 + BNNeck + ArcFace",
-    "B7": "ResNet18 + BNNeck + ArcFace + light SupCon",
+    "M0": "ResNet18 + CE",
+    "M1": "ResNet18 + CE + SupCon",
+    "M2": "ResNet18 + ArcFace",
+    "M3": "ResNet18 + CosFace",
+    "M4": "ResNet18 + BNNeck + CE",
+    "M6": "ResNet18 + BNNeck + ArcFace",
+    "M7": "ResNet18 + BNNeck + ArcFace + light SupCon",
 }
 
 
@@ -93,7 +93,7 @@ def infer_loss(cfg: Dict[str, Any]) -> str:
 
 
 def method_row(method: str, sub: pd.DataFrame) -> Dict[str, Any]:
-    cfgs = [load_yaml(Path(x)) for x in sub["config"].tolist()]
+    cfgs = [load_yaml(Path(x)) for x in sub["config_path"].tolist()]
 
     seeds = sorted({int(get_nested(c, "seed")) for c in cfgs})
     directions = sorted(set(sub["direction"].astype(str).tolist()))
@@ -152,9 +152,9 @@ def write_md(rows: List[Dict[str, Any]]) -> None:
     md.append("")
     md.append("This audit summarizes the training/evaluation configuration fields used by the final strict Tongji component-ablation runs.")
     md.append("")
-    md.append("- Source run table: `docs/results/strict_tongji_ablation_runs.csv`.")
-    md.append("- Source configs: YAML files listed in the `config` column of the run table.")
-    md.append("- Scope: B0/B1/B4/B5/B6/B7 under the strict Tongji palm-class-disjoint protocol.")
+    md.append("- Source run table: `audit_artifacts/manifests/run_manifest.csv`.")
+    md.append("- Source configs: YAML files listed in the `config_path` column of the run table.")
+    md.append("- Scope: M0/M1/M2/M3/M4/M6/M7 under the audited Tongji palm-class-disjoint cross-session protocol.")
     md.append("- Each method has six configs: two session directions and three seeds.")
     md.append("- Fields that intentionally vary across configs are seed, split file, save directory, and session direction.")
     md.append("")
@@ -181,10 +181,10 @@ def write_md(rows: List[Dict[str, Any]]) -> None:
     md.append("## Reviewer-facing notes")
     md.append("")
     md.append("- All final strict Tongji methods use 60 epochs, learning rate 1e-4, weight decay 1e-4, AMP enabled, and gradient accumulation of four steps.")
-    md.append("- B1 uses supervised contrastive regularization with lambda 0.1 and temperature 0.07.")
-    md.append("- B5 isolates BNNeck with cross-entropy by using BNNeck/post-BN evaluation and lambda_supcon 0.0.")
-    md.append("- B6 isolates BNNeck+ArcFace by using BNNeck/post-BN evaluation, ArcFace scale 30.0, margin 0.5, and lambda_supcon 0.0.")
-    md.append("- B7 adds a light supervised contrastive term to BNNeck+ArcFace with lambda_supcon 0.02.")
+    md.append("- M1 uses supervised contrastive regularization with temperature 0.07.")
+    md.append("- M4 isolates BNNeck with cross-entropy by using BNNeck/post-BN evaluation and lambda_supcon 0.0.")
+    md.append("- M6 isolates BNNeck+ArcFace by using BNNeck/post-BN evaluation, ArcFace scale 30.0, margin 0.5, and lambda_supcon 0.0.")
+    md.append("- M7 adds a light supervised contrastive term to BNNeck+ArcFace.")
     md.append("- Config filenames retain historical `subject_disjoint` naming, but the paper claim remains palm-class-disjoint according to the identity/parser and gallery/probe audits.")
 
     OUT_MD.write_text("\n".join(md).rstrip() + "\n", encoding="utf-8")
@@ -202,24 +202,13 @@ def write_tex(rows: List[Dict[str, Any]]) -> None:
     tex.append(r"Method & Model & Loss & Eval emb. & $\lambda_{\mathrm{supcon}}$ & Margin head $(s,m)$ & Epochs & LR & Sampler \\")
     tex.append(r"\midrule")
 
-    MAP_METHOD_ID = {
-        "B0": "M0",
-        "B1": "M1",
-        "B4": "M2",
-        "B8": "M3",
-        "B5": "M4",
-        "B6": "M6",
-        "B7": "M7",
-    }
-
     for r in rows:
         arcface = "-"
         if r["arcface_scale"] or r["arcface_margin"]:
             arcface = f"({r['arcface_scale']},{r['arcface_margin']})"
         sampler = f"{r['sampler_num_identities']}x{r['sampler_num_instances']}"
-        method_id = MAP_METHOD_ID.get(r['method'], r['method'])
         tex.append(
-            f"{method_id} {r['method_label']} & "
+            f"{r['method']} {r['method_label']} & "
             f"{r['model_name']} & "
             f"{r['loss']} & "
             f"{r['eval_embedding']} & "
@@ -243,35 +232,14 @@ def main() -> None:
         raise FileNotFoundError(RUNS_CSV)
 
     df = pd.read_csv(RUNS_CSV)
+    df = df[df["dataset"].astype(str) == "Tongji"].copy()
 
-    # Inject B8 runs dynamically
-    b8_rows = []
-    for direction in ["S1->S2", "S2->S1"]:
-        dir_key = "s1s2" if direction == "S1->S2" else "s2s1"
-        for seed in [42, 2026, 2705]:
-            b8_rows.append({
-                "method": "B8",
-                "method_label": "ResNet18 + CosFace",
-                "direction": direction,
-                "seed": seed,
-                "status": "OK",
-                "Rank-1": 0.0,
-                "Rank-5": 0.0,
-                "Macro-F1": 0.0,
-                "EER": 0.0,
-                "TAR@FAR=1e-2": 0.0,
-                "TAR@FAR=1e-3": 0.0,
-                "config": f"configs/b8_resnet18_cosface_tongji_subject_disjoint_{dir_key}_seed{seed}.yaml",
-                "metrics_path": f"experiments/b8_resnet18_cosface_tongji_subject_disjoint_{dir_key}_seed{seed}/metrics.json"
-            })
-    df = pd.concat([df, pd.DataFrame(b8_rows)], ignore_index=True)
-
-    required = {"method", "direction", "seed", "config", "status"}
+    required = {"method", "direction", "seed", "config_path", "status"}
     missing = required - set(df.columns)
     if missing:
         raise RuntimeError(f"Missing run-table columns: {sorted(missing)}")
 
-    bad = df[df["status"].astype(str).str.upper() != "OK"]
+    bad = df[df["status"].astype(str).str.lower() != "completed"]
     if not bad.empty:
         raise RuntimeError(f"Found non-OK rows:\n{bad[['method','direction','seed','status']]}")
 

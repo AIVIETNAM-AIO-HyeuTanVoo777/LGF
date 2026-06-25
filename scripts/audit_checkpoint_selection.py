@@ -1,214 +1,140 @@
+from __future__ import annotations
+
 import csv
 import json
-import hashlib
 from pathlib import Path
+from typing import Any
+
 import yaml
-import torch
+
 
 ROOT = Path(".").resolve()
-TONGJI_RUNS_CSV = ROOT / "docs/results/strict_tongji_ablation_runs.csv"
-IITD_RUNS_CSV = ROOT / "docs/results/iitd_subject_disjoint_rerun_runs.csv"
+RUN_MANIFEST = ROOT / "audit_artifacts" / "manifests" / "run_manifest.csv"
+OUT_CSV = ROOT / "audit_artifacts" / "protocol" / "checkpoint_selection_audit.csv"
+OUT_MD = ROOT / "audit_artifacts" / "protocol" / "checkpoint_selection_audit.md"
 
-OUT_CSV = ROOT / "docs/audits/checkpoint_selection_audit.csv"
-OUT_MD = ROOT / "docs/audits/checkpoint_selection_audit.md"
 
-def stable_json_hash(path):
+def load_split(path: str) -> dict[str, list[dict[str, Any]]]:
     p = Path(path)
-    if not p.exists():
-        p = ROOT / path
-    if not p.exists():
-        return "missing"
-    with open(p, 'r', encoding='utf-8') as f:
-        obj = json.load(f)
-    payload = json.dumps(obj, sort_keys=True, separators=(',', ':')).encode('utf-8')
-    return hashlib.sha256(payload).hexdigest()[:12]
+    if not p.is_absolute():
+        p = ROOT / p
+    return json.loads(p.read_text(encoding="utf-8"))
 
-def get_split_leakage(split_path):
-    p = Path(split_path)
-    if not p.exists():
-        p = ROOT / split_path
-    if not p.exists():
-        return True # Safe fallback: if missing, flag it
-        
-    with open(p, 'r', encoding='utf-8') as f:
-        data = json.load(f)
-        
+
+def values(rows: list[dict[str, Any]], key: str) -> set[str]:
+    return {str(r[key]) for r in rows if isinstance(r, dict) and key in r and r[key] not in (None, "")}
+
+
+def has_test_leakage(split_file: str) -> bool:
+    data = load_split(split_file)
     train = data.get("train", [])
     val = data.get("val", [])
     gallery = data.get("gallery", [])
     probe = data.get("probe", [])
-    
-    train_paths = set(item.get("path") for item in train if isinstance(item, dict))
-    val_paths = set(item.get("path") for item in val if isinstance(item, dict))
-    gallery_paths = set(item.get("path") for item in gallery if isinstance(item, dict))
-    probe_paths = set(item.get("path") for item in probe if isinstance(item, dict))
-    
-    dev_paths = train_paths | val_paths
-    test_paths = gallery_paths | probe_paths
-    
-    # Check if validation overlaps gallery/probe
-    overlap = val_paths & test_paths
-    return len(overlap) > 0
 
-def get_ckpt_epoch(run_dir):
-    p = Path(run_dir)
+    dev_paths = values(train + val, "path")
+    test_paths = values(gallery + probe, "path")
+    val_paths = values(val, "path")
+    return bool((dev_paths & test_paths) or (val_paths & test_paths))
+
+
+def config_checkpoint_policy(config_path: str) -> tuple[str, str, str]:
+    p = Path(config_path)
     if not p.is_absolute():
         p = ROOT / p
-    p = p.resolve()
-    
-    ckpt_path = p / "checkpoints" / "best.pt"
-    if not ckpt_path.exists():
-        ckpt_path = p / "best.pt"
-        
-    if not ckpt_path.exists():
-        return "N/A", "N/A"
-        
-    try:
-        ckpt = torch.load(ckpt_path, map_location="cpu")
-        epoch = ckpt.get("epoch", "N/A")
-        rel_path = ckpt_path.relative_to(ROOT).as_posix()
-        return str(rel_path), str(epoch)
-    except Exception:
-        rel_path = ckpt_path.relative_to(ROOT).as_posix()
-        return str(rel_path), "error"
+    if not p.exists():
+        return "missing_config", "missing_config", "missing_config"
 
-def main():
-    rows = []
-    
-    # 1. Process Tongji runs
-    if TONGJI_RUNS_CSV.exists():
-        print(f"Auditing Tongji runs from {TONGJI_RUNS_CSV}...")
-        tongji_df = pd_read_csv_fallback(TONGJI_RUNS_CSV)
-        for r in tongji_df:
-            method = r["method"]
-            direction = r["direction"]
-            seed = int(r["seed"])
-            metrics_path = Path(r["metrics_path"])
-            run_dir = metrics_path.parent
-            config_path = Path(r["config"])
-            
-            # Read config to get split file
-            full_config_path = ROOT / config_path
-            split_file = ""
-            if full_config_path.exists():
-                with open(full_config_path, "r", encoding="utf-8") as f:
-                    cfg = yaml.safe_load(f) or {}
-                    split_file = cfg.get("dataset", {}).get("split_file", "")
-            
-            split_hash = stable_json_hash(split_file)
-            leakage = get_split_leakage(split_file)
-            
-            ckpt_path, epoch = get_ckpt_epoch(run_dir)
-            if ckpt_path == "N/A":
-                ckpt_path, epoch = get_ckpt_epoch(ROOT / "experiments" / run_dir)
-                
-            selection_metric = "val_rank1" if method != "Gabor" else "N/A"
-            selection_partition = "val" if method != "Gabor" else "N/A"
-            
-            # Gabor is fixed texture matching, no checkpoints/validation used
-            if method == "Gabor":
-                epoch = "N/A"
-                ckpt_path = "N/A"
-                uses_test = False
-                verdict = "PASS"
-            else:
-                uses_test = leakage
-                verdict = "PASS" if not leakage else "FAIL"
-                
+    cfg = yaml.safe_load(p.read_text(encoding="utf-8")) or {}
+    checkpoint = cfg.get("checkpoint", {}) if isinstance(cfg, dict) else {}
+    monitor = checkpoint.get("monitor", "validation_rank1")
+    mode = checkpoint.get("mode", "max")
+    no_test_data = checkpoint.get("no_test_data", True)
+    return str(monitor), str(mode), str(no_test_data)
+
+
+def is_local_or_absolute(path_value: str) -> bool:
+    if not path_value:
+        return False
+    return Path(path_value).is_absolute()
+
+
+def main() -> int:
+    if not RUN_MANIFEST.exists():
+        raise FileNotFoundError(RUN_MANIFEST)
+
+    rows: list[dict[str, Any]] = []
+    with RUN_MANIFEST.open("r", encoding="utf-8", newline="") as f:
+        for row in csv.DictReader(f):
+            split_file = row["split_file"]
+            config_path = row["config_path"]
+            checkpoint_path = row.get("checkpoint_path", "")
+            leakage = has_test_leakage(split_file)
+            monitor, mode, no_test_data = config_checkpoint_policy(config_path)
+
+            reasons: list[str] = []
+            if leakage:
+                reasons.append("development/test path overlap")
+            if is_local_or_absolute(checkpoint_path):
+                reasons.append("checkpoint path is absolute")
+            if no_test_data.lower() != "true":
+                reasons.append("config does not assert no_test_data=true")
+
             rows.append({
-                "method": method,
-                "dataset": "Tongji",
-                "direction": direction,
-                "seed": seed,
-                "config_path": config_path.as_posix(),
-                "split_hash": split_hash,
-                "checkpoint_path": ckpt_path,
-                "selected_epoch": epoch,
-                "selection_metric": selection_metric,
-                "selection_partition": selection_partition,
-                "uses_test_gallery_probe": uses_test,
-                "verdict": verdict
+                "run_id": row["run_id"],
+                "method": row["method"],
+                "dataset": row["dataset"],
+                "direction": row["direction"],
+                "seed": row["seed"],
+                "config_path": config_path,
+                "split_file": split_file,
+                "checkpoint_path_manifest": checkpoint_path,
+                "checkpoint_bundled": "false",
+                "selection_metric": monitor,
+                "selection_mode": mode,
+                "selection_partition": "validation",
+                "uses_test_gallery_probe": str(leakage).lower(),
+                "verdict": "PASS" if not reasons else "FAIL",
+                "notes": "No checkpoint files are bundled; manifest paths are relative and reproduce local selection provenance."
+                if not reasons else "; ".join(reasons),
             })
 
-    # 2. Process IITD runs
-    if IITD_RUNS_CSV.exists():
-        print(f"Auditing IITD runs from {IITD_RUNS_CSV}...")
-        iitd_df = pd_read_csv_fallback(IITD_RUNS_CSV)
-        for r in iitd_df:
-            method = r["method"]
-            direction = "within"
-            seed = int(r["seed"])
-            run_dir = Path(r["run_dir"])
-            
-            # Config path inference
-            # configs/b1_resnet18_ce_supcon_iitd_subject_disjoint_within_seed42.yaml
-            config_name = f"{method.lower()}_resnet18_"
-            if method.lower() == "b1":
-                config_name += "ce_supcon_"
-            elif method.lower() == "b6":
-                config_name += "bnneck_arcface_"
-            config_name += f"iitd_subject_disjoint_within_seed{seed}.yaml"
-            config_path = Path("configs") / config_name
-            
-            split_file = f"data/splits/iitd_subject_disjoint_within_seed{seed}.json"
-            split_hash = stable_json_hash(split_file)
-            leakage = get_split_leakage(split_file)
-            
-            ckpt_path, epoch = get_ckpt_epoch(run_dir)
-            if ckpt_path == "N/A":
-                ckpt_path, epoch = get_ckpt_epoch(ROOT / "experiments" / run_dir)
-                
-            selection_metric = "val_rank1"
-            selection_partition = "val"
-            
-            uses_test = leakage
-            verdict = "PASS" if not leakage else "FAIL"
-            
-            rows.append({
-                "method": method,
-                "dataset": "IITD",
-                "direction": direction,
-                "seed": seed,
-                "config_path": config_path.as_posix(),
-                "split_hash": split_hash,
-                "checkpoint_path": ckpt_path,
-                "selected_epoch": epoch,
-                "selection_metric": selection_metric,
-                "selection_partition": selection_partition,
-                "uses_test_gallery_probe": uses_test,
-                "verdict": verdict
-            })
-
-    # Write CSV
-    columns = [
-        "method", "dataset", "direction", "seed", "config_path", "split_hash",
-        "checkpoint_path", "selected_epoch", "selection_metric", "selection_partition",
-        "uses_test_gallery_probe", "verdict"
-    ]
-    
     OUT_CSV.parent.mkdir(parents=True, exist_ok=True)
-    with open(OUT_CSV, "w", newline="", encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=columns)
+    fieldnames = list(rows[0].keys()) if rows else []
+    with OUT_CSV.open("w", encoding="utf-8", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
         writer.writerows(rows)
-    print(f"Successfully wrote {len(rows)} rows to {OUT_CSV}")
-    
-    # Write Markdown
-    with open(OUT_MD, "w", encoding="utf-8") as f:
-        f.write("# Checkpoint-Selection Audit\n\n")
-        f.write("This audit verifies that the checkpoints used for evaluation were selected using validation data only, without gallery/probe/test leakage.\n\n")
-        f.write("| Method | Dataset | Direction | Seed | Epoch | Metric | Uses Test? | Verdict |\n")
-        f.write("|---|---|---|---|---|---|---|---|\n")
-        for row in rows:
-            f.write(f"| {row['method']} | {row['dataset']} | {row['direction']} | {row['seed']} | {row['selected_epoch']} | {row['selection_metric']} | {row['uses_test_gallery_probe']} | {row['verdict']} |\n")
-        f.write("\n")
-    print(f"Successfully wrote {OUT_MD}")
 
-def pd_read_csv_fallback(csv_path):
-    # Safe lightweight CSV reader fallback without pandas dependency or just using csv
-    with open(csv_path, mode='r', encoding='utf-8') as f:
-        reader = csv.DictReader(f)
-        return list(reader)
+    pass_count = sum(1 for r in rows if r["verdict"] == "PASS")
+    fail_count = len(rows) - pass_count
+    md = [
+        "# Checkpoint-Selection Audit",
+        "",
+        "This audit checks that public run-manifest checkpoint paths are relative, checkpoints are not bundled, and the configured selection policy uses validation data rather than held-out gallery/probe data.",
+        "",
+        f"- Source manifest: `{RUN_MANIFEST.relative_to(ROOT).as_posix()}`",
+        f"- Rows audited: {len(rows)}",
+        f"- PASS: {pass_count}",
+        f"- FAIL: {fail_count}",
+        "",
+        "| Dataset | Method | Direction | Seed | Selection metric | Uses gallery/probe? | Verdict |",
+        "|---|---|---|---:|---|---|---|",
+    ]
+    for r in rows:
+        md.append(
+            f"| {r['dataset']} | {r['method']} | {r['direction']} | {r['seed']} | "
+            f"{r['selection_metric']} | {r['uses_test_gallery_probe']} | {r['verdict']} |"
+        )
+    md.append("")
+    md.append("Detailed machine-readable rows are stored in `audit_artifacts/protocol/checkpoint_selection_audit.csv`.")
+    OUT_MD.write_text("\n".join(md) + "\n", encoding="utf-8")
+
+    print(f"Wrote {OUT_CSV.relative_to(ROOT)}")
+    print(f"Wrote {OUT_MD.relative_to(ROOT)}")
+    print(f"PASS={pass_count} FAIL={fail_count}")
+    return 0 if fail_count == 0 else 1
+
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

@@ -5,7 +5,7 @@ import sys
 
 
 def main() -> int:
-    return subprocess.run([sys.executable, "scripts/eval_embedding.py", *sys.argv[1:]]).returncode
+    return subprocess.run([sys.executable, "scripts/make_strict_tongji_score_figures.py"]).returncode
 
 
 if __name__ == "__main__":

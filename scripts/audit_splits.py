@@ -8,10 +8,10 @@ import pandas as pd
 ROOT = Path(".").resolve()
 
 SPLIT_DIR = ROOT / "data" / "splits"
-OUT_DIR = ROOT / "docs" / "audits"
+OUT_DIR = ROOT / "audit_artifacts" / "splits"
 OUT_CSV = OUT_DIR / "split_audit.csv"
 OUT_MD = OUT_DIR / "split_audit.md"
-OUT_GP_MD = OUT_DIR / "gallery_probe_audit.md"
+OUT_GP_MD = ROOT / "audit_artifacts" / "protocol" / "gallery_probe_audit_summary.md"
 
 def stable_json_hash(path):
     with open(path, 'r', encoding='utf-8') as f:
@@ -75,6 +75,7 @@ def normalize_partition(part):
 
 def main():
     OUT_DIR.mkdir(parents=True, exist_ok=True)
+    OUT_GP_MD.parent.mkdir(parents=True, exist_ok=True)
     
     split_paths = sorted(
         list(SPLIT_DIR.glob("tongji_subject_disjoint_s*_to_s*_seed*.json")) +

@@ -21,11 +21,11 @@ from palmrec.evaluation.metrics import tar_at_far_conservative, conservative_tar
 
 
 SPLIT_DIR = Path("data/splits")
-RUNS_CSV = Path("docs/results/strict_tongji_ablation_runs.csv")
+RUNS_CSV = Path("audit_artifacts/manifests/strict_tongji_ablation_runs.csv")
 
-OUT_RUNS_CSV = Path("docs/results/gabor_strict_tongji_runs.csv")
-OUT_SUMMARY_CSV = Path("docs/results/gabor_strict_tongji_summary.csv")
-OUT_MD = Path("docs/results/gabor_strict_tongji_summary.md")
+OUT_RUNS_CSV = Path("audit_artifacts/results/gabor_strict_tongji_runs.csv")
+OUT_SUMMARY_CSV = Path("audit_artifacts/results/gabor_strict_tongji_summary.csv")
+OUT_MD = Path("audit_artifacts/results/gabor_strict_tongji_summary.md")
 OUT_TEX = Path("paper/sections/palmprint_specific_baseline_table.tex")
 
 SEEDS = [42, 2026, 2705]
@@ -42,9 +42,9 @@ COMPARE_METHODS = ["B1", "B5", "B6"]
 
 METHOD_LABELS = {
     "Gabor": "Fixed Gabor texture",
-    "B1": "B1 CE+SupCon",
-    "B5": "B5 BNNeck+CE",
-    "B6": "B6 BNNeck+ArcFace",
+    "B1": "M1 CE+SupCon",
+    "B5": "M4 BNNeck+CE",
+    "B6": "M6 BNNeck+ArcFace",
 }
 
 METHOD_ROLE = {
