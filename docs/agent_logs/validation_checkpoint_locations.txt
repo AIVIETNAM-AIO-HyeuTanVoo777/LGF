@@ -1,0 +1,935 @@
+scripts\aggregate_all_results.py:25:val = metrics[k]
+scripts\aggregate_all_results.py:26:if val is not None:
+scripts\aggregate_all_results.py:27:return float(val)
+scripts\aggregate_all_results.py:51:val1 = s1s2_run[0][metric]
+scripts\aggregate_all_results.py:52:val2 = s2s1_run[0][metric]
+scripts\aggregate_all_results.py:53:if isinstance(val1, float) and isinstance(val2, float):
+scripts\aggregate_all_results.py:54:seed_averages.append((val1 + val2) / 2.0)
+scripts\aggregate_all_results.py:86:seed_vals = []
+scripts\aggregate_all_results.py:90:val = run[0][metric]
+scripts\aggregate_all_results.py:91:if isinstance(val, float):
+scripts\aggregate_all_results.py:92:seed_vals.append(val)
+scripts\aggregate_all_results.py:93:if len(seed_vals) == 3:
+scripts\aggregate_all_results.py:94:mean = np.mean(seed_vals)
+scripts\aggregate_all_results.py:95:std = np.std(seed_vals, ddof=1)
+scripts\aggregate_all_results.py:177:# If config is empty, try loading it from checkpoint
+scripts\aggregate_all_results.py:178:checkpoint_path = rdir / "checkpoints" / "best.pt"
+scripts\aggregate_all_results.py:179:if not config and checkpoint_path.exists():
+scripts\aggregate_all_results.py:182:checkpoint = torch.load(checkpoint_path, map_location="cpu")
+scripts\aggregate_all_results.py:183:if "config" in checkpoint:
+scripts\aggregate_all_results.py:184:config = checkpoint["config"]
+scripts\aggregate_all_results.py:258:"checkpoint_path": f"experiments/{run_name}/checkpoints/best.pt" if checkpoint_path.exists() else "NA",
+scripts\aggregate_all_results.py:273:"config_path", "checkpoint_path", "rank1", "rank5", "macro_f1",
+scripts\aggregate_all_results.py:288:Total runs detected with valid metrics: {len(runs)}
+scripts\aggregate_b6_multiseed.py:144:for key, value in data.items():
+scripts\aggregate_b6_multiseed.py:146:return float(value)
+scripts\aggregate_b6_multiseed.py:150:def as_percent(value):
+scripts\aggregate_b6_multiseed.py:151:if value is None:
+scripts\aggregate_b6_multiseed.py:153:return value * 100.0 if abs(value) <= 1.0000001 else value
+scripts\aggregate_b6_multiseed.py:156:def as_params_m(value):
+scripts\aggregate_b6_multiseed.py:157:if value is None:
+scripts\aggregate_b6_multiseed.py:159:return value / 1_000_000.0 if value > 100_000 else value
+scripts\aggregate_b6_multiseed.py:162:def as_flops_g(value):
+scripts\aggregate_b6_multiseed.py:163:if value is None:
+scripts\aggregate_b6_multiseed.py:165:return value / 1_000_000_000.0 if value > 100_000 else value
+scripts\aggregate_b6_multiseed.py:193:value = float(match.group(1).replace(",", ""))
+scripts\aggregate_b6_multiseed.py:194:if metric == "params_m" and value > 100_000:
+scripts\aggregate_b6_multiseed.py:195:value = value / 1_000_000.0
+scripts\aggregate_b6_multiseed.py:196:parsed[metric] = value
+scripts\aggregate_b6_multiseed.py:257:value = json_metric(data, metric)
+scripts\aggregate_b6_multiseed.py:258:if value is None:
+scripts\aggregate_b6_multiseed.py:259:value = md_metrics.get(metric)
+scripts\aggregate_b6_multiseed.py:260:if value is None:
+scripts\aggregate_b6_multiseed.py:264:value = as_percent(value)
+scripts\aggregate_b6_multiseed.py:266:value = as_params_m(value)
+scripts\aggregate_b6_multiseed.py:268:value = as_flops_g(value)
+scripts\aggregate_b6_multiseed.py:269:metrics[metric] = value
+scripts\aggregate_b6_multiseed.py:314:def stats(values):
+scripts\aggregate_b6_multiseed.py:315:n = len(values)
+scripts\aggregate_b6_multiseed.py:316:mean = sum(values) / n
+scripts\aggregate_b6_multiseed.py:318:var = sum((v - mean) ** 2 for v in values) / (n - 1)
+scripts\aggregate_b6_multiseed.py:325:"min": min(values),
+scripts\aggregate_b6_multiseed.py:326:"max": max(values),
+scripts\aggregate_b6_multiseed.py:408:def fmt(value, suffix=""):
+scripts\aggregate_b6_multiseed.py:409:return f"{value:.2f}{suffix}"
+scripts\aggregate_b6_multiseed.py:472:"ResNet18 + CE + SupCon baseline under multi-seed Tongji evaluation."
+scripts\aggregate_b6_multiseed.py:477:"under multi-seed Tongji evaluation."
+scripts\aggregate_b6_multiseed.py:487:"- Recommend add one more validation: IITD B6 + optional session-robust ablation.\n"
+scripts\aggregate_b6_multiseed.py:503:- No retraining/evaluation done by this aggregate script.
+scripts\aggregate_cosface_baseline_results.py:42:def fmt_mean_std(values: list[float]) -> str:
+scripts\aggregate_cosface_baseline_results.py:43:return f"{mean(values):.3f} +/- {pstdev(values):.3f}"
+scripts\aggregate_cosface_baseline_results.py:88:for direction_label in [*DIRECTIONS.values(), "Both"]:
+scripts\aggregate_iitd_rerun_results.py:41:def mean_std(vals):
+scripts\aggregate_iitd_rerun_results.py:42:if len(vals) == 1:
+scripts\aggregate_iitd_rerun_results.py:43:return vals[0], 0.0
+scripts\aggregate_iitd_rerun_results.py:44:return stats.mean(vals), stats.stdev(vals)
+scripts\aggregate_iitd_rerun_results.py:80:vals = [r[metric] for r in sub]
+scripts\aggregate_iitd_rerun_results.py:81:mu, sd = mean_std(vals)
+scripts\aggregate_iitd_rerun_results.py:123:md.append("These results were regenerated after fixing the IITD gallery/probe construction so that each held-out palm class appears in both gallery and probe with no image overlap. IITD remains secondary within-session validation and is not cross-session evidence.")
+scripts\aggregate_iitd_rerun_results.py:176:tex.append(r"\caption{IITD palm-class-disjoint within-session rerun after gallery/probe split correction. Values are mean $\pm$ standard deviation over three seeds. Lower EER is better; higher values are better for all other metrics.}")
+scripts\aggregate_results.py:26:# Ensure all values are floats
+scripts\aggregate_results.py:35:def compute_mean_std(values_list):
+scripts\aggregate_results.py:36:if not values_list:
+scripts\aggregate_results.py:38:mean = float(np.mean(values_list))
+scripts\aggregate_results.py:39:std = float(np.std(values_list, ddof=1)) if len(values_list) > 1 else 0.0
+scripts\aggregate_results.py:82:tongji_report = """# Tongji Palm-Class-Disjoint Cross-Session Evaluation Summary
+scripts\aggregate_results.py:84:This document aggregates evaluation metrics for Tier-1 models on the Tongji palm-class-disjoint cross-session protocol across three random seeds: 42, 2026, and 2705.
+scripts\aggregate_results.py:98:r1_vals = []
+scripts\aggregate_results.py:103:r1_vals.append(metrics["Rank-1"])
+scripts\aggregate_results.py:107:mean_val, std_val = compute_mean_std(r1_vals)
+scripts\aggregate_results.py:108:tongji_report += f"| {method_name} | {' | '.join(cells)} | {format_cell(mean_val, std_val)} |\n"
+scripts\aggregate_results.py:118:r1_vals = []
+scripts\aggregate_results.py:123:r1_vals.append(metrics["Rank-1"])
+scripts\aggregate_results.py:127:mean_val, std_val = compute_mean_std(r1_vals)
+scripts\aggregate_results.py:128:tongji_report += f"| {method_name} | {' | '.join(cells)} | {format_cell(mean_val, std_val)} |\n"
+scripts\aggregate_results.py:140:# Store aggregated seed values for B1 and B6
+scripts\aggregate_results.py:152:avg_val = (m_s1s2[metric] + m_s2s1[metric]) / 2.0
+scripts\aggregate_results.py:153:overall_stats[method_key][metric].append(avg_val)
+scripts\aggregate_results.py:154:row_cells.append(format_cell(avg_val))
+scripts\aggregate_results.py:158:vals = overall_stats[method_key][metric]
+scripts\aggregate_results.py:159:mean_val, std_val = compute_mean_std(vals)
+scripts\aggregate_results.py:161:tongji_report += f"| {method_lbl} | {metric} | {' | '.join(row_cells)} | {format_cell(mean_val, std_val)} |\n"
+scripts\aggregate_results.py:176:b1_vals = overall_stats["b1"][metric]
+scripts\aggregate_results.py:177:b6_vals = overall_stats["b6"][metric]
+scripts\aggregate_results.py:178:if len(b1_vals) > i and len(b6_vals) > i:
+scripts\aggregate_results.py:179:d = b6_vals[i] - b1_vals[i]
+scripts\aggregate_results.py:190:- These results show that the BNNeck + ArcFace variant evaluated here does not transfer into a consistent cross-session improvement, reinforcing the need for protocol-sensitive benchmarking rather than single-protocol claims.
+scripts\aggregate_results.py:193:tongji_report = """# Tongji Palm-Class-Disjoint Cross-Session Evaluation Summary
+scripts\aggregate_results.py:197:No valid restart metrics were found by the current aggregation script. This file must not be used as experimental evidence until metrics from the restart experiments are available and parsed correctly.
+scripts\aggregate_results.py:202:- Protocol: palm-class-disjoint cross-session evaluation
+scripts\aggregate_results.py:208:No new result claim is made in this file. Tongji should be treated as primary cross-session evaluation, not as evidence for universal improvement.
+scripts\aggregate_results.py:237:iitd_report = """# IITD Palm-Class-Disjoint Within-Session Evaluation Summary
+scripts\aggregate_results.py:239:This document aggregates evaluation metrics for Tier-1 models on the secondary IITD palm-class-disjoint within-session protocol across three random seeds: 42, 2026, and 2705.
+scripts\aggregate_results.py:257:val = m[metric]
+scripts\aggregate_results.py:258:overall_stats_iitd[method_key][metric].append(val)
+scripts\aggregate_results.py:259:row_cells.append(format_cell(val))
+scripts\aggregate_results.py:263:vals = overall_stats_iitd[method_key][metric]
+scripts\aggregate_results.py:264:mean_val, std_val = compute_mean_std(vals)
+scripts\aggregate_results.py:266:iitd_report += f"| {method_lbl} | {metric} | {' | '.join(row_cells)} | {format_cell(mean_val, std_val)} |\n"
+scripts\aggregate_results.py:281:b1_vals = overall_stats_iitd["b1"][metric]
+scripts\aggregate_results.py:282:b6_vals = overall_stats_iitd["b6"][metric]
+scripts\aggregate_results.py:283:if len(b1_vals) > i and len(b6_vals) > i:
+scripts\aggregate_results.py:284:d = b6_vals[i] - b1_vals[i]
+scripts\aggregate_results.py:294:- **Secondary Validation Verdict**: Superseded. The IITD gallery/probe construction was corrected after this legacy aggregator was written. Use `scripts/aggregate_iitd_rerun_results.py` and `docs/results/iitd_subject_disjoint_rerun_results.md` as the authoritative IITD evidence. The corrected IITD rerun shows a near-tie: B6 has Rank-1 +0.12 pp versus B1, slightly worse EER (+0.19 pp), and lower TAR@FAR=1e-3 (-0.72 pp). IITD remains secondary within-session palm-class-disjoint validation, not cross-session evidence or universal superiority evidence.
+scripts\aggregate_results.py:297:iitd_report = """# IITD Palm-Class-Disjoint Within-Dataset Evaluation Summary
+scripts\aggregate_results.py:301:No valid restart metrics were found by the current aggregation script. This file must not be used as experimental evidence until metrics from the restart experiments are available and parsed correctly.
+scripts\aggregate_results.py:306:- Protocol: palm-class-disjoint within-dataset secondary validation
+scripts\aggregate_results.py:312:No new result claim is made in this file. IITD should be treated as secondary validation, not as evidence for cross-session robustness or universal improvement.
+scripts\aggregate_score_diagnostics.py:49:def summarize(values: list[float]) -> tuple[float, float]:
+scripts\aggregate_score_diagnostics.py:50:if len(values) == 1:
+scripts\aggregate_score_diagnostics.py:51:return values[0], 0.0
+scripts\aggregate_score_diagnostics.py:52:return mean(values), stdev(values)
+scripts\aggregate_score_diagnostics.py:137:vals = [float(item[metric]) for item in items]
+scripts\aggregate_score_diagnostics.py:138:mu, sd = summarize(vals)
+scripts\aggregate_strict_ablation_results.py:122:vals = []
+scripts\aggregate_strict_ablation_results.py:126:vals.append(f"{v:.10f}")
+scripts\aggregate_strict_ablation_results.py:128:vals.append(str(v).replace(",", ";"))
+scripts\aggregate_strict_ablation_results.py:129:lines.append(",".join(vals))
+scripts\aggregate_strict_ablation_results.py:150:vals = [r[k] for r in dr if r[k] is not None]
+scripts\aggregate_strict_ablation_results.py:151:s[f"{k}_mean"] = statistics.mean(vals) if vals else None
+scripts\aggregate_strict_ablation_results.py:152:s[f"{k}_std"] = statistics.stdev(vals) if len(vals) >= 2 else 0.0
+scripts\aggregate_strict_ablation_results.py:166:vals = []
+scripts\aggregate_strict_ablation_results.py:170:vals.append(f"{v:.10f}")
+scripts\aggregate_strict_ablation_results.py:172:vals.append(str(v))
+scripts\aggregate_strict_ablation_results.py:173:lines.append(",".join(vals))
+scripts\aggregate_tongji_seed_sweep.py:33:def get_metric_val(data, keys):
+scripts\aggregate_tongji_seed_sweep.py:73:def compute_stats(vals):
+scripts\aggregate_tongji_seed_sweep.py:74:if not vals:
+scripts\aggregate_tongji_seed_sweep.py:76:mean = float(np.mean(vals))
+scripts\aggregate_tongji_seed_sweep.py:77:std = float(np.std(vals, ddof=1)) if len(vals) > 1 else 0.0
+scripts\aggregate_tongji_seed_sweep.py:81:"min": float(np.min(vals)),
+scripts\aggregate_tongji_seed_sweep.py:82:"max": float(np.max(vals)),
+scripts\aggregate_tongji_seed_sweep.py:83:"n": len(vals)
+scripts\aggregate_tongji_seed_sweep.py:109:"rank1": get_metric_val(data, ["Rank-1", "Rank1", "rank1"]),
+scripts\aggregate_tongji_seed_sweep.py:110:"rank5": get_metric_val(data, ["Rank-5", "Rank5", "rank5"]),
+scripts\aggregate_tongji_seed_sweep.py:111:"macro_f1": get_metric_val(data, ["Macro-F1", "macro_f1"]),
+scripts\aggregate_tongji_seed_sweep.py:112:"eer": get_metric_val(data, ["EER", "eer"]),
+scripts\aggregate_tongji_seed_sweep.py:113:"tar_far_1e_2": get_metric_val(data, ["TAR@FAR=1e-2", "tar_far_1e_2"]),
+scripts\aggregate_tongji_seed_sweep.py:114:"tar_far_1e_3": get_metric_val(data, ["TAR@FAR=1e-3", "tar_far_1e_3"]),
+scripts\aggregate_tongji_seed_sweep.py:163:vals = [r[key] for r in sub_runs if r[key] is not None]
+scripts\aggregate_tongji_seed_sweep.py:166:vals = [v * 100.0 for v in vals]
+scripts\aggregate_tongji_seed_sweep.py:167:aggregated[m][p][key] = compute_stats(vals)
+scripts\aggregate_tongji_seed_sweep.py:178:# Step 4: Markdown reporting and claim validation
+scripts\aggregate_tongji_seed_sweep.py:205:# Format values to percent
+scripts\aggregate_tongji_seed_sweep.py:206:def p(val):
+scripts\aggregate_tongji_seed_sweep.py:207:return f"{val*100:.2f}%" if val is not None else "-"
+scripts\aggregate_tongji_seed_sweep.py:208:t_val = f"{r['average_inference_time_ms']:.2f} ms" if r['average_inference_time_ms'] is not None else "-"
+scripts\aggregate_tongji_seed_sweep.py:209:p_val = f"{r['params_m']:.2f}M" if r['params_m'] is not None else "-"
+scripts\aggregate_tongji_seed_sweep.py:210:f_val = f"{r['flops_g']:.3f}G" if r['flops_g'] is not None else "-"
+scripts\aggregate_tongji_seed_sweep.py:212:f"| {r['method']} | {r['protocol']} | {r['seed']} | {p(r['rank1'])} | {p(r['rank5'])} | {p(r['macro_f1'])} | {p(r['eer'])} | {p(r['tar_far_1e_2'])} | {p(r['tar_far_1e_3'])} | {t_val} | {p_val} | {f_val} |"
+scripts\aggregate_tongji_seed_sweep.py:221:mean_val = st[key]["mean"]
+scripts\aggregate_tongji_seed_sweep.py:222:std_val = st[key]["std"]
+scripts\aggregate_tongji_seed_sweep.py:225:return f"{mean_val:.2f}{unit} Â± {std_val:.2f}{unit}"
+scripts\aggregate_tongji_seed_sweep.py:230:# Direct comparison values (B2 - B1 on Bidirectional Average)
+scripts\aggregate_tongji_seed_sweep.py:252:Aggregated over $n=3$ seeds (42, 2026, 2705). All accuracy and verification thresholds are in percentage values (%).
+scripts\aggregate_tongji_seed_sweep.py:260:Comparison of mean values:
+scripts\analyze_paired_deltas.py:25:# Parse values
+scripts\analyze_paired_deltas.py:86:def format_diff(val):
+scripts\analyze_paired_deltas.py:87:sign = "+" if val >= 0 else ""
+scripts\analyze_paired_deltas.py:88:return f"{sign}{val*100:.2f} pp"
+scripts\analyze_paired_deltas.py:93:# - This analysis uses six paired seed-direction units from Tongji palm-class-disjoint cross-session evaluation.
+scripts\analyze_paired_deltas.py:108:- This analysis uses six paired seed-direction units from Tongji palm-class-disjoint cross-session evaluation.
+scripts\analyze_paired_deltas.py:139:- For the S1â†’S2 evaluation direction, the performance comparison between B6 and B1 is mixed, showing small gains on some seeds/metrics and drops on others.
+scripts\analyze_paired_deltas.py:140:- For the S2â†’S1 evaluation direction, the performance differences are more consistently negative for B6, indicating that B6 performs worse than B1 under this cross-session direction.
+scripts\audit_checkpoint_selection.py:12:OUT_CSV = ROOT / "docs/audits/checkpoint_selection_audit.csv"
+scripts\audit_checkpoint_selection.py:13:OUT_MD = ROOT / "docs/audits/checkpoint_selection_audit.md"
+scripts\audit_checkpoint_selection.py:37:val = data.get("val", [])
+scripts\audit_checkpoint_selection.py:42:val_paths = set(item.get("path") for item in val if isinstance(item, dict))
+scripts\audit_checkpoint_selection.py:46:dev_paths = train_paths | val_paths
+scripts\audit_checkpoint_selection.py:49:# Check if validation overlaps gallery/probe
+scripts\audit_checkpoint_selection.py:50:overlap = val_paths & test_paths
+scripts\audit_checkpoint_selection.py:59:ckpt_path = p / "checkpoints" / "best.pt"
+scripts\audit_checkpoint_selection.py:61:ckpt_path = p / "best.pt"
+scripts\audit_checkpoint_selection.py:105:selection_metric = "val_rank1" if method != "Gabor" else "N/A"
+scripts\audit_checkpoint_selection.py:106:selection_partition = "val" if method != "Gabor" else "N/A"
+scripts\audit_checkpoint_selection.py:108:# Gabor is fixed texture matching, no checkpoints/validation used
+scripts\audit_checkpoint_selection.py:125:"checkpoint_path": ckpt_path,
+scripts\audit_checkpoint_selection.py:161:selection_metric = "val_rank1"
+scripts\audit_checkpoint_selection.py:162:selection_partition = "val"
+scripts\audit_checkpoint_selection.py:174:"checkpoint_path": ckpt_path,
+scripts\audit_checkpoint_selection.py:185:"checkpoint_path", "selected_epoch", "selection_metric", "selection_partition",
+scripts\audit_checkpoint_selection.py:199:f.write("This audit verifies that the checkpoints used for evaluation were selected using validation data only, without gallery/probe/test leakage.\n\n")
+scripts\audit_dataset_and_splits.py:50:dataset_counts = df["dataset"].value_counts().to_dict()
+scripts\audit_dataset_and_splits.py:105:partitions = ["train", "val", "gallery", "probe"]
+scripts\audit_dataset_and_splits.py:169:if part in ["train", "val"]:
+scripts\audit_gallery_probe_construction.py:43:for key in ["train", "val", "gallery", "probe", "support"]:
+scripts\audit_gallery_probe_construction.py:44:val = data.get(key, [])
+scripts\audit_gallery_probe_construction.py:45:if val is None:
+scripts\audit_gallery_probe_construction.py:46:val = []
+scripts\audit_gallery_probe_construction.py:47:if not isinstance(val, list):
+scripts\audit_gallery_probe_construction.py:49:out[key] = val
+scripts\audit_gallery_probe_construction.py:76:def values(rows: list[dict[str, Any]], col: str) -> set[str]:
+scripts\audit_gallery_probe_construction.py:81:vals = sorted(values(rows, col))
+scripts\audit_gallery_probe_construction.py:82:return ",".join(vals)
+scripts\audit_gallery_probe_construction.py:105:gallery_paths = values(gallery_rows, "path_norm")
+scripts\audit_gallery_probe_construction.py:106:probe_paths = values(probe_rows, "path_norm")
+scripts\audit_gallery_probe_construction.py:107:gallery_classes = values(gallery_rows, "class_id")
+scripts\audit_gallery_probe_construction.py:108:probe_classes = values(probe_rows, "class_id")
+scripts\audit_gallery_probe_construction.py:109:gallery_palms = values(gallery_rows, "palm_id")
+scripts\audit_gallery_probe_construction.py:110:probe_palms = values(probe_rows, "palm_id")
+scripts\audit_gallery_probe_construction.py:111:gallery_subjects = values(gallery_rows, "subject_id")
+scripts\audit_gallery_probe_construction.py:112:probe_subjects = values(probe_rows, "subject_id")
+scripts\audit_gallery_probe_construction.py:113:gallery_sessions = values(gallery_rows, "session")
+scripts\audit_gallery_probe_construction.py:114:probe_sessions = values(probe_rows, "session")
+scripts\audit_gallery_probe_construction.py:199:md.append("## Evaluation-code evidence")
+scripts\audit_gallery_probe_construction.py:201:md.append("The evaluation script loads `gallery` and `probe` partitions separately, extracts embeddings, computes a probe-by-gallery cosine similarity matrix, uses class-label equality for Rank-k matching, and derives EER/TAR from genuine/impostor probe-gallery pairs.")
+scripts\audit_gallery_probe_construction.py:226:md.append("At least one gallery/probe split failed the audit. Do not strengthen evaluation claims until corrected.")
+scripts\audit_gallery_probe_construction.py:228:md.append("All audited splits use matching gallery/probe palm-class sets with disjoint images. Tongji splits are cross-session in the intended direction; IITD is within-session only and must remain secondary validation rather than cross-session evidence.")
+scripts\audit_identity_parser.py:44:for key in ["train", "val", "gallery", "probe", "support"]:
+scripts\audit_identity_parser.py:45:value = data.get(key, [])
+scripts\audit_identity_parser.py:46:if value is None:
+scripts\audit_identity_parser.py:47:value = []
+scripts\audit_identity_parser.py:48:if not isinstance(value, list):
+scripts\audit_identity_parser.py:50:out[key] = value
+scripts\audit_identity_parser.py:77:def values(rows: list[dict[str, Any]], col: str) -> set[str]:
+scripts\audit_identity_parser.py:114:dev_items = split["train"] + split["val"]
+scripts\audit_identity_parser.py:120:dev_paths = values(dev_rows, "path_norm")
+scripts\audit_identity_parser.py:121:test_paths = values(test_rows, "path_norm")
+scripts\audit_identity_parser.py:122:dev_classes = values(dev_rows, "class_id")
+scripts\audit_identity_parser.py:123:test_classes = values(test_rows, "class_id")
+scripts\audit_identity_parser.py:124:dev_palms = values(dev_rows, "palm_id")
+scripts\audit_identity_parser.py:125:test_palms = values(test_rows, "palm_id")
+scripts\audit_identity_parser.py:126:dev_subjects = values(dev_rows, "subject_id")
+scripts\audit_identity_parser.py:127:test_subjects = values(test_rows, "subject_id")
+scripts\audit_identity_parser.py:227:md.append("- `class_id`: manifest field used as palm-class label for training/evaluation split construction.")
+scripts\audit_image_quality.py:156:valid_df = audit_df[audit_df["corrupt"] == False]
+scripts\audit_image_quality.py:169:- **Average Width**: {valid_df['width'].mean():.2f} pixels
+scripts\audit_image_quality.py:170:- **Average Height**: {valid_df['height'].mean():.2f} pixels
+scripts\audit_image_quality.py:171:- **Average Intensity Mean**: {valid_df['mean'].mean():.2f} (0-255)
+scripts\audit_image_quality.py:172:- **Average Intensity Std**: {valid_df['std'].mean():.2f}
+scripts\audit_image_quality.py:173:- **Average Near-Black Pixels**: {valid_df['near_black_pct'].mean():.2f}%
+scripts\audit_image_quality.py:174:- **Average Near-White Pixels**: {valid_df['near_white_pct'].mean():.2f}%
+scripts\audit_image_quality.py:175:- **Average Sharpness/Blur Score**: {valid_df['blur_score'].mean():.2f}
+scripts\audit_image_quality.py:181:ds_valid = valid_df[valid_df["dataset"] == ds]
+scripts\audit_image_quality.py:189:if len(ds_valid) > 0:
+scripts\audit_image_quality.py:190:summary_md += f"- **Avg Size**: {ds_valid['width'].mean():.1f} x {ds_valid['height'].mean():.1f}\n"
+scripts\audit_image_quality.py:191:summary_md += f"- **Avg Intensity Mean**: {ds_valid['mean'].mean():.2f}\n"
+scripts\audit_image_quality.py:192:summary_md += f"- **Avg Intensity Std**: {ds_valid['std'].mean():.2f}\n"
+scripts\audit_image_quality.py:193:summary_md += f"- **Avg Sharpness Score**: {ds_valid['blur_score'].mean():.2f}\n"
+scripts\audit_metric_thresholds.py:19:from palmrec.evaluation.metrics import tar_at_far_conservative, conservative_tar_at_far
+scripts\audit_metric_thresholds.py:306:md.append("- Revised rule: choose only ROC points with empirical FPR less than or equal to the target FAR, then select the valid point with the highest TPR.")
+scripts\audit_metric_thresholds.py:317:md.append("| Dataset | Runs | Evidence rows | Conservative failures | Nearest-FPR rows above target | Max abs delta TAR vs reported (pp) | Pair count shapes | min FAR step values |")
+scripts\audit_rankb_protocol.py:20:PARTITIONS = ("train", "val", "gallery", "probe")
+scripts\audit_rankb_protocol.py:21:DEV_PARTITIONS = ("train", "val")
+scripts\audit_rankb_protocol.py:30:"val_count",
+scripts\audit_rankb_protocol.py:68:def values(records: list[dict[str, Any]], key: str) -> set[str]:
+scripts\audit_rankb_protocol.py:106:val = data["val"]
+scripts\audit_rankb_protocol.py:113:dev_paths = values(dev, "path")
+scripts\audit_rankb_protocol.py:114:test_paths = values(test, "path")
+scripts\audit_rankb_protocol.py:115:dev_classes = values(dev, "class_id")
+scripts\audit_rankb_protocol.py:116:test_classes = values(test, "class_id")
+scripts\audit_rankb_protocol.py:117:dev_palms = values(dev, "palm_id")
+scripts\audit_rankb_protocol.py:118:test_palms = values(test, "palm_id")
+scripts\audit_rankb_protocol.py:119:dev_subjects = values(dev, "subject_id")
+scripts\audit_rankb_protocol.py:120:test_subjects = values(test, "subject_id")
+scripts\audit_rankb_protocol.py:133:invalid_reasons: list[str] = []
+scripts\audit_rankb_protocol.py:135:invalid_reasons.append("dev/test image overlap")
+scripts\audit_rankb_protocol.py:137:invalid_reasons.append("dev/test class overlap")
+scripts\audit_rankb_protocol.py:139:invalid_reasons.append("dev/test palm overlap")
+scripts\audit_rankb_protocol.py:141:invalid_reasons.append("dev/test subject_id overlap")
+scripts\audit_rankb_protocol.py:143:if invalid_reasons:
+scripts\audit_rankb_protocol.py:144:claim_allowed = "invalid"
+scripts\audit_rankb_protocol.py:146:notes = "; ".join(invalid_reasons)
+scripts\audit_rankb_protocol.py:162:"val_count": len(val),
+scripts\audit_rankb_protocol.py:187:vals = [str(row.get(f, "")).replace("|", "\\|") for f in fields]
+scripts\audit_rankb_protocol.py:188:lines.append("| " + " | ".join(vals) + " |")
+scripts\audit_rankb_protocol.py:225:r"\caption{Protocol audit summary. Image, palm/class, and subject-id overlaps are measured between development (train+validation) and held-out test (gallery+probe) partitions. Split hashes identify the exact JSON split files.}",
+scripts\audit_rankb_protocol.py:286:"This audit measures overlap between development partitions (`train` + `val`) and held-out test partitions (`gallery` + `probe`).",
+scripts\audit_splits.py:97:val = normalize_partition(data.get("val", []))
+scripts\audit_splits.py:103:val_paths = set(item["path"] for item in val)
+scripts\audit_splits.py:107:dev_paths = train_paths | val_paths
+scripts\audit_splits.py:113:img_train_val_overlap = len(train_paths & val_paths)
+scripts\audit_splits.py:119:val_classes = set(item["class_id"] for item in val)
+scripts\audit_splits.py:123:dev_classes = train_classes | val_classes
+scripts\audit_splits.py:130:val_palms = set(item.get("palm_id") for item in val if item.get("palm_id") is not None)
+scripts\audit_splits.py:134:dev_palms = train_palms | val_palms
+scripts\audit_splits.py:139:val_subjects = set(item.get("subject_id") for item in val if item.get("subject_id") is not None)
+scripts\audit_splits.py:143:dev_subjects = train_subjects | val_subjects
+scripts\audit_splits.py:175:claim_allowed = "invalid"
+scripts\audit_splits.py:200:"val images": len(val),
+scripts\audit_tongji_session_quality.py:62:def summarize(values: list[float]) -> tuple[float, float]:
+scripts\audit_tongji_session_quality.py:63:if len(values) == 0:
+scripts\audit_tongji_session_quality.py:65:if len(values) == 1:
+scripts\audit_tongji_session_quality.py:66:return values[0], 0.0
+scripts\audit_tongji_session_quality.py:67:return mean(values), stdev(values)
+scripts\audit_tongji_session_quality.py:104:valid = qdf[qdf["corrupt"] == False].copy()
+scripts\audit_tongji_session_quality.py:109:val_s = valid[valid["session"] == session]
+scripts\audit_tongji_session_quality.py:115:"n_valid": int(len(val_s)),
+scripts\audit_tongji_session_quality.py:116:"n_corrupt": int(len(all_s) - len(val_s)),
+scripts\audit_tongji_session_quality.py:128:vals = [float(x) for x in val_s[metric].tolist()]
+scripts\audit_tongji_session_quality.py:129:mu, sd = summarize(vals)
+scripts\audit_tongji_session_quality.py:160:md.append("This audit summarizes image-quality differences between Tongji session1 and session2 using the segmented manifest. It is intended to support interpretation of cross-session direction asymmetry, not to define a new evaluation metric.")
+scripts\audit_tongji_session_quality.py:171:f"| {r['session']} | {r['n_valid']} | "
+scripts\audit_tongji_session_quality.py:199:tex.append(r"\caption{Tongji session-level image-quality statistics computed from segmented images. Sharpness is Laplacian variance; higher values indicate sharper images. Values are mean $\pm$ standard deviation.}")
+scripts\audit_tongji_session_quality.py:208:f"{r['session']} & {r['n_valid']} & "
+scripts\audit_training_config_table.py:33:raise RuntimeError(f"Invalid YAML object in {path}")
+scripts\audit_training_config_table.py:46:def uniq(values: List[Any]) -> List[Any]:
+scripts\audit_training_config_table.py:48:for v in values:
+scripts\audit_training_config_table.py:54:def fmt_values(values: List[Any]) -> str:
+scripts\audit_training_config_table.py:55:values = uniq(values)
+scripts\audit_training_config_table.py:56:if not values:
+scripts\audit_training_config_table.py:58:return "; ".join(str(v) for v in values)
+scripts\audit_training_config_table.py:61:def display_eval_embedding(value: Any) -> str:
+scripts\audit_training_config_table.py:62:text = str(value)
+scripts\audit_training_config_table.py:106:"dataset": fmt_values([get_nested(c, "dataset.name") for c in cfgs]),
+scripts\audit_training_config_table.py:108:"model_name": fmt_values([get_nested(c, "model.name") for c in cfgs]),
+scripts\audit_training_config_table.py:109:"embedding_dim": fmt_values([get_nested(c, "model.embedding_dim") for c in cfgs]),
+scripts\audit_training_config_table.py:110:"pretrained": fmt_values([get_nested(c, "model.pretrained") for c in cfgs]),
+scripts\audit_training_config_table.py:111:"eval_embedding": fmt_values([
+scripts\audit_training_config_table.py:112:display_eval_embedding(get_nested(c, "eval.embedding", get_nested(c, "model.eval_embedding", "pre_bn_or_default")))
+scripts\audit_training_config_table.py:115:"loss": fmt_values([infer_loss(c) for c in cfgs]),
+scripts\audit_training_config_table.py:116:"arcface_scale": fmt_values([get_nested(c, "loss.scale", "") for c in cfgs if get_nested(c, "loss.scale", "") != ""]),
+scripts\audit_training_config_table.py:117:"arcface_margin": fmt_values([get_nested(c, "loss.margin", "") for c in cfgs if get_nested(c, "loss.margin", "") != ""]),
+scripts\audit_training_config_table.py:118:"lambda_supcon": fmt_values([get_nested(c, "training.lambda_supcon", "") for c in cfgs]),
+scripts\audit_training_config_table.py:119:"temperature": fmt_values([get_nested(c, "training.temperature", "") for c in cfgs]),
+scripts\audit_training_config_table.py:120:"epochs": fmt_values([get_nested(c, "training.epochs") for c in cfgs]),
+scripts\audit_training_config_table.py:121:"lr": fmt_values([get_nested(c, "training.lr") for c in cfgs]),
+scripts\audit_training_config_table.py:122:"weight_decay": fmt_values([get_nested(c, "training.weight_decay") for c in cfgs]),
+scripts\audit_training_config_table.py:123:"grad_accumulation_steps": fmt_values([get_nested(c, "training.grad_accumulation_steps") for c in cfgs]),
+scripts\audit_training_config_table.py:124:"amp": fmt_values([get_nested(c, "training.amp") for c in cfgs]),
+scripts\audit_training_config_table.py:125:"sampler_num_identities": fmt_values([get_nested(c, "sampler.num_identities") for c in cfgs]),
+scripts\audit_training_config_table.py:126:"sampler_num_instances": fmt_values([get_nested(c, "sampler.num_instances") for c in cfgs]),
+scripts\audit_training_config_table.py:127:"sampler_fallback_identities": fmt_values([get_nested(c, "sampler.fallback_identities") for c in cfgs]),
+scripts\audit_training_config_table.py:128:"num_workers": fmt_values([get_nested(c, "loader.num_workers") for c in cfgs]),
+scripts\audit_training_config_table.py:129:"device": fmt_values([get_nested(c, "device") for c in cfgs]),
+scripts\audit_training_config_table.py:155:md.append("This audit summarizes the training/evaluation configuration fields used by the final strict Tongji component-ablation runs.")
+scripts\audit_training_config_table.py:165:md.append("| Method | Model | Loss | Eval embedding | SupCon lambda | ArcFace | Epochs | LR | WD | Sampler | AMP | Verdict |")
+scripts\audit_training_config_table.py:178:f"{r['eval_embedding']} | {r['lambda_supcon']} | {arcface} | "
+scripts\audit_training_config_table.py:187:md.append("- B5 isolates BNNeck with cross-entropy by using BNNeck/post-BN evaluation and lambda_supcon 0.0.")
+scripts\audit_training_config_table.py:188:md.append("- B6 isolates BNNeck+ArcFace by using BNNeck/post-BN evaluation, ArcFace scale 30.0, margin 0.5, and lambda_supcon 0.0.")
+scripts\audit_training_config_table.py:204:tex.append(r"Method & Model & Loss & Eval emb. & $\lambda_{\mathrm{supcon}}$ & ArcFace $(s,m)$ & Epochs & LR & Sampler \\")
+scripts\audit_training_config_table.py:216:f"{r['eval_embedding']} & "
+scripts\build_knowledge_graph.py:65:count = sum(len(templates) for templates in kg.graph[g][h].values())
+scripts\build_manifest.py:75:val = int(filename_stem)
+scripts\build_manifest.py:80:palm_idx = (val - 1) // 10 + 1
+scripts\evaluate.py:14:from palmrec.evaluation.metrics import calculate_classification_metrics, calculate_eer, get_confusion_matrix_df
+scripts\evaluate.py:15:from palmrec.evaluation.timing import LatencyTracker
+scripts\evaluate.py:18:parser = argparse.ArgumentParser(description="Evaluate Palmprint Matching Pipeline")
+scripts\evaluate.py:21:help="Evaluation mode (one_stage global search or two_stage graph search)")
+scripts\evaluate.py:29:eval_dir = os.path.join(config.project.output_dir, "evaluation", config.dataset.name)
+scripts\evaluate.py:31:os.makedirs(eval_dir, exist_ok=True)
+scripts\evaluate.py:35:log_file = os.path.join(config.project.output_dir, "logs", f"evaluate_{config.dataset.name}.log")
+scripts\evaluate.py:36:logger = get_logger("Evaluate", log_file=log_file)
+scripts\evaluate.py:37:logger.info(f"Evaluating Palmprint Recognition for dataset: {config.dataset.name} in {args.mode} mode")
+scripts\evaluate.py:64:# Perform evaluation
+scripts\evaluate.py:131:cm_csv_path = os.path.join(eval_dir, f"{args.mode}_confusion_matrix.csv")
+scripts\evaluate.py:164:"notes": [f"Evaluation Mode: {args.mode}", f"Average candidates: {np.mean(candidate_counts):.2f}"]
+scripts\evaluate_gabor_strict_tongji_baseline.py:20:from palmrec.evaluation.metrics import tar_at_far_conservative, conservative_tar_at_far
+scripts\evaluate_gabor_strict_tongji_baseline.py:102:for key in ["train", "val", "gallery", "probe"]:
+scripts\evaluate_gabor_strict_tongji_baseline.py:186:interp = interp1d(fpr, tpr, bounds_error=False, fill_value=(float(tpr[0]), float(tpr[-1])))
+scripts\evaluate_gabor_strict_tongji_baseline.py:200:def evaluate_one(direction_key: str, seed: int, cache: dict[str, np.ndarray]) -> dict:
+scripts\evaluate_gabor_strict_tongji_baseline.py:204:print(f"Evaluating fixed Gabor baseline: {DIRECTIONS[direction_key]} seed {seed}")
+scripts\evaluate_gabor_strict_tongji_baseline.py:267:vals = np.array([as_percent(x) for x in sub[metric].to_numpy(dtype=float)], dtype=float)
+scripts\evaluate_gabor_strict_tongji_baseline.py:268:row[f"{metric}_mean_pp"] = float(vals.mean())
+scripts\evaluate_gabor_strict_tongji_baseline.py:269:row[f"{metric}_sd_pp"] = float(vals.std(ddof=1)) if len(vals) > 1 else 0.0
+scripts\evaluate_gabor_strict_tongji_baseline.py:311:summary = summary.sort_values("order").drop(columns=["order"])
+scripts\evaluate_gabor_strict_tongji_baseline.py:321:md.append("- No learned checkpoint, experiment tensor, or score file is written.")
+scripts\evaluate_gabor_strict_tongji_baseline.py:379:gabor_rows.append(evaluate_one(direction_key, seed, cache))
+scripts\eval_embedding.py:20:from palmrec.evaluation.metrics import tar_at_far_conservative, conservative_tar_at_far
+scripts\eval_embedding.py:26:parser = argparse.ArgumentParser(description="Evaluate Palmprint Embeddings.")
+scripts\eval_embedding.py:27:parser.add_argument("--checkpoint", type=str, required=True, help="Path to best.pt checkpoint.")
+scripts\eval_embedding.py:34:model.eval()
+scripts\eval_embedding.py:72:# Load checkpoint
+scripts\eval_embedding.py:73:print(f"Loading checkpoint from {args.checkpoint}...")
+scripts\eval_embedding.py:74:checkpoint = torch.load(args.checkpoint, map_location=device)
+scripts\eval_embedding.py:76:class_mapping = checkpoint["class_mapping"]
+scripts\eval_embedding.py:95:model.load_state_dict(checkpoint["model_state_dict"])
+scripts\eval_embedding.py:97:eval_cfg = config.get("eval", {})
+scripts\eval_embedding.py:98:embedding_mode = eval_cfg.get(
+scripts\eval_embedding.py:100:model_cfg.get("eval_embedding", model_cfg.get("embedding_mode", "post_bn")),
+scripts\eval_embedding.py:109:model.eval()
+scripts\eval_embedding.py:331:md_content = f"""# Palmprint Recognition Evaluation Report
+scripts\eval_embedding.py:333:## Evaluation Summary
+scripts\eval_embedding.py:357:*Report generated automatically by `eval_embedding.py`.*
+scripts\eval_embedding.py:362:print("\n--- Evaluation Results ---")
+scripts\export_conservative_threshold_evidence.py:57:value = df[lower_to_original[key]]
+scripts\export_conservative_threshold_evidence.py:58:if isinstance(value, pd.DataFrame):
+scripts\export_conservative_threshold_evidence.py:60:value = value.iloc[:, 0]
+scripts\export_conservative_threshold_evidence.py:61:return value
+scripts\export_conservative_threshold_evidence.py:70:out[col] = first_available_series(df, SOURCE_PRIORITY[col]).values
+scripts\export_conservative_threshold_evidence.py:142:"| direction | Evaluation direction |",
+scripts\export_strict_tongji_failure_cases.py:60:valid = np.where(fpr <= target_far)[0]
+scripts\export_strict_tongji_failure_cases.py:61:if len(valid) == 0:
+scripts\export_strict_tongji_failure_cases.py:64:best_tpr = np.max(tpr[valid])
+scripts\export_strict_tongji_failure_cases.py:65:best = valid[np.where(tpr[valid] == best_tpr)[0]]
+scripts\export_strict_tongji_failure_cases.py:327:md.append("The reconstruction uses the split JSON gallery/probe order and the score export order from `eval_embedding.py`: genuine scores first, followed by impostor scores.")
+scripts\export_strict_tongji_failure_cases.py:361:md.append("- Safe: paths/classes are reconstructed using the same gallery/probe ordering used by evaluation.")
+scripts\export_threshold_audit.py:13:from palmrec.evaluation.metrics import conservative_tar_at_far
+scripts\export_threshold_audit.py:34:ckpt_path = p / "checkpoints" / "best.pt"
+scripts\export_threshold_audit.py:36:ckpt_path = p / "best.pt"
+scripts\export_threshold_audit.py:112:"checkpoint_path": ckpt_path,
+scripts\export_threshold_audit.py:113:"checkpoint_epoch": ckpt_epoch,
+scripts\export_threshold_audit.py:170:"checkpoint_path": ckpt_path,
+scripts\export_threshold_audit.py:171:"checkpoint_epoch": ckpt_epoch,
+scripts\extract_conformer_features.py:18:from palmrec.training.checkpoint import load_checkpoint
+scripts\extract_conformer_features.py:62:logger.info("Initializing model and loading checkpoint weights...")
+scripts\extract_conformer_features.py:65:checkpoint_path = config.conformer.get("checkpoint_path", "")
+scripts\extract_conformer_features.py:66:if os.path.exists(checkpoint_path):
+scripts\extract_conformer_features.py:67:checkpoint = load_checkpoint(checkpoint_path, device)
+scripts\extract_conformer_features.py:68:model.load_state_dict(checkpoint["model_state_dict"])
+scripts\extract_conformer_features.py:69:logger.info(f"Successfully loaded trained weights from {checkpoint_path}")
+scripts\extract_conformer_features.py:71:logger.warning(f"Trained checkpoint not found at {checkpoint_path}. Using randomly initialized model weights!")
+scripts\extract_conformer_features.py:74:model.eval()
+scripts\finalize_rank_b_protocol_audit.py:7:1. Development (train âˆª val) and Test (gallery âˆª probe âˆª support) are disjoint by the manifest identity field used for palm-class protocol construction.
+scripts\finalize_rank_b_protocol_audit.py:9:3. Gallery and probe have subject overlap when both are non-empty (to enable identification evaluation).
+scripts\finalize_rank_b_protocol_audit.py:10:4. Subject overlap between train and validation is allowed and reported.
+scripts\finalize_rank_b_protocol_audit.py:77:keys = ["train", "val", "gallery", "probe", "support"]
+scripts\finalize_rank_b_protocol_audit.py:121:S_val = subject_sets["val"]
+scripts\finalize_rank_b_protocol_audit.py:126:train_val_overlap = len(S_train.intersection(S_val))
+scripts\finalize_rank_b_protocol_audit.py:127:S_dev = S_train.union(S_val)
+scripts\finalize_rank_b_protocol_audit.py:155:"train_val_subject_overlap": train_val_overlap,
+scripts\finalize_rank_b_protocol_audit.py:171:print(f"  Train-Val Subject Overlap: {r['train_val_subject_overlap']}")
+scripts\finalize_rank_b_protocol_audit.py:186:md.append("> **Tongji Protocol (Primary)**: We use a development/test palm-class-disjoint protocol. Training and validation images are drawn from development subjects, while gallery and probe images are drawn from held-out test palm classes. No subject appears in both the development set and the gallery/probe evaluation set.")
+scripts\finalize_rank_b_protocol_audit.py:188:md.append("> **IITD Protocol (Secondary)**: IITD is used as a secondary palm-class-disjoint within-dataset validation. Because session metadata is not used to define a cross-session split, IITD is not treated as cross-session evidence.")
+scripts\finalize_rank_b_protocol_audit.py:191:md.append("In the development phase, train and validation sets are both parts of the development set (development = train âˆª val). Since validation is used to tune hyperparameters during development rather than serving as the final test evaluation, manifest-field overlap between train and validation is allowed and does not constitute data leakage. The critical boundary is between development and test (gallery âˆª probe âˆª support). This audit enforces strict subject disjointness between the development set and the test set.")
+scripts\finalize_rank_b_protocol_audit.py:198:for ds, count in df["dataset"].value_counts().items():
+scripts\finalize_rank_b_protocol_audit.py:206:tot_items = sum(r["item_counts"].values())
+scripts\finalize_rank_b_protocol_audit.py:208:f"| `{r['filename']}` | {r['dataset']} | {tot_items} | {r['total_unresolved']} | {r['train_val_subject_overlap']} | {r['development_test_subject_overlap']} | {r['gallery_probe_subject_overlap']} | `{r['verdict']}` |"
+scripts\finalize_rank_b_protocol_audit.py:232:md.append(f"  - Train âˆ© Val Subject Overlap: {r['train_val_subject_overlap']}")
+scripts\fit_kcca.py:58:logger.info(f"Saved KCCA model checkpoint to {kcca_model_path}")
+scripts\generate_rank_b_configs.py:3:Generate and validate Rank-B palm-class-disjoint B1/B6 configs for Tongji and IITD.
+scripts\generate_rank_b_configs.py:6:seeds, split paths, and output directories, and performs validation.
+scripts\generate_rank_b_configs.py:134:validation_passed = True
+scripts\generate_rank_b_configs.py:140:validation_passed = False
+scripts\generate_rank_b_configs.py:148:validation_passed = False
+scripts\generate_rank_b_configs.py:155:validation_passed = False
+scripts\generate_rank_b_configs.py:161:validation_passed = False
+scripts\generate_rank_b_configs.py:164:validation_passed = False
+scripts\generate_rank_b_configs.py:169:validation_passed = False
+scripts\generate_rank_b_configs.py:172:validation_passed = False
+scripts\generate_rank_b_configs.py:178:# B1 recipe validation
+scripts\generate_rank_b_configs.py:183:validation_passed = False
+scripts\generate_rank_b_configs.py:187:validation_passed = False
+scripts\generate_rank_b_configs.py:190:validation_passed = False
+scripts\generate_rank_b_configs.py:193:validation_passed = False
+scripts\generate_rank_b_configs.py:195:# B6 recipe validation
+scripts\generate_rank_b_configs.py:200:validation_passed = False
+scripts\generate_rank_b_configs.py:204:validation_passed = False
+scripts\generate_rank_b_configs.py:207:validation_passed = False
+scripts\generate_rank_b_configs.py:210:validation_passed = False
+scripts\generate_rank_b_configs.py:213:validation_passed = False
+scripts\generate_rank_b_configs.py:215:# Check post_bn evaluation
+scripts\generate_rank_b_configs.py:216:if cfg["model"].get("eval_embedding") != "post_bn":
+scripts\generate_rank_b_configs.py:217:print(f"ERROR: B6 config {p.name} model.eval_embedding is {cfg['model'].get('eval_embedding')} (expected post_bn)")
+scripts\generate_rank_b_configs.py:218:validation_passed = False
+scripts\generate_rank_b_configs.py:219:if cfg.get("eval", {}).get("embedding") != "post_bn" and "iitd" not in p.name:
+scripts\generate_rank_b_configs.py:220:# Note: template for iitd b6 doesn't have loss_type: arcface or eval section but has it in model.eval_embedding
+scripts\generate_rank_b_configs.py:221:# We preserved template schemas. Let's make sure we check model.eval_embedding or eval.embedding if present.
+scripts\generate_rank_b_configs.py:224:# 6. Preserve parameters validation
+scripts\generate_rank_b_configs.py:227:validation_passed = False
+scripts\generate_rank_b_configs.py:230:validation_passed = False
+scripts\generate_rank_b_configs.py:233:validation_passed = False
+scripts\generate_rank_b_configs.py:236:validation_passed = False
+scripts\generate_rank_b_configs.py:239:validation_passed = False
+scripts\generate_rank_b_configs.py:242:validation_passed = False
+scripts\generate_rank_b_configs.py:244:if validation_passed:
+scripts\generate_strict_ablation_configs.py:81:"eval_embedding": "post_bn",
+scripts\generate_strict_ablation_configs.py:83:"eval": {"embedding": "post_bn"},
+scripts\generate_strict_ablation_configs.py:97:"eval_embedding": "post_bn",
+scripts\generate_strict_ablation_configs.py:99:"eval": {"embedding": "post_bn"},
+scripts\generate_strict_ablation_configs.py:136:if "eval" in method:
+scripts\generate_strict_ablation_configs.py:137:cfg["eval"] = dict(method["eval"])
+scripts\make_directional_tables.py:68:This document presents the detailed directional results for the primary Tongji palm-class-disjoint cross-session evaluation.
+scripts\make_directional_tables.py:157:def format_diff(val):
+scripts\make_directional_tables.py:158:sign = "+" if val >= 0 else ""
+scripts\make_directional_tables.py:159:return f"{sign}{val*100:.2f} pp"
+scripts\make_splits.py:7:parser = argparse.ArgumentParser(description="Create protocol train/val/gallery/probe/support splits.")
+scripts\make_splits.py:31:val_s1 = []
+scripts\make_splits.py:38:group = group.sort_values("path")
+scripts\make_splits.py:48:# Split Session 1 into 8 train / 2 val
+scripts\make_splits.py:50:val_s1.extend(s1_records[8:])
+scripts\make_splits.py:60:"val": [{"path": r["path"], "class_id": int(r["class_id"])} for r in val_s1],
+scripts\make_splits.py:74:val_s2 = []
+scripts\make_splits.py:79:group = group.sort_values("path")
+scripts\make_splits.py:86:# Split Session 2 into 8 train / 2 val
+scripts\make_splits.py:88:val_s2.extend(s2_records[8:])
+scripts\make_splits.py:98:"val": [{"path": r["path"], "class_id": int(r["class_id"])} for r in val_s2],
+scripts\make_splits.py:114:val_iitd = []
+scripts\make_splits.py:119:group = group.sort_values("path")
+scripts\make_splits.py:125:val_iitd.append(records[n-2])
+scripts\make_splits.py:130:val_iitd.append(records[1])
+scripts\make_splits.py:135:val_iitd.extend(records)
+scripts\make_splits.py:141:"val": [{"path": r["path"], "class_id": int(r["class_id"])} for r in val_iitd],
+scripts\make_splits.py:159:val_cross = []
+scripts\make_splits.py:162:group = group.sort_values("path")
+scripts\make_splits.py:166:val_cross.extend(s1_records[8:])
+scripts\make_splits.py:172:group = group.sort_values("path")
+scripts\make_splits.py:186:"val": [{"path": r["path"], "class_id": int(r["class_id"])} for r in val_cross],
+scripts\make_strict_ablation_by_direction_table.py:43:def mean_sd(values: List[float]) -> tuple[float, float]:
+scripts\make_strict_ablation_by_direction_table.py:44:s = pd.Series(values, dtype="float64")
+scripts\make_strict_ablation_by_direction_table.py:87:vals = [pct(v) for v in sub[col].tolist()]
+scripts\make_strict_ablation_by_direction_table.py:88:mu, sd = mean_sd(vals)
+scripts\make_strict_ablation_by_direction_table.py:150:md.append("The paper table reports B1, B5, and B6 because these are the baseline, the strongest strict component variant, and the originally evaluated BNNeck+ArcFace variant.")
+scripts\make_strict_ablation_by_direction_table.py:162:tex.append(r"\caption{Strict Tongji palm-class-disjoint ablation by session direction. Values are mean $\pm$ standard deviation over three seeds. Lower EER is better; higher values are better for all other metrics. The table focuses on B1, B5, and B6 to highlight the baseline, the strongest tested component variant, and the BNNeck+ArcFace variant.}")
+scripts\make_strict_ablation_run_plan.py:50:"| method | direction | seed | config | save_dir | train status | eval status | metrics path |",
+scripts\make_strict_tongji_score_figures.py:71:df = df[["fpr", "tpr"]].dropna().sort_values("fpr")
+scripts\make_tongji_iitd_disjoint_splits.py:43:def normalize_dataset_value(x: Any) -> str:
+scripts\make_tongji_iitd_disjoint_splits.py:47:def normalize_session_value(x: Any) -> str:
+scripts\make_tongji_iitd_disjoint_splits.py:62:for key in ["train", "val", "gallery", "probe", "support"]:
+scripts\make_tongji_iitd_disjoint_splits.py:102:def half_split(indices: list[int], seed: int, val_ratio: float = 0.2) -> tuple[list[int], list[int]]:
+scripts\make_tongji_iitd_disjoint_splits.py:106:n_val = max(1, int(round(len(indices) * val_ratio))) if len(indices) > 1 else 0
+scripts\make_tongji_iitd_disjoint_splits.py:107:val = indices[:n_val]
+scripts\make_tongji_iitd_disjoint_splits.py:108:train = indices[n_val:]
+scripts\make_tongji_iitd_disjoint_splits.py:109:return train, val
+scripts\make_tongji_iitd_disjoint_splits.py:129:dataset_norm = df[dataset_col].map(normalize_dataset_value)
+scripts\make_tongji_iitd_disjoint_splits.py:133:tongji["__session_norm"] = tongji[session_col].map(normalize_session_value)
+scripts\make_tongji_iitd_disjoint_splits.py:153:train_idx, val_idx = half_split(train_pool, seed + 17, val_ratio=0.2)
+scripts\make_tongji_iitd_disjoint_splits.py:159:"val": materialize(df, val_idx, mode, path_col, record_fields),
+scripts\make_tongji_iitd_disjoint_splits.py:171:audit_lines.append(f"- val images: {len(val_idx)}")
+scripts\make_tongji_iitd_disjoint_splits.py:196:dataset_norm = df[dataset_col].map(normalize_dataset_value)
+scripts\make_tongji_iitd_disjoint_splits.py:206:train_idx, val_idx = half_split(train_pool, seed + 31, val_ratio=0.2)
+scripts\make_tongji_iitd_disjoint_splits.py:218:# evaluation label is palm/class, so gallery/probe must both contain each
+scripts\make_tongji_iitd_disjoint_splits.py:219:# evaluated class_id/palm_id.
+scripts\make_tongji_iitd_disjoint_splits.py:220:eval_group_col = "class_id" if "class_id" in iitd.columns else identity_col
+scripts\make_tongji_iitd_disjoint_splits.py:221:test_groups = sorted(iitd.loc[test_pool, eval_group_col].dropna().unique().tolist())
+scripts\make_tongji_iitd_disjoint_splits.py:223:for eval_group in test_groups:
+scripts\make_tongji_iitd_disjoint_splits.py:224:group_idx = indices_for(iitd, iitd.index.isin(test_pool) & (iitd[eval_group_col] == eval_group))
+scripts\make_tongji_iitd_disjoint_splits.py:228:raise ValueError(f"IITD evaluation group {eval_group!r} has fewer than 2 images.")
+scripts\make_tongji_iitd_disjoint_splits.py:237:"val": materialize(df, val_idx, mode, path_col, record_fields),
+scripts\make_tongji_iitd_disjoint_splits.py:249:audit_lines.append(f"- val images: {len(val_idx)}")
+scripts\make_tongji_iitd_disjoint_splits.py:253:audit_lines.append("- note: IITD is secondary within-dataset validation, not cross-session evidence.")
+scripts\make_tongji_iitd_disjoint_splits.py:291:raise SystemExit("No usable identity column found. Add subject_id, palm_id, class_id, label, or equivalent.")
+scripts\paired_statistics_component_ablation.py:62:def bootstrap_ci(values: List[float], rng: random.Random) -> Tuple[float, float]:
+scripts\paired_statistics_component_ablation.py:63:n = len(values)
+scripts\paired_statistics_component_ablation.py:66:sample = [values[rng.randrange(n)] for _ in range(n)]
+scripts\paired_statistics_component_ablation.py:73:def exact_sign_flip_p(values: List[float]) -> float:
+scripts\paired_statistics_component_ablation.py:74:obs = abs(sum(values) / len(values))
+scripts\paired_statistics_component_ablation.py:75:n = len(values)
+scripts\paired_statistics_component_ablation.py:79:mu = abs(sum(v * s for v, s in zip(values, signs)) / n)
+scripts\paired_statistics_component_ablation.py:202:md.append("- Because n=6, p-values are coarse uncertainty diagnostics, not definitive significance claims.")
+scripts\rankb_paired_statistics.py:39:def bootstrap_ci(values: list[float], rng: random.Random) -> tuple[float, float]:
+scripts\rankb_paired_statistics.py:40:n = len(values)
+scripts\rankb_paired_statistics.py:43:sample = [values[rng.randrange(n)] for _ in range(n)]
+scripts\rankb_paired_statistics.py:48:def exact_sign_flip_p(values: list[float]) -> float:
+scripts\rankb_paired_statistics.py:49:"""Two-sided exact paired sign-flip p-value for mean delta under symmetric null."""
+scripts\rankb_paired_statistics.py:50:observed = abs(mean(values))
+scripts\rankb_paired_statistics.py:51:n = len(values)
+scripts\rankb_paired_statistics.py:55:flipped_mean = mean([s * v for s, v in zip(signs, values)])
+scripts\rankb_paired_statistics.py:100:values = [float(r[col]) for r in rows]
+scripts\rankb_paired_statistics.py:101:mu = mean(values)
+scripts\rankb_paired_statistics.py:102:sd = stdev(values)
+scripts\rankb_paired_statistics.py:103:ci_lo, ci_hi = bootstrap_ci(values, rng)
+scripts\rankb_paired_statistics.py:104:p_sign = exact_sign_flip_p(values)
+scripts\rankb_paired_statistics.py:113:"n": len(values),
+scripts\rankb_paired_statistics.py:145:md.append("- Protocol: palm-class-disjoint cross-session evaluation.")
+scripts\rankb_paired_statistics.py:152:md.append("- Because n=6, p-values are coarse and should be treated as uncertainty diagnostics, not definitive significance claims.")
+scripts\rankb_paired_statistics.py:171:md.append("- However, the bootstrap intervals are wide because there are only six paired units.")
+scripts\rankb_paired_statistics.py:181:tex.append(r"\caption{Paired statistical evidence for B6 minus B1 on Tongji palm-class-disjoint cross-session evaluation. Deltas are in percentage points over six paired seed-direction units. Positive EER is worse for B6; positive values are better for all other metrics.}")
+scripts\rank_b_split_audit_and_iitd_fix.py:12:- Does not modify training/eval/model code.
+scripts\rank_b_split_audit_and_iitd_fix.py:15:- Does not touch raw biometric data, checkpoints, embeddings, or experiment folders.
+scripts\rank_b_split_audit_and_iitd_fix.py:43:SPLIT_KEYS = ["train", "val", "gallery", "probe", "support"]
+scripts\rank_b_split_audit_and_iitd_fix.py:130:"""Try common split JSON layouts and return train/val/gallery/probe/support lists."""
+scripts\rank_b_split_audit_and_iitd_fix.py:132:if all(k in data for k in ["train", "val", "gallery", "probe"]):
+scripts\rank_b_split_audit_and_iitd_fix.py:224:lines.append("- STATUS: FAIL_SCHEMA: Could not find train/val/gallery/probe lists.")
+scripts\rank_b_split_audit_and_iitd_fix.py:271:val = id_sets.get("val", set())
+scripts\rank_b_split_audit_and_iitd_fix.py:278:"trainâˆ©val": train & val,
+scripts\rank_b_split_audit_and_iitd_fix.py:280:"valâˆ©test": val & test,
+scripts\rank_b_split_audit_and_iitd_fix.py:284:lines.append(f"  - trainâˆ©val: {len(checks['trainâˆ©val'])}")
+scripts\rank_b_split_audit_and_iitd_fix.py:286:lines.append(f"  - valâˆ©test: {len(checks['valâˆ©test'])}")
+scripts\rank_b_split_audit_and_iitd_fix.py:288:if checks["trainâˆ©val"] or checks["trainâˆ©test"] or checks["valâˆ©test"]:
+scripts\rank_b_split_audit_and_iitd_fix.py:290:elif unresolved_counts["train"] or unresolved_counts["val"] or unresolved_counts["gallery"] or unresolved_counts["probe"]:
+scripts\rank_b_split_audit_and_iitd_fix.py:308:for k in ["train", "val", "gallery", "probe"]:
+scripts\rank_b_split_audit_and_iitd_fix.py:387:n_val = int(round(n * 0.20))
+scripts\rank_b_split_audit_and_iitd_fix.py:388:if n_train + n_val >= n:
+scripts\rank_b_split_audit_and_iitd_fix.py:389:n_val = max(1, n - n_train - 1)
+scripts\rank_b_split_audit_and_iitd_fix.py:397:val_ids = set(shuffled[n_train:n_train + n_val])
+scripts\rank_b_split_audit_and_iitd_fix.py:398:test_ids = set(shuffled[n_train + n_val:])
+scripts\rank_b_split_audit_and_iitd_fix.py:404:for ident in sorted(val_ids):
+scripts\rank_b_split_audit_and_iitd_fix.py:406:split["val"].append(encode_item(idx, row, schema, style))
+scripts\rank_b_split_audit_and_iitd_fix.py:434:lines.append(f"  - train_ids={len(train_ids)}, val_ids={len(val_ids)}, test_ids={len(test_ids)}, skipped_test_ids={skipped_test_ids}")
+scripts\rank_b_split_audit_and_iitd_fix.py:435:lines.append(f"  - train={len(split['train'])}, val={len(split['val'])}, gallery={len(split['gallery'])}, probe={len(split['probe'])}, support=0")
+scripts\rank_b_split_audit_and_iitd_fix.py:478:lines.append("- Dataset value counts:")
+scripts\rank_b_split_audit_and_iitd_fix.py:530:lines.append("- IITD should remain secondary validation and must not be described as cross-session unless a real session column supports that claim.")
+scripts\run_full_pipeline.py:45:("Matching & Evaluation", ["scripts/evaluate.py"])
+scripts\run_margin_head_experiments.py:40:parser.add_argument("--force", action="store_true", help="Rerun train/eval even if outputs exist.")
+scripts\run_margin_head_experiments.py:44:parser.add_argument("--skip_eval", action="store_true", help="Skip evaluation phase.")
+scripts\run_margin_head_experiments.py:74:"checkpoint": save_dir / "checkpoints" / "best.pt",
+scripts\run_margin_head_experiments.py:111:cfg["model"]["eval_embedding"] = "post_bn"
+scripts\run_margin_head_experiments.py:112:cfg["eval"] = {"embedding": "post_bn"}
+scripts\run_margin_head_experiments.py:116:cfg["model"]["eval_embedding"] = "post_bn"
+scripts\run_margin_head_experiments.py:117:cfg["eval"] = {"embedding": "post_bn"}
+scripts\run_margin_head_experiments.py:152:elif paths["checkpoint"].exists() and not args.force:
+scripts\run_margin_head_experiments.py:153:print(f"Checkpoint exists: {paths['checkpoint']}. Skipping training.")
+scripts\run_margin_head_experiments.py:157:if args.skip_eval:
+scripts\run_margin_head_experiments.py:158:print("Skipping eval due to --skip_eval.")
+scripts\run_margin_head_experiments.py:160:print(f"Metrics exist: {paths['metrics_json']}. Skipping eval.")
+scripts\run_margin_head_experiments.py:162:if not args.dry_run and not paths["checkpoint"].exists():
+scripts\run_margin_head_experiments.py:163:raise FileNotFoundError(f"Missing checkpoint for eval: {paths['checkpoint']}")
+scripts\run_margin_head_experiments.py:167:"scripts/eval_embedding.py",
+scripts\run_margin_head_experiments.py:168:"--checkpoint",
+scripts\run_margin_head_experiments.py:169:str(paths["checkpoint"]),
+scripts\run_margin_head_experiments.py:222:"python scripts/eval_embedding.py "
+scripts\run_margin_head_experiments.py:223:f"--checkpoint {cfg['save_dir']}/checkpoints/best.pt "
+scripts\run_margin_head_experiments.py:360:for dirs in SEED42_CONFIGS.values():
+scripts\run_margin_head_experiments.py:361:for config_path in dirs.values():
+scripts\run_tongji_seed_sweep.py:20:parser.add_argument("--force", action="store_true", help="Force rerun training and evaluation even if outputs exist.")
+scripts\run_tongji_seed_sweep.py:24:parser.add_argument("--skip_eval", action="store_true", help="Skip evaluation phase.")
+scripts\run_tongji_seed_sweep.py:67:# Step 2: Run training and evaluation
+scripts\run_tongji_seed_sweep.py:70:checkpoint_path = os.path.join(save_dir, "checkpoints", "best.pt")
+scripts\run_tongji_seed_sweep.py:86:if os.path.exists(checkpoint_path) and not args.force:
+scripts\run_tongji_seed_sweep.py:87:print(f"Checkpoint already exists at {checkpoint_path}. Skipping training.")
+scripts\run_tongji_seed_sweep.py:101:# --- Evaluation ---
+scripts\run_tongji_seed_sweep.py:102:eval_skipped = False
+scripts\run_tongji_seed_sweep.py:104:print(f"Metrics already exist at {local_metrics_json}. Skipping evaluation.")
+scripts\run_tongji_seed_sweep.py:105:eval_skipped = True
+scripts\run_tongji_seed_sweep.py:106:elif args.skip_eval:
+scripts\run_tongji_seed_sweep.py:107:print("Skipping evaluation as --skip_eval is set.")
+scripts\run_tongji_seed_sweep.py:108:eval_skipped = True
+scripts\run_tongji_seed_sweep.py:110:if not args.dry_run and not os.path.exists(checkpoint_path):
+scripts\run_tongji_seed_sweep.py:111:print(f"Error: Missing checkpoint: {checkpoint_path}")
+scripts\run_tongji_seed_sweep.py:114:cmd_eval = [
+scripts\run_tongji_seed_sweep.py:115:"python", "scripts/eval_embedding.py",
+scripts\run_tongji_seed_sweep.py:116:"--checkpoint", checkpoint_path,
+scripts\run_tongji_seed_sweep.py:119:print(f"Running eval command: {' '.join(cmd_eval)}")
+scripts\run_tongji_seed_sweep.py:121:res = subprocess.run(cmd_eval)
+scripts\run_tongji_seed_sweep.py:123:print(f"Error: Evaluation failed for {experiment_name} with exit code {res.returncode}")
+scripts\run_tongji_seed_sweep.py:127:print(f"Error: Missing metrics.json after eval: {local_metrics_json}")
+scripts\run_tongji_seed_sweep.py:139:if not eval_skipped:
+scripts\run_tongji_seed_sweep.py:147:if not eval_skipped:
+scripts\train_conformer.py:25:# Output checkpoint directory
+scripts\train_conformer.py:26:checkpoint_dir = os.path.join(config.project.output_dir, "checkpoints", config.dataset.name)
+scripts\train_conformer.py:27:os.makedirs(checkpoint_dir, exist_ok=True)
+scripts\train_conformer.py:111:# Map class_id to palm_id for checkpoint storage
+scripts\train_conformer.py:124:val_loader=test_loader,
+scripts\train_conformer.py:130:checkpoint_dir=checkpoint_dir,
+scripts\train_lgf.py:30:def compute_val_rank1(embeddings, labels):
+scripts\train_lgf.py:64:os.makedirs(os.path.join(save_dir, "checkpoints"), exist_ok=True)
+scripts\train_lgf.py:73:# Pass train class mapping to validation set to align class indices
+scripts\train_lgf.py:74:val_dataset = PalmDataset(
+scripts\train_lgf.py:76:"val",
+scripts\train_lgf.py:83:print(f"Train samples: {len(train_dataset)}, Val samples: {len(val_dataset)}")
+scripts\train_lgf.py:108:val_loader = DataLoader(
+scripts\train_lgf.py:109:val_dataset,
+scripts\train_lgf.py:153:csv_headers = ["epoch", "train_loss", "train_loss_ce", "train_loss_supcon", "val_loss", "val_loss_ce", "val_loss_supcon", "val_rank1"]
+scripts\train_lgf.py:162:best_loss = float("inf") # If we save by val_loss fallback
+scripts\train_lgf.py:165:# Check if we can compute validation Rank-1
+scripts\train_lgf.py:166:val_labels_list = [val_dataset.samples[i]["class_id"] for i in range(len(val_dataset))]
+scripts\train_lgf.py:167:val_counts = Counter(val_labels_list)
+scripts\train_lgf.py:168:can_compute_val_rank1 = any(count >= 2 for count in val_counts.values())
+scripts\train_lgf.py:169:if can_compute_val_rank1:
+scripts\train_lgf.py:171:print("Validation set supports Rank-1 computation. Best model will be selected by validation Rank-1.")
+scripts\train_lgf.py:173:print("Validation set has too few samples per class. Best model will be selected by validation loss.")
+scripts\train_lgf.py:215:model.eval()
+scripts\train_lgf.py:216:val_loss_accum = 0.0
+scripts\train_lgf.py:217:val_ce_accum = 0.0
+scripts\train_lgf.py:218:val_supcon_accum = 0.0
+scripts\train_lgf.py:220:val_embeddings_list = []
+scripts\train_lgf.py:221:val_labels_list = []
+scripts\train_lgf.py:224:for batch in val_loader:
+scripts\train_lgf.py:229:valid_mask = labels != -1
+scripts\train_lgf.py:230:if not valid_mask.any():
+scripts\train_lgf.py:232:images = images[valid_mask]
+scripts\train_lgf.py:233:labels = labels[valid_mask]
+scripts\train_lgf.py:239:val_loss_accum += loss.item()
+scripts\train_lgf.py:240:val_ce_accum += loss_dict["loss_ce"]
+scripts\train_lgf.py:241:val_supcon_accum += loss_dict["loss_supcon"]
+scripts\train_lgf.py:243:val_embeddings_list.append(embeddings)
+scripts\train_lgf.py:244:val_labels_list.append(labels)
+scripts\train_lgf.py:246:num_val_batches = len(val_loader)
+scripts\train_lgf.py:247:val_loss_mean = val_loss_accum / num_val_batches
+scripts\train_lgf.py:248:val_ce_mean = val_ce_accum / num_val_batches
+scripts\train_lgf.py:249:val_supcon_mean = val_supcon_accum / num_val_batches
+scripts\train_lgf.py:251:# Compute Rank-1 on validation set if possible
+scripts\train_lgf.py:252:val_rank1 = None
+scripts\train_lgf.py:253:if len(val_embeddings_list) > 0 and can_compute_val_rank1:
+scripts\train_lgf.py:254:all_val_embeddings = torch.cat(val_embeddings_list, dim=0)
+scripts\train_lgf.py:255:all_val_labels = torch.cat(val_labels_list, dim=0)
+scripts\train_lgf.py:256:val_rank1 = compute_val_rank1(all_val_embeddings, all_val_labels)
+scripts\train_lgf.py:257:print(f"Val Loss: {val_loss_mean:.4f} | CE: {val_ce_mean:.4f} | SupCon: {val_supcon_mean:.4f} | Rank-1: {val_rank1:.4f}")
+scripts\train_lgf.py:259:print(f"Val Loss: {val_loss_mean:.4f} | CE: {val_ce_mean:.4f} | SupCon: {val_supcon_mean:.4f}")
+scripts\train_lgf.py:267:"val_loss": val_loss_mean,
+scripts\train_lgf.py:268:"val_loss_ce": val_ce_mean,
+scripts\train_lgf.py:269:"val_loss_supcon": val_supcon_mean,
+scripts\train_lgf.py:270:"val_rank1": val_rank1 if val_rank1 is not None else ""
+scripts\train_lgf.py:276:checkpoint = {
+scripts\train_lgf.py:285:# Always save last checkpoint
+scripts\train_lgf.py:286:torch.save(checkpoint, os.path.join(save_dir, "checkpoints", "last.pt"))
+scripts\train_lgf.py:289:if save_by_rank1 and val_rank1 is not None:
+scripts\train_lgf.py:290:if val_rank1 > best_metric:
+scripts\train_lgf.py:291:best_metric = val_rank1
+scripts\train_lgf.py:294:if val_loss_mean < best_loss:
+scripts\train_lgf.py:295:best_loss = val_loss_mean
+scripts\train_lgf.py:299:print(f"==> Saving new best checkpoint (Epoch {epoch})")
+scripts\train_lgf.py:300:torch.save(checkpoint, os.path.join(save_dir, "checkpoints", "best.pt"))
+scripts\validate_configs.py:18:def validate_one(path: Path) -> None:
+scripts\validate_configs.py:72:if model.get("eval_embedding") != "post_bn":
+scripts\validate_configs.py:73:fail(f"{path}: BNNeck requires model.eval_embedding=post_bn")
+scripts\validate_configs.py:74:if cfg.get("eval", {}).get("embedding") != "post_bn":
+scripts\validate_configs.py:75:fail(f"{path}: BNNeck requires eval.embedding=post_bn")
+scripts\validate_configs.py:141:validate_one(p)
+configs\b0_resnet18_ce_tongji_subject_disjoint_s1s2_seed2026.yaml:18:eval_embedding: post_bn
+configs\b0_resnet18_ce_tongji_subject_disjoint_s1s2_seed2026.yaml:46:validation_policy: same_session_development
+configs\b0_resnet18_ce_tongji_subject_disjoint_s1s2_seed2026.yaml:48:checkpoint:
+configs\b0_resnet18_ce_tongji_subject_disjoint_s1s2_seed2026.yaml:49:monitor: validation_rank1
+configs\b0_resnet18_ce_tongji_subject_disjoint_s1s2_seed2705.yaml:18:eval_embedding: post_bn
+configs\b0_resnet18_ce_tongji_subject_disjoint_s1s2_seed2705.yaml:46:validation_policy: same_session_development
+configs\b0_resnet18_ce_tongji_subject_disjoint_s1s2_seed2705.yaml:48:checkpoint:
+configs\b0_resnet18_ce_tongji_subject_disjoint_s1s2_seed2705.yaml:49:monitor: validation_rank1
+configs\b0_resnet18_ce_tongji_subject_disjoint_s1s2_seed42.yaml:18:eval_embedding: post_bn
+configs\b0_resnet18_ce_tongji_subject_disjoint_s1s2_seed42.yaml:46:validation_policy: same_session_development
+configs\b0_resnet18_ce_tongji_subject_disjoint_s1s2_seed42.yaml:48:checkpoint:
+configs\b0_resnet18_ce_tongji_subject_disjoint_s1s2_seed42.yaml:49:monitor: validation_rank1
+configs\b0_resnet18_ce_tongji_subject_disjoint_s2s1_seed2026.yaml:18:eval_embedding: post_bn
+configs\b0_resnet18_ce_tongji_subject_disjoint_s2s1_seed2026.yaml:46:validation_policy: same_session_development
+configs\b0_resnet18_ce_tongji_subject_disjoint_s2s1_seed2026.yaml:48:checkpoint:
+configs\b0_resnet18_ce_tongji_subject_disjoint_s2s1_seed2026.yaml:49:monitor: validation_rank1
+configs\b0_resnet18_ce_tongji_subject_disjoint_s2s1_seed2705.yaml:18:eval_embedding: post_bn
+configs\b0_resnet18_ce_tongji_subject_disjoint_s2s1_seed2705.yaml:46:validation_policy: same_session_development
+configs\b0_resnet18_ce_tongji_subject_disjoint_s2s1_seed2705.yaml:48:checkpoint:
+configs\b0_resnet18_ce_tongji_subject_disjoint_s2s1_seed2705.yaml:49:monitor: validation_rank1
+configs\b0_resnet18_ce_tongji_subject_disjoint_s2s1_seed42.yaml:18:eval_embedding: post_bn
+configs\b0_resnet18_ce_tongji_subject_disjoint_s2s1_seed42.yaml:46:validation_policy: same_session_development
+configs\b0_resnet18_ce_tongji_subject_disjoint_s2s1_seed42.yaml:48:checkpoint:
+configs\b0_resnet18_ce_tongji_subject_disjoint_s2s1_seed42.yaml:49:monitor: validation_rank1
+configs\b1_resnet18_ce_supcon_iitd_subject_disjoint_within_seed2026.yaml:18:eval_embedding: post_bn
+configs\b1_resnet18_ce_supcon_iitd_subject_disjoint_within_seed2026.yaml:36:validation_policy: same_session_development
+configs\b1_resnet18_ce_supcon_iitd_subject_disjoint_within_seed2026.yaml:46:checkpoint:
+configs\b1_resnet18_ce_supcon_iitd_subject_disjoint_within_seed2026.yaml:47:monitor: validation_eer
+configs\b1_resnet18_ce_supcon_iitd_subject_disjoint_within_seed2705.yaml:18:eval_embedding: post_bn
+configs\b1_resnet18_ce_supcon_iitd_subject_disjoint_within_seed2705.yaml:36:validation_policy: same_session_development
+configs\b1_resnet18_ce_supcon_iitd_subject_disjoint_within_seed2705.yaml:46:checkpoint:
+configs\b1_resnet18_ce_supcon_iitd_subject_disjoint_within_seed2705.yaml:47:monitor: validation_eer
+configs\b1_resnet18_ce_supcon_iitd_subject_disjoint_within_seed42.yaml:18:eval_embedding: post_bn
+configs\b1_resnet18_ce_supcon_iitd_subject_disjoint_within_seed42.yaml:36:validation_policy: same_session_development
+configs\b1_resnet18_ce_supcon_iitd_subject_disjoint_within_seed42.yaml:46:checkpoint:
+configs\b1_resnet18_ce_supcon_iitd_subject_disjoint_within_seed42.yaml:47:monitor: validation_eer
+configs\b1_resnet18_ce_supcon_tongji_subject_disjoint_s1s2_seed2026.yaml:18:eval_embedding: post_bn
+configs\b1_resnet18_ce_supcon_tongji_subject_disjoint_s1s2_seed2026.yaml:36:validation_policy: same_session_development
+configs\b1_resnet18_ce_supcon_tongji_subject_disjoint_s1s2_seed2026.yaml:46:checkpoint:
+configs\b1_resnet18_ce_supcon_tongji_subject_disjoint_s1s2_seed2026.yaml:47:monitor: validation_rank1
+configs\b1_resnet18_ce_supcon_tongji_subject_disjoint_s1s2_seed2705.yaml:18:eval_embedding: post_bn
+configs\b1_resnet18_ce_supcon_tongji_subject_disjoint_s1s2_seed2705.yaml:36:validation_policy: same_session_development
+configs\b1_resnet18_ce_supcon_tongji_subject_disjoint_s1s2_seed2705.yaml:46:checkpoint:
+configs\b1_resnet18_ce_supcon_tongji_subject_disjoint_s1s2_seed2705.yaml:47:monitor: validation_rank1
+configs\b1_resnet18_ce_supcon_tongji_subject_disjoint_s1s2_seed42.yaml:18:eval_embedding: post_bn
+configs\b1_resnet18_ce_supcon_tongji_subject_disjoint_s1s2_seed42.yaml:36:validation_policy: same_session_development
+configs\b1_resnet18_ce_supcon_tongji_subject_disjoint_s1s2_seed42.yaml:46:checkpoint:
+configs\b1_resnet18_ce_supcon_tongji_subject_disjoint_s1s2_seed42.yaml:47:monitor: validation_rank1
+configs\b1_resnet18_ce_supcon_tongji_subject_disjoint_s2s1_seed2026.yaml:18:eval_embedding: post_bn
+configs\b1_resnet18_ce_supcon_tongji_subject_disjoint_s2s1_seed2026.yaml:36:validation_policy: same_session_development
+configs\b1_resnet18_ce_supcon_tongji_subject_disjoint_s2s1_seed2026.yaml:46:checkpoint:
+configs\b1_resnet18_ce_supcon_tongji_subject_disjoint_s2s1_seed2026.yaml:47:monitor: validation_rank1
+configs\b1_resnet18_ce_supcon_tongji_subject_disjoint_s2s1_seed2705.yaml:18:eval_embedding: post_bn
+configs\b1_resnet18_ce_supcon_tongji_subject_disjoint_s2s1_seed2705.yaml:36:validation_policy: same_session_development
+configs\b1_resnet18_ce_supcon_tongji_subject_disjoint_s2s1_seed2705.yaml:46:checkpoint:
+configs\b1_resnet18_ce_supcon_tongji_subject_disjoint_s2s1_seed2705.yaml:47:monitor: validation_rank1
+configs\b1_resnet18_ce_supcon_tongji_subject_disjoint_s2s1_seed42.yaml:18:eval_embedding: post_bn
+configs\b1_resnet18_ce_supcon_tongji_subject_disjoint_s2s1_seed42.yaml:36:validation_policy: same_session_development
+configs\b1_resnet18_ce_supcon_tongji_subject_disjoint_s2s1_seed42.yaml:46:checkpoint:
+configs\b1_resnet18_ce_supcon_tongji_subject_disjoint_s2s1_seed42.yaml:47:monitor: validation_rank1
+configs\b4_resnet18_arcface_tongji_subject_disjoint_s1s2_seed2026.yaml:18:eval_embedding: post_bn
+configs\b4_resnet18_arcface_tongji_subject_disjoint_s1s2_seed2026.yaml:48:validation_policy: same_session_development
+configs\b4_resnet18_arcface_tongji_subject_disjoint_s1s2_seed2026.yaml:50:checkpoint:
+configs\b4_resnet18_arcface_tongji_subject_disjoint_s1s2_seed2026.yaml:51:monitor: validation_rank1
+configs\b4_resnet18_arcface_tongji_subject_disjoint_s1s2_seed2705.yaml:18:eval_embedding: post_bn
+configs\b4_resnet18_arcface_tongji_subject_disjoint_s1s2_seed2705.yaml:48:validation_policy: same_session_development
+configs\b4_resnet18_arcface_tongji_subject_disjoint_s1s2_seed2705.yaml:50:checkpoint:
+configs\b4_resnet18_arcface_tongji_subject_disjoint_s1s2_seed2705.yaml:51:monitor: validation_rank1
+configs\b4_resnet18_arcface_tongji_subject_disjoint_s1s2_seed42.yaml:18:eval_embedding: post_bn
+configs\b4_resnet18_arcface_tongji_subject_disjoint_s1s2_seed42.yaml:48:validation_policy: same_session_development
+configs\b4_resnet18_arcface_tongji_subject_disjoint_s1s2_seed42.yaml:50:checkpoint:
+configs\b4_resnet18_arcface_tongji_subject_disjoint_s1s2_seed42.yaml:51:monitor: validation_rank1
+configs\b4_resnet18_arcface_tongji_subject_disjoint_s2s1_seed2026.yaml:18:eval_embedding: post_bn
+configs\b4_resnet18_arcface_tongji_subject_disjoint_s2s1_seed2026.yaml:48:validation_policy: same_session_development
+configs\b4_resnet18_arcface_tongji_subject_disjoint_s2s1_seed2026.yaml:50:checkpoint:
+configs\b4_resnet18_arcface_tongji_subject_disjoint_s2s1_seed2026.yaml:51:monitor: validation_rank1
+configs\b4_resnet18_arcface_tongji_subject_disjoint_s2s1_seed2705.yaml:18:eval_embedding: post_bn
+configs\b4_resnet18_arcface_tongji_subject_disjoint_s2s1_seed2705.yaml:48:validation_policy: same_session_development
+configs\b4_resnet18_arcface_tongji_subject_disjoint_s2s1_seed2705.yaml:50:checkpoint:
+configs\b4_resnet18_arcface_tongji_subject_disjoint_s2s1_seed2705.yaml:51:monitor: validation_rank1
+configs\b4_resnet18_arcface_tongji_subject_disjoint_s2s1_seed42.yaml:18:eval_embedding: post_bn
+configs\b4_resnet18_arcface_tongji_subject_disjoint_s2s1_seed42.yaml:48:validation_policy: same_session_development
+configs\b4_resnet18_arcface_tongji_subject_disjoint_s2s1_seed42.yaml:50:checkpoint:
+configs\b4_resnet18_arcface_tongji_subject_disjoint_s2s1_seed42.yaml:51:monitor: validation_rank1
+configs\b5_resnet18_bnneck_ce_tongji_subject_disjoint_s1s2_seed2026.yaml:17:eval_embedding: post_bn
+configs\b5_resnet18_bnneck_ce_tongji_subject_disjoint_s1s2_seed2026.yaml:19:eval:
+configs\b5_resnet18_bnneck_ce_tongji_subject_disjoint_s1s2_seed2026.yaml:48:validation_policy: same_session_development
+configs\b5_resnet18_bnneck_ce_tongji_subject_disjoint_s1s2_seed2026.yaml:50:checkpoint:
+configs\b5_resnet18_bnneck_ce_tongji_subject_disjoint_s1s2_seed2026.yaml:51:monitor: validation_rank1
+configs\b5_resnet18_bnneck_ce_tongji_subject_disjoint_s1s2_seed2705.yaml:17:eval_embedding: post_bn
+configs\b5_resnet18_bnneck_ce_tongji_subject_disjoint_s1s2_seed2705.yaml:19:eval:
+configs\b5_resnet18_bnneck_ce_tongji_subject_disjoint_s1s2_seed2705.yaml:48:validation_policy: same_session_development
+configs\b5_resnet18_bnneck_ce_tongji_subject_disjoint_s1s2_seed2705.yaml:50:checkpoint:
+configs\b5_resnet18_bnneck_ce_tongji_subject_disjoint_s1s2_seed2705.yaml:51:monitor: validation_rank1
+configs\b5_resnet18_bnneck_ce_tongji_subject_disjoint_s1s2_seed42.yaml:17:eval_embedding: post_bn
+configs\b5_resnet18_bnneck_ce_tongji_subject_disjoint_s1s2_seed42.yaml:19:eval:
+configs\b5_resnet18_bnneck_ce_tongji_subject_disjoint_s1s2_seed42.yaml:48:validation_policy: same_session_development
+configs\b5_resnet18_bnneck_ce_tongji_subject_disjoint_s1s2_seed42.yaml:50:checkpoint:
+configs\b5_resnet18_bnneck_ce_tongji_subject_disjoint_s1s2_seed42.yaml:51:monitor: validation_rank1
+configs\b5_resnet18_bnneck_ce_tongji_subject_disjoint_s2s1_seed2026.yaml:17:eval_embedding: post_bn
+configs\b5_resnet18_bnneck_ce_tongji_subject_disjoint_s2s1_seed2026.yaml:19:eval:
+configs\b5_resnet18_bnneck_ce_tongji_subject_disjoint_s2s1_seed2026.yaml:48:validation_policy: same_session_development
+configs\b5_resnet18_bnneck_ce_tongji_subject_disjoint_s2s1_seed2026.yaml:50:checkpoint:
+configs\b5_resnet18_bnneck_ce_tongji_subject_disjoint_s2s1_seed2026.yaml:51:monitor: validation_rank1
+configs\b5_resnet18_bnneck_ce_tongji_subject_disjoint_s2s1_seed2705.yaml:17:eval_embedding: post_bn
+configs\b5_resnet18_bnneck_ce_tongji_subject_disjoint_s2s1_seed2705.yaml:19:eval:
+configs\b5_resnet18_bnneck_ce_tongji_subject_disjoint_s2s1_seed2705.yaml:48:validation_policy: same_session_development
+configs\b5_resnet18_bnneck_ce_tongji_subject_disjoint_s2s1_seed2705.yaml:50:checkpoint:
+configs\b5_resnet18_bnneck_ce_tongji_subject_disjoint_s2s1_seed2705.yaml:51:monitor: validation_rank1
+configs\b5_resnet18_bnneck_ce_tongji_subject_disjoint_s2s1_seed42.yaml:17:eval_embedding: post_bn
+configs\b5_resnet18_bnneck_ce_tongji_subject_disjoint_s2s1_seed42.yaml:19:eval:
+configs\b5_resnet18_bnneck_ce_tongji_subject_disjoint_s2s1_seed42.yaml:48:validation_policy: same_session_development
+configs\b5_resnet18_bnneck_ce_tongji_subject_disjoint_s2s1_seed42.yaml:50:checkpoint:
+configs\b5_resnet18_bnneck_ce_tongji_subject_disjoint_s2s1_seed42.yaml:51:monitor: validation_rank1
+configs\b6_resnet18_bnneck_arcface_iitd_subject_disjoint_within_seed2026.yaml:17:eval_embedding: post_bn
+configs\b6_resnet18_bnneck_arcface_iitd_subject_disjoint_within_seed2026.yaml:47:validation_policy: same_session_development
+configs\b6_resnet18_bnneck_arcface_iitd_subject_disjoint_within_seed2026.yaml:49:checkpoint:
+configs\b6_resnet18_bnneck_arcface_iitd_subject_disjoint_within_seed2026.yaml:50:monitor: validation_eer
+configs\b6_resnet18_bnneck_arcface_iitd_subject_disjoint_within_seed2705.yaml:17:eval_embedding: post_bn
+configs\b6_resnet18_bnneck_arcface_iitd_subject_disjoint_within_seed2705.yaml:47:validation_policy: same_session_development
+configs\b6_resnet18_bnneck_arcface_iitd_subject_disjoint_within_seed2705.yaml:49:checkpoint:
+configs\b6_resnet18_bnneck_arcface_iitd_subject_disjoint_within_seed2705.yaml:50:monitor: validation_eer
+configs\b6_resnet18_bnneck_arcface_iitd_subject_disjoint_within_seed42.yaml:17:eval_embedding: post_bn
+configs\b6_resnet18_bnneck_arcface_iitd_subject_disjoint_within_seed42.yaml:47:validation_policy: same_session_development
+configs\b6_resnet18_bnneck_arcface_iitd_subject_disjoint_within_seed42.yaml:49:checkpoint:
+configs\b6_resnet18_bnneck_arcface_iitd_subject_disjoint_within_seed42.yaml:50:monitor: validation_eer
+configs\b6_resnet18_bnneck_arcface_iitd_within_lr1e4_seed42.yaml:22:eval_embedding: post_bn
+configs\b6_resnet18_bnneck_arcface_tongji_s1s2_lr1e4_seed2026.yaml:17:eval_embedding: post_bn
+configs\b6_resnet18_bnneck_arcface_tongji_s1s2_lr1e4_seed2026.yaml:18:eval:
+configs\b6_resnet18_bnneck_arcface_tongji_s1s2_lr1e4_seed2705.yaml:17:eval_embedding: post_bn
+configs\b6_resnet18_bnneck_arcface_tongji_s1s2_lr1e4_seed2705.yaml:18:eval:
+configs\b6_resnet18_bnneck_arcface_tongji_s1s2_lr1e4_seed42.yaml:22:eval_embedding: post_bn
+configs\b6_resnet18_bnneck_arcface_tongji_s1s2_lr1e4_seed42.yaml:24:eval:
+configs\b6_resnet18_bnneck_arcface_tongji_s2s1_lr1e4_seed2026.yaml:17:eval_embedding: post_bn
+configs\b6_resnet18_bnneck_arcface_tongji_s2s1_lr1e4_seed2026.yaml:18:eval:
+configs\b6_resnet18_bnneck_arcface_tongji_s2s1_lr1e4_seed2705.yaml:17:eval_embedding: post_bn
+configs\b6_resnet18_bnneck_arcface_tongji_s2s1_lr1e4_seed2705.yaml:18:eval:
+configs\b6_resnet18_bnneck_arcface_tongji_s2s1_lr1e4_seed42.yaml:22:eval_embedding: post_bn
+configs\b6_resnet18_bnneck_arcface_tongji_s2s1_lr1e4_seed42.yaml:24:eval:
+configs\b6_resnet18_bnneck_arcface_tongji_subject_disjoint_s1s2_seed2026.yaml:17:eval_embedding: post_bn
+configs\b6_resnet18_bnneck_arcface_tongji_subject_disjoint_s1s2_seed2026.yaml:19:eval:
+configs\b6_resnet18_bnneck_arcface_tongji_subject_disjoint_s1s2_seed2026.yaml:50:validation_policy: same_session_development
+configs\b6_resnet18_bnneck_arcface_tongji_subject_disjoint_s1s2_seed2026.yaml:52:checkpoint:
+configs\b6_resnet18_bnneck_arcface_tongji_subject_disjoint_s1s2_seed2026.yaml:53:monitor: validation_rank1
+configs\b6_resnet18_bnneck_arcface_tongji_subject_disjoint_s1s2_seed2705.yaml:17:eval_embedding: post_bn
+configs\b6_resnet18_bnneck_arcface_tongji_subject_disjoint_s1s2_seed2705.yaml:19:eval:
+configs\b6_resnet18_bnneck_arcface_tongji_subject_disjoint_s1s2_seed2705.yaml:50:validation_policy: same_session_development
+configs\b6_resnet18_bnneck_arcface_tongji_subject_disjoint_s1s2_seed2705.yaml:52:checkpoint:
+configs\b6_resnet18_bnneck_arcface_tongji_subject_disjoint_s1s2_seed2705.yaml:53:monitor: validation_rank1
+configs\b6_resnet18_bnneck_arcface_tongji_subject_disjoint_s1s2_seed42.yaml:17:eval_embedding: post_bn
+configs\b6_resnet18_bnneck_arcface_tongji_subject_disjoint_s1s2_seed42.yaml:19:eval:
+configs\b6_resnet18_bnneck_arcface_tongji_subject_disjoint_s1s2_seed42.yaml:50:validation_policy: same_session_development
+configs\b6_resnet18_bnneck_arcface_tongji_subject_disjoint_s1s2_seed42.yaml:52:checkpoint:
+configs\b6_resnet18_bnneck_arcface_tongji_subject_disjoint_s1s2_seed42.yaml:53:monitor: validation_rank1
+configs\b6_resnet18_bnneck_arcface_tongji_subject_disjoint_s2s1_seed2026.yaml:17:eval_embedding: post_bn
+configs\b6_resnet18_bnneck_arcface_tongji_subject_disjoint_s2s1_seed2026.yaml:19:eval:
+configs\b6_resnet18_bnneck_arcface_tongji_subject_disjoint_s2s1_seed2026.yaml:50:validation_policy: same_session_development
+configs\b6_resnet18_bnneck_arcface_tongji_subject_disjoint_s2s1_seed2026.yaml:52:checkpoint:
+configs\b6_resnet18_bnneck_arcface_tongji_subject_disjoint_s2s1_seed2026.yaml:53:monitor: validation_rank1
+configs\b6_resnet18_bnneck_arcface_tongji_subject_disjoint_s2s1_seed2705.yaml:17:eval_embedding: post_bn
+configs\b6_resnet18_bnneck_arcface_tongji_subject_disjoint_s2s1_seed2705.yaml:19:eval:
+configs\b6_resnet18_bnneck_arcface_tongji_subject_disjoint_s2s1_seed2705.yaml:50:validation_policy: same_session_development
+configs\b6_resnet18_bnneck_arcface_tongji_subject_disjoint_s2s1_seed2705.yaml:52:checkpoint:
+configs\b6_resnet18_bnneck_arcface_tongji_subject_disjoint_s2s1_seed2705.yaml:53:monitor: validation_rank1
+configs\b6_resnet18_bnneck_arcface_tongji_subject_disjoint_s2s1_seed42.yaml:17:eval_embedding: post_bn
+configs\b6_resnet18_bnneck_arcface_tongji_subject_disjoint_s2s1_seed42.yaml:19:eval:
+configs\b6_resnet18_bnneck_arcface_tongji_subject_disjoint_s2s1_seed42.yaml:50:validation_policy: same_session_development
+configs\b6_resnet18_bnneck_arcface_tongji_subject_disjoint_s2s1_seed42.yaml:52:checkpoint:
+configs\b6_resnet18_bnneck_arcface_tongji_subject_disjoint_s2s1_seed42.yaml:53:monitor: validation_rank1
+configs\b7_resnet18_bnneck_arcface_light_supcon_tongji_subject_disjoint_s1s2_seed2026.yaml:17:eval_embedding: post_bn
+configs\b7_resnet18_bnneck_arcface_light_supcon_tongji_subject_disjoint_s1s2_seed2026.yaml:19:eval:
+configs\b7_resnet18_bnneck_arcface_light_supcon_tongji_subject_disjoint_s1s2_seed2026.yaml:50:validation_policy: same_session_development
+configs\b7_resnet18_bnneck_arcface_light_supcon_tongji_subject_disjoint_s1s2_seed2026.yaml:52:checkpoint:
+configs\b7_resnet18_bnneck_arcface_light_supcon_tongji_subject_disjoint_s1s2_seed2026.yaml:53:monitor: validation_rank1
+configs\b7_resnet18_bnneck_arcface_light_supcon_tongji_subject_disjoint_s1s2_seed2705.yaml:17:eval_embedding: post_bn
+configs\b7_resnet18_bnneck_arcface_light_supcon_tongji_subject_disjoint_s1s2_seed2705.yaml:19:eval:
+configs\b7_resnet18_bnneck_arcface_light_supcon_tongji_subject_disjoint_s1s2_seed2705.yaml:50:validation_policy: same_session_development
+configs\b7_resnet18_bnneck_arcface_light_supcon_tongji_subject_disjoint_s1s2_seed2705.yaml:52:checkpoint:
+configs\b7_resnet18_bnneck_arcface_light_supcon_tongji_subject_disjoint_s1s2_seed2705.yaml:53:monitor: validation_rank1
+configs\b7_resnet18_bnneck_arcface_light_supcon_tongji_subject_disjoint_s1s2_seed42.yaml:17:eval_embedding: post_bn
+configs\b7_resnet18_bnneck_arcface_light_supcon_tongji_subject_disjoint_s1s2_seed42.yaml:19:eval:
+configs\b7_resnet18_bnneck_arcface_light_supcon_tongji_subject_disjoint_s1s2_seed42.yaml:50:validation_policy: same_session_development
+configs\b7_resnet18_bnneck_arcface_light_supcon_tongji_subject_disjoint_s1s2_seed42.yaml:52:checkpoint:
+configs\b7_resnet18_bnneck_arcface_light_supcon_tongji_subject_disjoint_s1s2_seed42.yaml:53:monitor: validation_rank1
+configs\b7_resnet18_bnneck_arcface_light_supcon_tongji_subject_disjoint_s2s1_seed2026.yaml:17:eval_embedding: post_bn
+configs\b7_resnet18_bnneck_arcface_light_supcon_tongji_subject_disjoint_s2s1_seed2026.yaml:19:eval:
+configs\b7_resnet18_bnneck_arcface_light_supcon_tongji_subject_disjoint_s2s1_seed2026.yaml:50:validation_policy: same_session_development
+configs\b7_resnet18_bnneck_arcface_light_supcon_tongji_subject_disjoint_s2s1_seed2026.yaml:52:checkpoint:
+configs\b7_resnet18_bnneck_arcface_light_supcon_tongji_subject_disjoint_s2s1_seed2026.yaml:53:monitor: validation_rank1
+configs\b7_resnet18_bnneck_arcface_light_supcon_tongji_subject_disjoint_s2s1_seed2705.yaml:17:eval_embedding: post_bn
+configs\b7_resnet18_bnneck_arcface_light_supcon_tongji_subject_disjoint_s2s1_seed2705.yaml:19:eval:
+configs\b7_resnet18_bnneck_arcface_light_supcon_tongji_subject_disjoint_s2s1_seed2705.yaml:50:validation_policy: same_session_development
+configs\b7_resnet18_bnneck_arcface_light_supcon_tongji_subject_disjoint_s2s1_seed2705.yaml:52:checkpoint:
+configs\b7_resnet18_bnneck_arcface_light_supcon_tongji_subject_disjoint_s2s1_seed2705.yaml:53:monitor: validation_rank1
+configs\b7_resnet18_bnneck_arcface_light_supcon_tongji_subject_disjoint_s2s1_seed42.yaml:17:eval_embedding: post_bn
+configs\b7_resnet18_bnneck_arcface_light_supcon_tongji_subject_disjoint_s2s1_seed42.yaml:19:eval:
+configs\b7_resnet18_bnneck_arcface_light_supcon_tongji_subject_disjoint_s2s1_seed42.yaml:50:validation_policy: same_session_development
+configs\b7_resnet18_bnneck_arcface_light_supcon_tongji_subject_disjoint_s2s1_seed42.yaml:52:checkpoint:
+configs\b7_resnet18_bnneck_arcface_light_supcon_tongji_subject_disjoint_s2s1_seed42.yaml:53:monitor: validation_rank1
+configs\b7_resnet18_bnneck_arcface_supcon_tongji_s1s2_lr1e4_seed42.yaml:22:eval_embedding: post_bn
+configs\b7_resnet18_bnneck_arcface_supcon_tongji_s1s2_lr1e4_seed42.yaml:24:eval:
+configs\b7_resnet18_bnneck_arcface_supcon_tongji_s2s1_lr1e4_seed42.yaml:22:eval_embedding: post_bn
+configs\b7_resnet18_bnneck_arcface_supcon_tongji_s2s1_lr1e4_seed42.yaml:24:eval:
+configs\b8_resnet18_cosface_tongji_subject_disjoint_s1s2_seed2026.yaml:18:eval_embedding: post_bn
+configs\b8_resnet18_cosface_tongji_subject_disjoint_s1s2_seed2026.yaml:48:validation_policy: same_session_development
+configs\b8_resnet18_cosface_tongji_subject_disjoint_s1s2_seed2026.yaml:50:checkpoint:
+configs\b8_resnet18_cosface_tongji_subject_disjoint_s1s2_seed2026.yaml:51:monitor: validation_rank1
+configs\b8_resnet18_cosface_tongji_subject_disjoint_s1s2_seed2705.yaml:18:eval_embedding: post_bn
+configs\b8_resnet18_cosface_tongji_subject_disjoint_s1s2_seed2705.yaml:48:validation_policy: same_session_development
+configs\b8_resnet18_cosface_tongji_subject_disjoint_s1s2_seed2705.yaml:50:checkpoint:
+configs\b8_resnet18_cosface_tongji_subject_disjoint_s1s2_seed2705.yaml:51:monitor: validation_rank1
+configs\b8_resnet18_cosface_tongji_subject_disjoint_s1s2_seed42.yaml:18:eval_embedding: post_bn
+configs\b8_resnet18_cosface_tongji_subject_disjoint_s1s2_seed42.yaml:48:validation_policy: same_session_development
+configs\b8_resnet18_cosface_tongji_subject_disjoint_s1s2_seed42.yaml:50:checkpoint:
+configs\b8_resnet18_cosface_tongji_subject_disjoint_s1s2_seed42.yaml:51:monitor: validation_rank1
+configs\b8_resnet18_cosface_tongji_subject_disjoint_s2s1_seed2026.yaml:18:eval_embedding: post_bn
+configs\b8_resnet18_cosface_tongji_subject_disjoint_s2s1_seed2026.yaml:48:validation_policy: same_session_development
+configs\b8_resnet18_cosface_tongji_subject_disjoint_s2s1_seed2026.yaml:50:checkpoint:
+configs\b8_resnet18_cosface_tongji_subject_disjoint_s2s1_seed2026.yaml:51:monitor: validation_rank1
+configs\b8_resnet18_cosface_tongji_subject_disjoint_s2s1_seed2705.yaml:18:eval_embedding: post_bn
+configs\b8_resnet18_cosface_tongji_subject_disjoint_s2s1_seed2705.yaml:48:validation_policy: same_session_development
+configs\b8_resnet18_cosface_tongji_subject_disjoint_s2s1_seed2705.yaml:50:checkpoint:
+configs\b8_resnet18_cosface_tongji_subject_disjoint_s2s1_seed2705.yaml:51:monitor: validation_rank1
+configs\b8_resnet18_cosface_tongji_subject_disjoint_s2s1_seed42.yaml:18:eval_embedding: post_bn
+configs\b8_resnet18_cosface_tongji_subject_disjoint_s2s1_seed42.yaml:48:validation_policy: same_session_development
+configs\b8_resnet18_cosface_tongji_subject_disjoint_s2s1_seed42.yaml:50:checkpoint:
+configs\b8_resnet18_cosface_tongji_subject_disjoint_s2s1_seed42.yaml:51:monitor: validation_rank1
+configs\default.yaml:23:defective_policy: metadata_or_all_valid
+configs\default.yaml:91:checkpoint_path: outputs/checkpoints/CASIA/best_conformer.pt
+configs\default.yaml:107:save_best_by: val_accuracy
+configs\default.yaml:153:evaluation:
+configs\resnet18_ce_tongji_s1s2.yaml:24:epochs: 2  # Keep it small (e.g. 2 epochs) for baseline validation, can be scaled up
+configs\toy.yaml:19:defective_policy: metadata_or_all_valid
+configs\toy.yaml:74:checkpoint_path: outputs/checkpoints/TOY/best_conformer.pt
+configs\toy.yaml:87:save_best_by: val_accuracy
+configs\toy.yaml:124:evaluation:

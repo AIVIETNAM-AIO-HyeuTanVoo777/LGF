@@ -1,20 +1,18 @@
 # STATUS
 
-- **Current Step**: Step 3 - Split and Gallery/Probe Protocol Audit (`03_SPLIT_GALLERY_PROBE_AUDIT.md`)
+- **Current Step**: Step 4 - Checkpoint Validation Policy and Configs (`04_VALIDATION_POLICY_AND_CONFIGS.md`)
 - **Modified Files**:
-  - `scripts/audit_splits.py` (created: audits official study splits)
-  - `docs/audits/split_audit.csv` (created)
-  - `docs/audits/split_audit.md` (created)
-  - `docs/audits/gallery_probe_audit.md` (created)
-  - `docs/agent_logs/data_file_inventory.txt` (created)
-  - `docs/agent_logs/split_related_files.txt` (created)
-  - `paper/sections/04_experiments.tex` (modified: added Claim column and updated person ID phrasing)
+  - `scripts/audit_checkpoint_selection.py` (updated: processes both Tongji and IITD runs)
+  - `docs/audits/checkpoint_selection_audit.csv` (created/updated)
+  - `docs/audits/checkpoint_selection_audit.md` (created/updated)
+  - `docs/audits/hyperparameter_provenance.md` (created)
+  - `docs/agent_logs/validation_checkpoint_locations.txt` (created)
+  - `paper/sections/04_experiments.tex` (modified: added same-session validation policy text)
+  - `configs/**/*.yaml` (48 subject-disjoint configurations patched with protocol, loss, and checkpoint settings)
   - `docs/agent_logs/STATUS.md` (modified)
 - **Commands Run**:
-  - `python scripts/audit_splits.py`
-  - `python -c "import pandas as pd; p='docs/audits/split_audit.csv'; df=pd.read_csv(p); assert (df['verdict'] == 'PASS').all(), df[df['verdict'] != 'PASS']; print(df[['dataset','direction','seed','split hash','claim allowed']].to_string(index=False))"`
-  - `python -c \"import glob, os; files = sorted([f.replace('\\\\', '/') for f in glob.glob('data/**/*', recursive=True) if os.path.isfile(f) and f.endswith(('.json', '.csv', '.txt'))]); open('docs/agent_logs/data_file_inventory.txt', 'w', encoding='utf-8').write('\\n'.join(files) + '\\n')\"`
-  - `python -c \"import glob, os; files = sorted([f.replace('\\\\', '/') for f in glob.glob('**/*', recursive=True) if os.path.isfile(f) and any(x in f.lower() for x in ['split', 'manifest', 'gallery', 'probe', 'audit'])]); open('docs/agent_logs/split_related_files.txt', 'w', encoding='utf-8').write('\\n'.join(files) + '\\n')\"`
+  - `python scripts/audit_checkpoint_selection.py`
+  - `python -c "import pandas as pd; p='docs/audits/checkpoint_selection_audit.csv'; df=pd.read_csv(p); assert (~df['uses_test_gallery_probe'].astype(bool)).all(); assert (df['verdict'] == 'PASS').all(); print(df[['method','dataset','direction','seed','selected_epoch','selection_metric']].head().to_string(index=False))"`
 - **Pass/Fail Status**: PASS
 - **Unresolved Issues**: None
-- **Next Action**: Execute Step 4 - Checkpoint Validation Policy (`04_VALIDATION_POLICY_AND_CONFIGS.md`)
+- **Next Action**: Execute Step 5 - Design Execution Plan for Experiment Matrix (`05_EXPERIMENT_MATRIX_RUN_PLAN.md`)

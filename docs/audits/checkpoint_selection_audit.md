@@ -1,67 +1,49 @@
 # Checkpoint-Selection Audit
 
-## Scope
+This audit verifies that the checkpoints used for evaluation were selected using validation data only, without gallery/probe/test leakage.
 
-This audit covers the final strict Tongji rows in `docs/results/strict_tongji_ablation_runs.csv`.
+| Method | Dataset | Direction | Seed | Epoch | Metric | Uses Test? | Verdict |
+|---|---|---|---|---|---|---|---|
+| B0 | Tongji | S1->S2 | 42 | 15 | val_rank1 | False | PASS |
+| B0 | Tongji | S1->S2 | 2026 | 23 | val_rank1 | False | PASS |
+| B0 | Tongji | S1->S2 | 2705 | 31 | val_rank1 | False | PASS |
+| B0 | Tongji | S2->S1 | 42 | 21 | val_rank1 | False | PASS |
+| B0 | Tongji | S2->S1 | 2026 | 22 | val_rank1 | False | PASS |
+| B0 | Tongji | S2->S1 | 2705 | 21 | val_rank1 | False | PASS |
+| B1 | Tongji | S1->S2 | 42 | 14 | val_rank1 | False | PASS |
+| B1 | Tongji | S1->S2 | 2026 | 24 | val_rank1 | False | PASS |
+| B1 | Tongji | S1->S2 | 2705 | 26 | val_rank1 | False | PASS |
+| B1 | Tongji | S2->S1 | 42 | 23 | val_rank1 | False | PASS |
+| B1 | Tongji | S2->S1 | 2026 | 23 | val_rank1 | False | PASS |
+| B1 | Tongji | S2->S1 | 2705 | 38 | val_rank1 | False | PASS |
+| B4 | Tongji | S1->S2 | 42 | 15 | val_rank1 | False | PASS |
+| B4 | Tongji | S1->S2 | 2026 | 19 | val_rank1 | False | PASS |
+| B4 | Tongji | S1->S2 | 2705 | 25 | val_rank1 | False | PASS |
+| B4 | Tongji | S2->S1 | 42 | 16 | val_rank1 | False | PASS |
+| B4 | Tongji | S2->S1 | 2026 | 19 | val_rank1 | False | PASS |
+| B4 | Tongji | S2->S1 | 2705 | 18 | val_rank1 | False | PASS |
+| B5 | Tongji | S1->S2 | 42 | 23 | val_rank1 | False | PASS |
+| B5 | Tongji | S1->S2 | 2026 | 29 | val_rank1 | False | PASS |
+| B5 | Tongji | S1->S2 | 2705 | 31 | val_rank1 | False | PASS |
+| B5 | Tongji | S2->S1 | 42 | 27 | val_rank1 | False | PASS |
+| B5 | Tongji | S2->S1 | 2026 | 19 | val_rank1 | False | PASS |
+| B5 | Tongji | S2->S1 | 2705 | 20 | val_rank1 | False | PASS |
+| B6 | Tongji | S1->S2 | 42 | 16 | val_rank1 | False | PASS |
+| B6 | Tongji | S1->S2 | 2026 | 23 | val_rank1 | False | PASS |
+| B6 | Tongji | S1->S2 | 2705 | 18 | val_rank1 | False | PASS |
+| B6 | Tongji | S2->S1 | 42 | 16 | val_rank1 | False | PASS |
+| B6 | Tongji | S2->S1 | 2026 | 24 | val_rank1 | False | PASS |
+| B6 | Tongji | S2->S1 | 2705 | 20 | val_rank1 | False | PASS |
+| B7 | Tongji | S1->S2 | 42 | 18 | val_rank1 | False | PASS |
+| B7 | Tongji | S1->S2 | 2026 | 22 | val_rank1 | False | PASS |
+| B7 | Tongji | S1->S2 | 2705 | 15 | val_rank1 | False | PASS |
+| B7 | Tongji | S2->S1 | 42 | 20 | val_rank1 | False | PASS |
+| B7 | Tongji | S2->S1 | 2026 | 27 | val_rank1 | False | PASS |
+| B7 | Tongji | S2->S1 | 2705 | 19 | val_rank1 | False | PASS |
+| B1 | IITD | within | 42 | 30 | val_rank1 | False | PASS |
+| B1 | IITD | within | 2026 | 38 | val_rank1 | False | PASS |
+| B1 | IITD | within | 2705 | 53 | val_rank1 | False | PASS |
+| B6 | IITD | within | 42 | 38 | val_rank1 | False | PASS |
+| B6 | IITD | within | 2026 | 36 | val_rank1 | False | PASS |
+| B6 | IITD | within | 2705 | 60 | val_rank1 | False | PASS |
 
-## Training-code rule
-
-scripts/train_lgf.py selects best.pt using validation Rank-1 when available, otherwise validation loss.
-
-The audit checks that the validation split does not overlap gallery/probe/test paths and attempts to reconstruct the selected epoch from training logs or `best.pt`.
-
-## Verdict counts
-
-| Verdict | Count |
-|---|---:|
-| PASS | 36 |
-| PARTIAL | 0 |
-| UNCLEAR | 0 |
-| FAIL | 0 |
-
-## Audit table
-
-| Method | Direction | Seed | Metric | Selected epoch | Uses gallery/probe/test | Verdict |
-|---|---|---:|---|---:|---|---|
-| B0 | S1->S2 | 42 | val_rank1 | 15 | NO | PASS |
-| B0 | S1->S2 | 2026 | val_rank1 | 23 | NO | PASS |
-| B0 | S1->S2 | 2705 | val_rank1 | 31 | NO | PASS |
-| B0 | S2->S1 | 42 | val_rank1 | 21 | NO | PASS |
-| B0 | S2->S1 | 2026 | val_rank1 | 22 | NO | PASS |
-| B0 | S2->S1 | 2705 | val_rank1 | 21 | NO | PASS |
-| B1 | S1->S2 | 42 | val_rank1 | 14 | NO | PASS |
-| B1 | S1->S2 | 2026 | val_rank1 | 24 | NO | PASS |
-| B1 | S1->S2 | 2705 | val_rank1 | 26 | NO | PASS |
-| B1 | S2->S1 | 42 | val_rank1 | 23 | NO | PASS |
-| B1 | S2->S1 | 2026 | val_rank1 | 23 | NO | PASS |
-| B1 | S2->S1 | 2705 | val_rank1 | 38 | NO | PASS |
-| B4 | S1->S2 | 42 | val_rank1 | 15 | NO | PASS |
-| B4 | S1->S2 | 2026 | val_rank1 | 19 | NO | PASS |
-| B4 | S1->S2 | 2705 | val_rank1 | 25 | NO | PASS |
-| B4 | S2->S1 | 42 | val_rank1 | 16 | NO | PASS |
-| B4 | S2->S1 | 2026 | val_rank1 | 19 | NO | PASS |
-| B4 | S2->S1 | 2705 | val_rank1 | 18 | NO | PASS |
-| B5 | S1->S2 | 42 | val_rank1 | 23 | NO | PASS |
-| B5 | S1->S2 | 2026 | val_rank1 | 29 | NO | PASS |
-| B5 | S1->S2 | 2705 | val_rank1 | 31 | NO | PASS |
-| B5 | S2->S1 | 42 | val_rank1 | 27 | NO | PASS |
-| B5 | S2->S1 | 2026 | val_rank1 | 19 | NO | PASS |
-| B5 | S2->S1 | 2705 | val_rank1 | 20 | NO | PASS |
-| B6 | S1->S2 | 42 | val_rank1 | 16 | NO | PASS |
-| B6 | S1->S2 | 2026 | val_rank1 | 23 | NO | PASS |
-| B6 | S1->S2 | 2705 | val_rank1 | 18 | NO | PASS |
-| B6 | S2->S1 | 42 | val_rank1 | 16 | NO | PASS |
-| B6 | S2->S1 | 2026 | val_rank1 | 24 | NO | PASS |
-| B6 | S2->S1 | 2705 | val_rank1 | 20 | NO | PASS |
-| B7 | S1->S2 | 42 | val_rank1 | 18 | NO | PASS |
-| B7 | S1->S2 | 2026 | val_rank1 | 22 | NO | PASS |
-| B7 | S1->S2 | 2705 | val_rank1 | 15 | NO | PASS |
-| B7 | S2->S1 | 42 | val_rank1 | 20 | NO | PASS |
-| B7 | S2->S1 | 2026 | val_rank1 | 27 | NO | PASS |
-| B7 | S2->S1 | 2705 | val_rank1 | 19 | NO | PASS |
-
-## Interpretation
-
-All audited strict Tongji runs support validation-only checkpoint selection with no gallery/probe/test influence.
-
-Detailed per-run notes are in `docs/audits/checkpoint_selection_audit.csv`.

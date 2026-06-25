@@ -1,5 +1,3 @@
-# B4: ResNet18 + ArcFace on Tongji palm-class-disjoint S1 -> S2, seed 2026
-# Note: filenames retain historical 'subject_disjoint' naming, while the paper claim is capped at palm-class-disjoint by audit.
 seed: 2026
 device: cuda
 save_dir: experiments/b4_resnet18_arcface_tongji_subject_disjoint_s1s2_seed2026
@@ -16,10 +14,19 @@ model:
   name: ResNet18Baseline
   embedding_dim: 256
   pretrained: true
+  bnneck: false
+  eval_embedding: post_bn
 loss:
   name: arcface
   scale: 30.0
   margin: 0.5
+  ce: false
+  supcon_lambda: 0.0
+  supcon_temperature: 0.07
+  arcface: true
+  arcface_scale: 30.0
+  arcface_margin: 0.5
+  cosface: false
 training:
   epochs: 60
   lr: 0.0001
@@ -29,3 +36,18 @@ training:
   amp: true
   loss_type: arcface
   lambda_supcon: 0.0
+  optimizer: Adam
+  scheduler: CosineAnnealingLR
+  batch_size: 16
+  effective_batch_size: 64
+  sampler: MPerClassSampler
+protocol:
+  dataset: Tongji
+  direction: s1_to_s2
+  split_file: data/splits/tongji_subject_disjoint_s1_to_s2_seed2026.json
+  validation_policy: same_session_development
+  test_policy: heldout_gallery_probe_only
+checkpoint:
+  monitor: validation_rank1
+  mode: max
+  no_test_data: true
