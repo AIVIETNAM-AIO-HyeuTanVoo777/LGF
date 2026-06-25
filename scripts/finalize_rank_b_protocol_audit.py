@@ -2,9 +2,9 @@
 """
 Finalize Rank-B split audit for PALM_CGK_BASE.
 
-This script audits the subject-disjoint splits of Tongji and IITD datasets.
+This script audits the palm-class-disjoint split manifests of Tongji and IITD datasets.
 It ensures that:
-1. Development (train ∪ val) and Test (gallery ∪ probe ∪ support) are strictly subject-disjoint.
+1. Development (train ∪ val) and Test (gallery ∪ probe ∪ support) are disjoint by the manifest identity field used for palm-class protocol construction.
 2. All items in the splits are successfully resolved against the manifest (unresolved_items == 0).
 3. Gallery and probe have subject overlap when both are non-empty (to enable identification evaluation).
 4. Subject overlap between train and validation is allowed and reported.
@@ -183,12 +183,12 @@ def main() -> None:
         md.append("### Paper Terminology & Definitions")
         md.append("")
         md.append("> [!IMPORTANT]")
-        md.append("> **Tongji Protocol (Primary)**: We use a development/test subject-disjoint protocol. Training and validation images are drawn from development subjects, while gallery and probe images are drawn from held-out test subjects. No subject appears in both the development set and the gallery/probe evaluation set.")
+        md.append("> **Tongji Protocol (Primary)**: We use a development/test palm-class-disjoint protocol. Training and validation images are drawn from development subjects, while gallery and probe images are drawn from held-out test palm classes. No subject appears in both the development set and the gallery/probe evaluation set.")
         md.append("> ")
-        md.append("> **IITD Protocol (Secondary)**: IITD is used as a secondary subject-disjoint within-dataset validation. Because session metadata is not used to define a cross-session split, IITD is not treated as cross-session evidence.")
+        md.append("> **IITD Protocol (Secondary)**: IITD is used as a secondary palm-class-disjoint within-dataset validation. Because session metadata is not used to define a cross-session split, IITD is not treated as cross-session evidence.")
         md.append("")
         md.append("### Train/Val Subject Overlap Justification")
-        md.append("In the development phase, train and validation sets are both parts of the development set (development = train ∪ val). Since validation is used to tune hyperparameters during development rather than serving as the final held-out test evaluation, subject overlap between train and validation is allowed and does not constitute data leakage. The critical boundary is between development and test (gallery ∪ probe ∪ support). This audit enforces strict subject disjointness between the development set and the test set.")
+        md.append("In the development phase, train and validation sets are both parts of the development set (development = train ∪ val). Since validation is used to tune hyperparameters during development rather than serving as the final test evaluation, manifest-field overlap between train and validation is allowed and does not constitute data leakage. The critical boundary is between development and test (gallery ∪ probe ∪ support). This audit enforces strict subject disjointness between the development set and the test set.")
         md.append("")
         md.append("## Dataset Manifest Summary")
         md.append("")

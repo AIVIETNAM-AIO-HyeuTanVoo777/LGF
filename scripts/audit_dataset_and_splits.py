@@ -85,7 +85,7 @@ This document summarizes the dataset metadata parsed from the official manifest.
     
     integrity_summary_content = """# Split Integrity Summary
 
-This document provides verification results for all subject-disjoint split files, checking for duplicate paths, image existence, partition size, and identity leakage (overlap between development and test subsets).
+This document provides verification results for all palm-class-disjoint split files, checking for duplicate paths, image existence, partition size, and identity leakage (overlap between development and test subsets).
 
 """
     
@@ -206,9 +206,9 @@ This document provides verification results for all subject-disjoint split files
             integrity_summary_content += "- [x] **File Existence**: All referenced images exist on disk (passed).\n"
             
         if len(overlap_subjects) > 0:
-            integrity_summary_content += f"- [!] **Subject Leakage**: {len(overlap_subjects)} subjects overlap between Dev and Test partitions! Overlapping: {list(overlap_subjects)[:10]}\n"
+            integrity_summary_content += f"- [!] **Manifest-field Leakage**: {len(overlap_subjects)} subjects overlap between Dev and Test partitions! Overlapping: {list(overlap_subjects)[:10]}\n"
         else:
-            integrity_summary_content += "- [x] **Subject Leakage**: 0 overlapping subjects (passed subject-disjoint constraint).\n"
+            integrity_summary_content += "- [x] **Manifest-field Leakage**: 0 overlapping manifest identity fields across final partitions.\n"
             
         if len(overlap_palms) > 0:
             integrity_summary_content += f"- [!] **Palm Leakage**: {len(overlap_palms)} palms overlap between Dev and Test partitions!\n"

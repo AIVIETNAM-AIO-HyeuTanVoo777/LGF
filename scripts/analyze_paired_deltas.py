@@ -90,7 +90,7 @@ def main():
     # Write to MD
     # Requirements:
     # 1. Scope:
-    # - This analysis uses six paired seed-direction units from Tongji subject-disjoint cross-session evaluation.
+    # - This analysis uses six paired seed-direction units from Tongji palm-class-disjoint cross-session evaluation.
     # - Each unit compares B6 and B1 under the same direction and seed.
     # - Positive Rank/TAR deltas favor B6.
     # - Positive EER deltas indicate worse performance for B6.
@@ -105,7 +105,7 @@ def main():
     md_content = f"""# Paired Delta Analysis: B6 vs B1
 
 ## Scope
-- This analysis uses six paired seed-direction units from Tongji subject-disjoint cross-session evaluation.
+- This analysis uses six paired seed-direction units from Tongji palm-class-disjoint cross-session evaluation.
 - Each unit compares B6 and B1 under the same direction and seed.
 - Positive Rank/TAR deltas favor B6.
 - Positive EER deltas indicate worse performance for B6.

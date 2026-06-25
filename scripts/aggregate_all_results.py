@@ -59,7 +59,7 @@ def write_paper_ready_tables(runs):
                 else:
                     tongji_summary[method][metric] = ("NA", "NA")
                     
-        md_content += "## 1. Tongji Subject-Disjoint Cross-Session Results (Bidirectional 3-Seed Average)\n\n"
+        md_content += "## 1. Tongji Palm-Class-Disjoint Cross-Session Results (Bidirectional 3-Seed Average)\n\n"
         md_content += "| Method | Rank-1 | Rank-5 | Macro-F1 | EER | TAR@FAR=1e-2 | TAR@FAR=1e-3 |\n"
         md_content += "|---|---|---|---|---|---|---|\n"
         for method in ["B1", "B6"]:
@@ -75,7 +75,7 @@ def write_paper_ready_tables(runs):
             md_content += row
         md_content += "\n"
     else:
-        md_content += "## 1. Tongji Subject-Disjoint Cross-Session Results\n\n"
+        md_content += "## 1. Tongji Palm-Class-Disjoint Cross-Session Results\n\n"
         md_content += "*Summary generation pending (incomplete Tongji runs)*\n\n"
         
     if has_all_iitd:
@@ -97,7 +97,7 @@ def write_paper_ready_tables(runs):
                 else:
                     iitd_summary[method][metric] = ("NA", "NA")
                     
-        md_content += "## 2. IITD Subject-Disjoint Within-Session Results (3-Seed Average)\n\n"
+        md_content += "## 2. IITD Palm-Class-Disjoint Within-Session Results (3-Seed Average)\n\n"
         md_content += "| Method | Rank-1 | Rank-5 | Macro-F1 | EER | TAR@FAR=1e-2 | TAR@FAR=1e-3 |\n"
         md_content += "|---|---|---|---|---|---|---|\n"
         for method in ["B1", "B6"]:
@@ -113,7 +113,7 @@ def write_paper_ready_tables(runs):
             md_content += row
         md_content += "\n"
     else:
-        md_content += "## 2. IITD Subject-Disjoint Within-Session Results\n\n"
+        md_content += "## 2. IITD Palm-Class-Disjoint Within-Session Results\n\n"
         md_content += "*Summary generation pending (incomplete IITD runs)*\n\n"
         
     md_file = RESULTS_DIR / "paper_ready_tables.md"

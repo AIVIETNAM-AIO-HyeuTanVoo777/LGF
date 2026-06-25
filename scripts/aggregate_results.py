@@ -52,7 +52,7 @@ def main():
     print("Aggregating results...")
 
     # -------------------------------------------------------------
-    # 1. Tongji Subject-Disjoint Cross-Session Aggregation
+    # 1. Tongji Palm-Class-Disjoint Cross-Session Aggregation
     # -------------------------------------------------------------
     tongji_data = {}
 
@@ -79,9 +79,9 @@ def main():
 
     if has_tongji_metrics:
         # Build Tongji report
-        tongji_report = """# Tongji Subject-Disjoint Cross-Session Evaluation Summary
+        tongji_report = """# Tongji Palm-Class-Disjoint Cross-Session Evaluation Summary
 
-This document aggregates evaluation metrics for Tier-1 models on the Tongji subject-disjoint cross-session protocol across three random seeds: 42, 2026, and 2705.
+This document aggregates evaluation metrics for Tier-1 models on the Tongji palm-class-disjoint cross-session protocol across three random seeds: 42, 2026, and 2705.
 
 - **Baseline (B1)**: ResNet18 trained with Cross-Entropy and Supervised Contrastive Loss.
 - **BNNeck + ArcFace (B6)**: ResNet18 trained with BNNeck and ArcFace Loss.
@@ -186,11 +186,11 @@ A positive delta (pp = percentage points) indicates B6 outperformed B1.
 
         tongji_report += """
 ## 4. Key Takeaways and Insights
-- **Protocol-Sensitivity Verdict**: Rather than providing a universal improvement, the BNNeck + ArcFace (B6) pipeline exhibits a degradation or neutral behavior compared to Baseline (B1) under the cross-session subject-disjoint protocol on Tongji.
+- **Protocol-Sensitivity Verdict**: Rather than providing a universal improvement, the BNNeck + ArcFace (B6) pipeline exhibits a degradation or neutral behavior compared to Baseline (B1) under the cross-session palm-class-disjoint protocol on Tongji.
 - These results show that the BNNeck + ArcFace variant evaluated here does not transfer into a consistent cross-session improvement, reinforcing the need for protocol-sensitive benchmarking rather than single-protocol claims.
 """
     else:
-        tongji_report = """# Tongji Subject-Disjoint Cross-Session Evaluation Summary
+        tongji_report = """# Tongji Palm-Class-Disjoint Cross-Session Evaluation Summary
 
 Status: restart aggregation placeholder.
 
@@ -199,7 +199,7 @@ No valid restart metrics were found by the current aggregation script. This file
 ## Intended protocol
 
 - Dataset: Tongji
-- Protocol: subject-disjoint cross-session evaluation
+- Protocol: palm-class-disjoint cross-session evaluation
 - Seeds: 42, 2026, 2705
 - Metrics: Rank-1, Rank-5, Macro-F1, EER, TAR@FAR=1e-2, TAR@FAR=1e-3
 
@@ -213,7 +213,7 @@ No new result claim is made in this file. Tongji should be treated as primary cr
     print("Wrote tongji_subject_disjoint_summary.md")
 
     # -------------------------------------------------------------
-    # 2. IITD Subject-Disjoint Within-Session Aggregation
+    # 2. IITD Palm-Class-Disjoint Within-Session Aggregation
     # -------------------------------------------------------------
     iitd_data = {}
     for method in ["b1", "b6"]:

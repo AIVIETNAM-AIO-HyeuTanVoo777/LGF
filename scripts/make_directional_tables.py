@@ -31,7 +31,7 @@ def main():
                 pass
             rows.append(r)
 
-    # Filter for Tongji primary subject-disjoint cross-session runs for B1 and B6
+    # Filter for Tongji primary palm-class-disjoint cross-session runs for B1 and B6
     tongji_rows = []
     for r in rows:
         if (r["dataset"] == "tongji" and 
@@ -65,7 +65,7 @@ def main():
     out_full_md = RESULTS_DIR / "tongji_directional_metrics_full.md"
     md_content = """# Tongji Directional Metrics Full
 
-This document presents the detailed directional results for the primary Tongji subject-disjoint cross-session evaluation.
+This document presents the detailed directional results for the primary Tongji palm-class-disjoint cross-session evaluation.
 
 | Method | Direction | Seed | Rank-1 | Rank-5 | Macro-F1 | EER | TAR@1e-2 | TAR@1e-3 |
 |---|---|---|---|---|---|---|---|---|

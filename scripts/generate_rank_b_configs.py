@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Generate and validate Rank-B subject-disjoint B1/B6 configs for Tongji and IITD.
+Generate and validate Rank-B palm-class-disjoint B1/B6 configs for Tongji and IITD.
 
 This script reads existing configs as templates, creates new configs with updated
 seeds, split paths, and output directories, and performs validation.
@@ -58,7 +58,7 @@ def main() -> None:
             "seed": seed,
             "split_file": f"data/splits/tongji_subject_disjoint_s1_to_s2_seed{seed}.json",
             "save_dir": f"experiments/b1_resnet18_ce_supcon_tongji_subject_disjoint_s1s2_seed{seed}",
-            "header": f"# B1: ResNet18 + CE + SupCon on Tongji subject-disjoint S1 -> S2, seed {seed}",
+            "header": f"# B1: ResNet18 + CE + SupCon on Tongji palm-class-disjoint S1 -> S2, seed {seed}",
         })
         # S2 to S1
         configs_to_create.append({
@@ -67,7 +67,7 @@ def main() -> None:
             "seed": seed,
             "split_file": f"data/splits/tongji_subject_disjoint_s2_to_s1_seed{seed}.json",
             "save_dir": f"experiments/b1_resnet18_ce_supcon_tongji_subject_disjoint_s2s1_seed{seed}",
-            "header": f"# B1: ResNet18 + CE + SupCon on Tongji subject-disjoint S2 -> S1, seed {seed}",
+            "header": f"# B1: ResNet18 + CE + SupCon on Tongji palm-class-disjoint S2 -> S1, seed {seed}",
         })
 
     # --- Tongji B6 Configs ---
@@ -79,7 +79,7 @@ def main() -> None:
             "seed": seed,
             "split_file": f"data/splits/tongji_subject_disjoint_s1_to_s2_seed{seed}.json",
             "save_dir": f"experiments/b6_resnet18_bnneck_arcface_tongji_subject_disjoint_s1s2_seed{seed}",
-            "header": f"# B6: ResNet18 + BNNeck + ArcFace on Tongji subject-disjoint S1 -> S2, seed {seed}",
+            "header": f"# B6: ResNet18 + BNNeck + ArcFace on Tongji palm-class-disjoint S1 -> S2, seed {seed}",
         })
         # S2 to S1
         configs_to_create.append({
@@ -88,7 +88,7 @@ def main() -> None:
             "seed": seed,
             "split_file": f"data/splits/tongji_subject_disjoint_s2_to_s1_seed{seed}.json",
             "save_dir": f"experiments/b6_resnet18_bnneck_arcface_tongji_subject_disjoint_s2s1_seed{seed}",
-            "header": f"# B6: ResNet18 + BNNeck + ArcFace on Tongji subject-disjoint S2 -> S1, seed {seed}",
+            "header": f"# B6: ResNet18 + BNNeck + ArcFace on Tongji palm-class-disjoint S2 -> S1, seed {seed}",
         })
 
     # --- IITD B1 Configs ---
@@ -99,7 +99,7 @@ def main() -> None:
             "seed": seed,
             "split_file": f"data/splits/iitd_subject_disjoint_within_seed{seed}.json",
             "save_dir": f"experiments/b1_resnet18_ce_supcon_iitd_subject_disjoint_within_seed{seed}",
-            "header": f"# B1: ResNet18 + CE + SupCon on IITD subject-disjoint within-dataset, seed {seed}",
+            "header": f"# B1: ResNet18 + CE + SupCon on IITD palm-class-disjoint within-dataset, seed {seed}",
         })
 
     # --- IITD B6 Configs ---
@@ -110,7 +110,7 @@ def main() -> None:
             "seed": seed,
             "split_file": f"data/splits/iitd_subject_disjoint_within_seed{seed}.json",
             "save_dir": f"experiments/b6_resnet18_bnneck_arcface_iitd_subject_disjoint_within_seed{seed}",
-            "header": f"# B6: ResNet18 + BNNeck + ArcFace on IITD subject-disjoint within-dataset, seed {seed}",
+            "header": f"# B6: ResNet18 + BNNeck + ArcFace on IITD palm-class-disjoint within-dataset, seed {seed}",
         })
 
     print(f"Generating {len(configs_to_create)} configuration files...")

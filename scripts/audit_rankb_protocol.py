@@ -214,7 +214,7 @@ def write_tex(rows: list[dict[str, Any]]) -> None:
         ("Seed", "seed"),
         ("Img ov.", "image_overlap"),
         ("Palm/class ov.", "palm_class_overlap"),
-        ("Subj. ov.", "subject_overlap"),
+        ("Manifest subj-field ov.", "subject_overlap"),
         ("Split hash", "split_hash_short"),
         ("Claim", "claim_allowed"),
     ]

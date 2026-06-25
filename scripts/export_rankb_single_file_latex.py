@@ -140,7 +140,7 @@ def main() -> None:
             r"before this manuscript is submitted",
             r"must be completed",
             r"current draft",
-            r"subject-disjoint",
+            r"palm-class-disjoint",
             r"person-disjoint",
             r"\\input\{",
         ],
