@@ -22,9 +22,9 @@ OUT_TEX = Path("paper/sections/strict_tongji_score_figures.tex")
 
 METHODS = ["B1", "B5", "B6"]
 METHOD_LABELS = {
-    "B1": "B1 CE+SupCon",
-    "B5": "B5 BNNeck+CE",
-    "B6": "B6 BNNeck+ArcFace",
+    "B1": "M1 CE+SupCon",
+    "B5": "M4 BNNeck+CE",
+    "B6": "M6 BNNeck+ArcFace",
 }
 DIRECTIONS = ["S1->S2", "S2->S1"]
 DIRECTION_SLUG = {
@@ -250,7 +250,7 @@ def write_summary(df: pd.DataFrame, figure_paths: List[Path]) -> None:
     md = []
     md.append("# Strict Tongji ROC/DET/Score Figure Summary")
     md.append("")
-    md.append("This file records reviewer-facing ROC, DET, and score-distribution figures for B1, B5, and B6 under the strict Tongji palm-class-disjoint protocol.")
+    md.append("This file records reviewer-facing ROC, DET, and score-distribution figures for M1, M4, and M6 under the strict Tongji palm-class-disjoint protocol.")
     md.append("")
     md.append("- Source run table: `docs/results/strict_tongji_ablation_runs.csv`.")
     md.append("- Source curves: per-run `roc.csv` files from the corresponding experiment directories.")
@@ -275,15 +275,13 @@ def write_summary(df: pd.DataFrame, figure_paths: List[Path]) -> None:
             f"{100*r['mean_tpr_at_fpr_1e-4']:.2f} |"
         )
     OUT_MD.write_text("\n".join(md) + "\n", encoding="utf-8")
-
-
 def write_tex() -> None:
     tex = []
     tex.append(r"\begin{figure*}[t]")
     tex.append(r"\centering")
     tex.append(r"\includegraphics[width=0.48\textwidth]{figures/roc_tongji_b1_b5_b6_s1_to_s2.pdf}")
     tex.append(r"\includegraphics[width=0.48\textwidth]{figures/roc_tongji_b1_b5_b6_s2_to_s1.pdf}")
-    tex.append(r"\caption{Strict Tongji ROC curves for B1, B5, and B6, averaged over three seeds within each session direction. The curves emphasize low-FAR verification behavior under the palm-class-disjoint cross-session protocol.}")
+    tex.append(r"\caption{Strict Tongji ROC curves for M1, M4, and M6, averaged over three seeds within each session direction. The curves emphasize low-FAR verification behavior under the palm-class-disjoint cross-session protocol.}")
     tex.append(r"\label{fig:strict_tongji_roc_by_direction}")
     tex.append(r"\end{figure*}")
     tex.append("")
@@ -291,7 +289,7 @@ def write_tex() -> None:
     tex.append(r"\centering")
     tex.append(r"\includegraphics[width=0.48\textwidth]{figures/det_tongji_b1_b5_b6_s1_to_s2.pdf}")
     tex.append(r"\includegraphics[width=0.48\textwidth]{figures/det_tongji_b1_b5_b6_s2_to_s1.pdf}")
-    tex.append(r"\caption{Strict Tongji DET curves for B1, B5, and B6. The DET view highlights that component behavior changes with session direction and that BNNeck+ArcFace does not provide a direction-invariant improvement.}")
+    tex.append(r"\caption{Strict Tongji DET curves for M1, M4, and M6. The DET view highlights that component behavior changes with session direction and that BNNeck+ArcFace does not provide a direction-invariant improvement.}")
     tex.append(r"\label{fig:strict_tongji_det_by_direction}")
     tex.append(r"\end{figure*}")
     tex.append("")
@@ -299,7 +297,7 @@ def write_tex() -> None:
     tex.append(r"\centering")
     tex.append(r"\includegraphics[width=0.48\textwidth]{figures/score_hist_tongji_b1_b5_b6_s1_to_s2.pdf}")
     tex.append(r"\includegraphics[width=0.48\textwidth]{figures/score_hist_tongji_b1_b5_b6_s2_to_s1.pdf}")
-    tex.append(r"\caption{Strict Tongji genuine and impostor score distributions for B1, B5, and B6. Dashed curves denote genuine-pair scores and solid curves denote impostor-pair scores. The distributions provide a score-level view of the direction-sensitive verification behavior.}")
+    tex.append(r"\caption{Strict Tongji genuine and impostor score distributions for M1, M4, and M6. Dashed curves denote genuine-pair scores and solid curves denote impostor-pair scores. The distributions provide a score-level view of the direction-sensitive verification behavior.}")
     tex.append(r"\label{fig:strict_tongji_score_hist_by_direction}")
     tex.append(r"\end{figure*}")
     OUT_TEX.write_text("\n".join(tex) + "\n", encoding="utf-8")

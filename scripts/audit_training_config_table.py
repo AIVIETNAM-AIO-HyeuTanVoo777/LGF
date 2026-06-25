@@ -109,7 +109,7 @@ def method_row(method: str, sub: pd.DataFrame) -> Dict[str, Any]:
         "model_name": fmt_values([get_nested(c, "model.name") for c in cfgs]),
         "embedding_dim": fmt_values([get_nested(c, "model.embedding_dim") for c in cfgs]),
         "pretrained": fmt_values([get_nested(c, "model.pretrained") for c in cfgs]),
-        "eval_embedding": "pre-BN/default" if not any(get_nested(c, "model.bnneck", False) for c in cfgs) else "post-BN",
+        "eval_embedding": "default L2" if not any(get_nested(c, "model.bnneck", False) for c in cfgs) else "post-BN",
         "loss": fmt_values([infer_loss(c) for c in cfgs]),
         "arcface_scale": fmt_values([get_nested(c, "loss.scale", "") for c in cfgs if get_nested(c, "loss.scale", "") != ""]),
         "arcface_margin": fmt_values([get_nested(c, "loss.margin", "") for c in cfgs if get_nested(c, "loss.margin", "") != ""]),

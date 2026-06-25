@@ -3,7 +3,7 @@
 
 \subsection{Tongji Palm-Class-Disjoint Cross-Session Results}
 
-The primary cross-session palmprint evaluation is conducted under the development/test palm-class-disjoint protocol on the Tongji dataset. Table~\ref{tab:strict_tongji_ablation} reports the performance metrics for the complete ResNet18 model matrix (M0–M7). Values are bidirectional six seed-direction unit means and standard deviations, without pre-averaging.
+The primary cross-session palmprint evaluation is conducted under the development/test palm-class-disjoint protocol on the Tongji dataset. Table~\ref{tab:strict_tongji_ablation} reports the performance metrics for the complete ResNet18 model matrix (M0, M1, M2, M3, M4, M6, and M7). Values are bidirectional six seed-direction unit means and standard deviations, without pre-averaging.
 
 \input{sections/strict_tongji_ablation_table}
 
@@ -45,4 +45,4 @@ The IITD validation is a within-session evaluation. After the splits were audite
 
 \input{sections/iitd_subject_disjoint_table}
 
-Table~\ref{tab:iitd_subject_disjoint} reports the corrected IITD results. M6 is best interpreted as near-tied with M1 rather than clearly superior. Its mean Rank-1 is $97.95\% \pm 1.71\%$ compared with $97.83\% \pm 0.72\%$ for M1, corresponding to a minor $+0.12$ PP delta. However, M6 has slightly worse mean EER ($3.24\% \pm 1.34\%$ versus $3.05\% \pm 1.18\%$ for M1) and lower mean TAR@FAR=$10^{-3}$ ($-0.72$ PP). This secondary validation on a distinct database reinforces our main conclusion: BNNeck + ArcFace does not yield a direction-invariant improvement under palm-class-disjoint protocol constraints.
+Table~\ref{tab:iitd_subject_disjoint} reports the corrected IITD results. M6 is best interpreted as near-tied with M1 rather than clearly superior. Its mean Rank-1 is $97.95\% \pm 1.71\%$ compared with $97.83\% \pm 0.72\%$ for M1, corresponding to a minor $+0.12$ PP delta. However, M6 has slightly worse mean EER ($3.24\% \pm 1.34\%$ versus $3.05\% \pm 1.18\%$ for M1) and lower mean TAR@FAR=$10^{-3}$ ($-0.72$ PP). This secondary validation on a distinct database is consistent with our main conclusion: BNNeck + ArcFace does not yield a direction-invariant improvement under palm-class-disjoint protocol constraints.

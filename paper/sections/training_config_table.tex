@@ -7,10 +7,10 @@
 \toprule
 Method & Model & Loss & Eval emb. & $\lambda_{\mathrm{supcon}}$ & Margin head $(s,m)$ & Epochs & LR & Sampler \\
 \midrule
-M0 ResNet18 + CE & ResNet18Baseline & ce & pre-BN/default & 0.0 & - & 60 & 0.0001 & 8x2 \\
-M1 ResNet18 + CE + SupCon & ResNet18Baseline & ce+supcon & pre-BN/default & 0.1 & - & 60 & 0.0001 & 8x2 \\
-M2 ResNet18 + ArcFace & ResNet18Baseline & arcface & pre-BN/default & 0.0 & (30.0,0.5) & 60 & 0.0001 & 8x2 \\
-M3 ResNet18 + CosFace & ResNet18Baseline & cosface & pre-BN/default & 0.0 & (30.0,0.35) & 60 & 0.0001 & 8x2 \\
+M0 ResNet18 + CE & ResNet18Baseline & ce & default L2 & 0.0 & - & 60 & 0.0001 & 8x2 \\
+M1 ResNet18 + CE + SupCon & ResNet18Baseline & ce+supcon & default L2 & 0.1 & - & 60 & 0.0001 & 8x2 \\
+M2 ResNet18 + ArcFace & ResNet18Baseline & arcface & default L2 & 0.0 & (30.0,0.5) & 60 & 0.0001 & 8x2 \\
+M3 ResNet18 + CosFace & ResNet18Baseline & cosface & default L2 & 0.0 & (30.0,0.35) & 60 & 0.0001 & 8x2 \\
 M4 ResNet18 + BNNeck + CE & ResNet18BNNeck & ce & post-BN & 0.0 & - & 60 & 0.0001 & 8x2 \\
 M6 ResNet18 + BNNeck + ArcFace & ResNet18BNNeck & arcface & post-BN & 0.0 & (30.0,0.5) & 60 & 0.0001 & 8x2 \\
 M7 ResNet18 + BNNeck + ArcFace + light SupCon & ResNet18BNNeck & arcface & post-BN & 0.02 & (30.0,0.5) & 60 & 0.0001 & 8x2 \\

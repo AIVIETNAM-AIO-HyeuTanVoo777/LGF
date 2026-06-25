@@ -10,9 +10,9 @@ Contactless palmprint recognition is more difficult than contact-based recogniti
 
 \subsection{Metric Learning for Biometric Embeddings}
 
-Biometric recognition systems depend on embedding geometry: genuine pairs should remain close while impostor pairs should be separated, especially at strict false-acceptance operating points. Supervised contrastive learning explicitly pulls same-class examples together and pushes different-class examples apart \cite{khosla2020supervised}. The M1 baseline in this project uses this idea together with cross entropy, forming a strong baseline for the Tongji cross-session protocol.
+Biometric recognition systems depend on embedding geometry: genuine pairs should remain close while impostor pairs should be separated, especially at strict false-acceptance operating points. Supervised contrastive learning explicitly pulls same-class examples together and pushes different-class examples apart \cite{khosla2020supervised}. The M1 baseline in this study uses this idea together with cross entropy, forming a strong baseline for the Tongji cross-session protocol.
 
-Margin-based normalized classifiers provide another route to discriminative embeddings. ArcFace adds an angular margin to normalized features and class weights, encouraging separation in angular space \cite{deng2019arcface}. BNNeck was introduced in person re-identification as a normalization neck that separates feature spaces used for metric comparison and classification supervision \cite{luo2019strong}. M6 combines these two ideas to the palmprint setting: ArcFace shapes the angular classifier geometry, while BNNeck provides the post-BN embedding used for cosine verification.
+Margin-based normalized classifiers provide another route to discriminative embeddings. ArcFace adds an angular margin to normalized features and class weights, encouraging separation in angular space \cite{deng2019arcface}. BNNeck was introduced in person re-identification as a normalization neck that separates feature spaces used for metric comparison and classification supervision \cite{luo2019strong}. M6 adapts these ideas to the palmprint setting: ArcFace shapes the angular classifier geometry, while BNNeck provides the post-BN embedding used for cosine verification.
 
 \subsection{Cross-Session and Protocol-Sensitive Evaluation}
 
@@ -24,18 +24,18 @@ Representative palmprint studies differ substantially in acquisition setup, ROI 
 
 \begin{table*}[t]
 \centering
-\caption{Protocol positioning relative to representative palmprint recognition studies. The table contextualizes protocols rather than claiming direct numerical comparability.}
+\caption{Protocol positioning relative to representative palmprint recognition studies. This table is for protocol positioning and contextualization, not a direct numerical leaderboard comparison.}
 \label{tab:literature_protocol_positioning}
 \small
 \setlength{\tabcolsep}{3pt}
-\begin{tabular}{p{0.15\textwidth}p{0.18\textwidth}p{0.19\textwidth}p{0.10\textwidth}p{0.13\textwidth}p{0.17\textwidth}}
+\begin{tabular}{p{0.15\textwidth}p{0.18\textwidth}p{0.22\textwidth}p{0.10\textwidth}p{0.13\textwidth}p{0.17\textwidth}}
 \toprule
 Study & Representation & Dataset(s) & Contactless & Cross-session & Directly comparable? \\
 \midrule
 Zhang et al.~\cite{zhang2017tongji} & CR CompCode & Tongji & Yes & Yes & Partially; protocol differs \\
 PalmNet~\cite{genovese2019palmnet} & Gabor-PCA CNN & Multiple touchless sets & Yes & Not normalized here & No \\
 CompNet~\cite{liang2021compnet} & Learnable Gabor CNN & Multiple palmprint sets & Yes & Not normalized here & No \\
-Matkowski et al.~\cite{matkowski2020uncontrolled} & Alignment + feature network & IITD/CASIA/PolyU/NTU & Yes & Mixed & No \\
+Matkowski et al.~\cite{matkowski2020uncontrolled} & Alignment + feature network & IITD, CASIA, PolyU, NTU & Yes & Mixed & No \\
 Smartphone verification~\cite{zhang2020smartphone} & DCNN verification pipeline & Smartphone palmprint data & Yes & Yes & No \\
 Ours & BNNeck/ArcFace matrix + Gabor ref. & Tongji + IITD & Yes & Tongji yes & Current protocol \\
 \bottomrule

@@ -112,7 +112,7 @@ def main() -> None:
     md = []
     md.append("# Strict Tongji Additional Baselines")
     md.append("")
-    md.append("This table adds M3, a generic learned CosFace baseline, outside the M0--M7 component matrix.")
+    md.append("This table adds M3, a generic learned CosFace baseline, outside the M0, M1, M2, M3, M4, M6, and M7 component matrix.")
     md.append("")
     md.append("M3 is not palmprint-specific. It is included as a stronger generic metric-learning baseline using the existing margin-head training path.")
     md.append("")
