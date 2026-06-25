@@ -1,47 +1,24 @@
 # Paired Statistical Evidence for Strict Component Ablation
 
-This analysis extends the existing B6-vs-B1 paired uncertainty analysis to the component-ablation comparisons needed by the paper claim, especially B5.
+Deltas are method A minus method B in percentage points over six paired seed-direction units. TAR@FAR uses the conservative empirical-FAR rule.
 
-## Method
-
-- Input: `docs/results/strict_tongji_ablation_runs.csv`.
-- Paired units: six matched seed-direction units: S1->S2 and S2->S1 for seeds 42, 2026, and 2705.
-- Delta definition: method A minus method B, in percentage points.
-- Positive Rank-1, Rank-5, Macro-F1, and TAR deltas favor method A.
-- Positive EER deltas are worse for method A.
-- Bootstrap CI: percentile bootstrap over paired units, 50000 resamples, seed 20260624.
-- Exact sign-flip test: two-sided paired sign-flip test over six deltas.
-- Because n=6, p-values are coarse uncertainty diagnostics, not definitive significance claims.
-
-## Summary table
-
-| Comparison | Metric | Mean delta (pp) | SD (pp) | Bootstrap 95% CI (pp) | Exact sign-flip p | Interpretation |
-|---|---|---:|---:|---:|---:|---|
-| B5 minus B1 | Rank-1 | +0.43 | 3.41 | [-1.74, +3.13] | 0.8125 | B5 better |
-| B5 minus B1 | Rank-5 | +0.17 | 1.63 | [-0.90, +1.47] | 0.8125 | B5 better |
-| B5 minus B1 | Macro-F1 | +0.49 | 3.93 | [-2.01, +3.62] | 0.8438 | B5 better |
-| B5 minus B1 | EER | +0.47 | 0.67 | [-0.03, +0.94] | 0.1875 | B5 worse |
-| B5 minus B1 | TAR@FAR=1e-2 | -0.82 | 4.06 | [-3.73, +2.23] | 0.6562 | B5 worse |
-| B5 minus B1 | TAR@FAR=1e-3 | +0.88 | 8.28 | [-5.38, +6.63] | 0.8125 | B5 better |
-| B5 minus B6 | Rank-1 | +1.61 | 2.83 | [-0.64, +3.51] | 0.1562 | B5 better |
-| B5 minus B6 | Rank-5 | +1.17 | 1.77 | [-0.17, +2.43] | 0.1875 | B5 better |
-| B5 minus B6 | Macro-F1 | +1.80 | 3.08 | [-0.62, +3.85] | 0.1562 | B5 better |
-| B5 minus B6 | EER | -0.54 | 0.77 | [-1.07, +0.05] | 0.1562 | B5 better |
-| B5 minus B6 | TAR@FAR=1e-2 | +1.57 | 3.79 | [-1.27, +4.20] | 0.3125 | B5 better |
-| B5 minus B6 | TAR@FAR=1e-3 | +2.95 | 7.25 | [-2.49, +8.00] | 0.4375 | B5 better |
-| B6 minus B1 | Rank-1 | -1.18 | 3.26 | [-3.32, +1.26] | 0.4688 | B6 worse |
-| B6 minus B1 | Rank-5 | -1.00 | 1.87 | [-2.35, +0.37] | 0.2500 | B6 worse |
-| B6 minus B1 | Macro-F1 | -1.31 | 3.62 | [-3.67, +1.44] | 0.4688 | B6 worse |
-| B6 minus B1 | EER | +1.01 | 0.73 | [+0.48, +1.52] | 0.0312 | B6 worse |
-| B6 minus B1 | TAR@FAR=1e-2 | -2.39 | 4.15 | [-5.29, +0.58] | 0.2500 | B6 worse |
-| B6 minus B1 | TAR@FAR=1e-3 | -2.07 | 8.91 | [-8.46, +3.63] | 0.5625 | B6 worse |
-
-## Paper-relevant interpretation
-
-- B5 versus B1: B5 has positive mean paired deltas for Rank-1 and TAR@FAR=1e-3, with Rank-1 +0.43 pp and TAR@FAR=1e-3 +0.88 pp. This supports describing B5 as a modestly favorable BNNeck+CE component variant rather than a large statistically established improvement.
-- B5 versus B6: B5 has better mean paired low-FAR behavior than B6, including TAR@FAR=1e-3 +2.95 pp and EER -0.54 pp (negative EER favors B5). This supports the paper statement that B5 is stronger than the ArcFace-based B6 under the strict Tongji protocol.
-- B6 versus B1: B6 remains unfavorable on the bidirectional paired average, with Rank-1 -1.18 pp and EER +1.01 pp (positive EER is worse). This is consistent with the existing B6-vs-B1 paired analysis.
-
-## Per-unit deltas
-
-The machine-readable per-unit deltas are embedded in the `deltas_pp` column of the CSV output.
+| comparison   | hypothesis                               | method_a   | method_b   | method_a_label              | method_b_label              | metric       | metric_direction   |   n_paired_units |   mean_delta_pp |   sd_delta_pp |   bootstrap_ci95_low_pp |   bootstrap_ci95_high_pp |   exact_sign_flip_p_two_sided | interpretation   | deltas_pp                                                                          |
+|:-------------|:-----------------------------------------|:-----------|:-----------|:----------------------------|:----------------------------|:-------------|:-------------------|-----------------:|----------------:|--------------:|------------------------:|-------------------------:|------------------------------:|:-----------------|:-----------------------------------------------------------------------------------|
+| B5 minus B1  | BNNeck + CE vs CE + SupCon baseline      | B5         | B1         | ResNet18 + BNNeck + CE      | ResNet18 + CE + SupCon      | Rank-1       | higher_is_better   |                6 |        0.430556 |      3.40727  |              -1.77083   |                3.125     |                       0.8125  | B5 better        | 6.5833330200;1.0833323000;-0.2499997600;0.3333330200;-1.8333315900;-3.3333301600   |
+| B5 minus B1  | BNNeck + CE vs CE + SupCon baseline      | B5         | B1         | ResNet18 + BNNeck + CE      | ResNet18 + CE + SupCon      | Rank-5       | higher_is_better   |                6 |        0.166665 |      1.62618  |              -0.892365  |                1.45833   |                       0.8125  | B5 better        | 3.0833304000;0.4166662700;-0.1666665100;0.2499997600;-1.6666710400;-0.9166717500   |
+| B5 minus B1  | BNNeck + CE vs CE + SupCon baseline      | B5         | B1         | ResNet18 + BNNeck + CE      | ResNet18 + CE + SupCon      | Macro-F1     | higher_is_better   |                6 |        0.491108 |      3.93465  |              -2.04911   |                3.59505   |                       0.84375 | B5 better        | 7.5818312600;1.3976686700;-0.4203166800;0.3461863300;-2.1525565700;-3.8061636800   |
+| B5 minus B1  | BNNeck + CE vs CE + SupCon baseline      | B5         | B1         | ResNet18 + BNNeck + CE      | ResNet18 + CE + SupCon      | EER          | lower_is_better    |                6 |        0.470051 |      0.66777  |              -0.0310691 |                0.935971  |                       0.1875  | B5 worse         | -0.5436274500;0.3911764700;-0.0009103600;0.7226890800;0.9658263300;1.2851540600    |
+| B5 minus B1  | BNNeck + CE vs CE + SupCon baseline      | B5         | B1         | ResNet18 + BNNeck + CE      | ResNet18 + CE + SupCon      | TAR@FAR=1e-2 | higher_is_better   |                6 |       -0.820833 |      4.05682  |              -3.73611   |                2.22917   |                       0.65625 | B5 worse         | 5.0583333333;1.1250000000;1.0500000000;-2.0000000000;-3.9000000000;-6.2583333333   |
+| B5 minus B1  | BNNeck + CE vs CE + SupCon baseline      | B5         | B1         | ResNet18 + BNNeck + CE      | ResNet18 + CE + SupCon      | TAR@FAR=1e-3 | higher_is_better   |                6 |        0.880556 |      8.27572  |              -5.37222   |                6.75      |                       0.8125  | B5 better        | 11.6916666667;6.0833333333;3.6916666667;-0.8333333333;-3.1333333333;-12.2166666667 |
+| B5 minus B6  | BNNeck + CE vs BNNeck + ArcFace          | B5         | B6         | ResNet18 + BNNeck + CE      | ResNet18 + BNNeck + ArcFace | Rank-1       | higher_is_better   |                6 |        1.61111  |      2.82875  |              -0.638888  |                3.51389   |                       0.15625 | B5 better        | 3.2500028600;0.5833327800;3.9999961900;4.4166624600;-2.9999971400;0.4166662700     |
+| B5 minus B6  | BNNeck + CE vs BNNeck + ArcFace          | B5         | B6         | ResNet18 + BNNeck + CE      | ResNet18 + BNNeck + ArcFace | Rank-5       | higher_is_better   |                6 |        1.16667  |      1.77404  |              -0.166667  |                2.43056   |                       0.1875  | B5 better        | 1.4166653200;0.6666719900;3.5833358800;2.5000035700;-1.5000045300;0.3333330200     |
+| B5 minus B6  | BNNeck + CE vs BNNeck + ArcFace          | B5         | B6         | ResNet18 + BNNeck + CE      | ResNet18 + BNNeck + ArcFace | Macro-F1     | higher_is_better   |                6 |        1.79859  |      3.0793   |              -0.621816  |                3.86952   |                       0.15625 | B5 better        | 3.6693625100;0.9095921500;4.1470661900;4.9895979700;-3.2168895700;0.2928042800     |
+| B5 minus B6  | BNNeck + CE vs BNNeck + ArcFace          | B5         | B6         | ResNet18 + BNNeck + CE      | ResNet18 + BNNeck + ArcFace | EER          | lower_is_better    |                6 |       -0.544713 |      0.771005 |              -1.06699   |                0.0539449 |                       0.15625 | B5 better        | -0.5936274500;-0.6154761900;-1.5000000000;-1.0750000000;0.7491596600;-0.2333333300 |
+| B5 minus B6  | BNNeck + CE vs BNNeck + ArcFace          | B5         | B6         | ResNet18 + BNNeck + CE      | ResNet18 + BNNeck + ArcFace | TAR@FAR=1e-2 | higher_is_better   |                6 |        1.56944  |      3.78941  |              -1.26944   |                4.20139   |                       0.3125  | B5 better        | 2.1500000000;0.7666666667;6.0750000000;5.0000000000;-4.4083333333;-0.1666666667    |
+| B5 minus B6  | BNNeck + CE vs BNNeck + ArcFace          | B5         | B6         | ResNet18 + BNNeck + CE      | ResNet18 + BNNeck + ArcFace | TAR@FAR=1e-3 | higher_is_better   |                6 |        2.94444  |      7.24931  |              -2.48056   |                8.00278   |                       0.4375  | B5 better        | 5.6916666667;-0.1333333333;12.3166666667;7.4000000000;-8.6500000000;1.0416666667   |
+| B6 minus B1  | BNNeck + ArcFace vs CE + SupCon baseline | B6         | B1         | ResNet18 + BNNeck + ArcFace | ResNet18 + CE + SupCon      | Rank-1       | higher_is_better   |                6 |       -1.18055  |      3.26063  |              -3.31944   |                1.26389   |                       0.46875 | B6 worse         | 3.3333301600;0.4999995200;-4.2499959500;-4.0833294400;1.1666655500;-3.7499964300   |
+| B6 minus B1  | BNNeck + ArcFace vs CE + SupCon baseline | B6         | B1         | ResNet18 + BNNeck + ArcFace | ResNet18 + CE + SupCon      | Rank-5       | higher_is_better   |                6 |       -1        |      1.8738   |              -2.34722   |                0.388887  |                       0.25    | B6 worse         | 1.6666650800;-0.2500057200;-3.7500023900;-2.2500038100;-0.1666665100;-1.2500047700 |
+| B6 minus B1  | BNNeck + ArcFace vs CE + SupCon baseline | B6         | B1         | ResNet18 + BNNeck + ArcFace | ResNet18 + CE + SupCon      | Macro-F1     | higher_is_better   |                6 |       -1.30748  |      3.6234   |              -3.67208   |                1.44107   |                       0.46875 | B6 worse         | 3.9124687500;0.4880765200;-4.5673828700;-4.6434116400;1.0643330000;-4.0989679600   |
+| B6 minus B1  | BNNeck + ArcFace vs CE + SupCon baseline | B6         | B1         | ResNet18 + BNNeck + ArcFace | ResNet18 + CE + SupCon      | EER          | lower_is_better    |                6 |        1.01476  |      0.730626 |               0.478735  |                1.52302   |                       0.03125 | B6 worse         | 0.0500000000;1.0066526600;1.4990896400;1.7976890800;0.2166666700;1.5184873900      |
+| B6 minus B1  | BNNeck + ArcFace vs CE + SupCon baseline | B6         | B1         | ResNet18 + BNNeck + ArcFace | ResNet18 + CE + SupCon      | TAR@FAR=1e-2 | higher_is_better   |                6 |       -2.39028  |      4.14545  |              -5.29306   |                0.583333  |                       0.25    | B6 worse         | 2.9083333333;0.3583333333;-5.0250000000;-7.0000000000;0.5083333333;-6.0916666667   |
+| B6 minus B1  | BNNeck + ArcFace vs CE + SupCon baseline | B6         | B1         | ResNet18 + BNNeck + ArcFace | ResNet18 + CE + SupCon      | TAR@FAR=1e-3 | higher_is_better   |                6 |       -2.06389  |      8.9161   |              -8.46806   |                3.63472   |                       0.5625  | B6 worse         | 6.0000000000;6.2166666667;-8.6250000000;-8.2333333333;5.5166666667;-13.2583333333  |

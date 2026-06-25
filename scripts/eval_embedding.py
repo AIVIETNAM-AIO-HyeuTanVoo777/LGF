@@ -1,18 +1,26 @@
 import os
+import sys
 import json
 import yaml
 import argparse
+from pathlib import Path
+
 import numpy as np
 import pandas as pd
 import torch
 from torch.utils.data import DataLoader
 from sklearn.metrics import f1_score, roc_curve
-from palmrec.evaluation.metrics import tar_at_far_conservative
 from scipy.optimize import brentq
 from scipy.interpolate import interp1d
 
+ROOT = Path(".").resolve()
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from palmrec.evaluation.metrics import tar_at_far_conservative
 from palmrec.datasets.palm_dataset import PalmDataset
 from palmrec.models.baselines import ResNet18Baseline
+
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Evaluate Palmprint Embeddings.")

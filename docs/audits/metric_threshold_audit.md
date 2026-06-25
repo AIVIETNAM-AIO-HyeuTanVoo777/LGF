@@ -1,58 +1,80 @@
 # Metric Threshold Audit
 
-This audit verifies verification pair counts and threshold conventions for the strict Tongji ablation runs.
+This audit documents the revision from the previous nearest-FPR TAR@FAR rule to the conservative empirical-FAR rule used in the revised metric implementation.
+
+## Metric convention
+
+- Previous rule: choose the ROC point whose empirical FPR is nearest to the target FAR. This can select a point above the requested FAR.
+- Revised rule: choose only ROC points with empirical FPR less than or equal to the target FAR, then select the valid point with the highest TPR.
+- EER convention remains unchanged: sklearn ROC with brentq/interp1d interpolation when possible, falling back to nearest |FPR-FNR|.
+
+## Required evidence artifacts
+
+- Strict Tongji threshold evidence: `docs/results/threshold_evidence_strict_tongji.csv`
+- IITD threshold evidence: `docs/results/threshold_evidence_iitd.csv`
+- Combined audit CSV: `docs/audits/metric_threshold_audit.csv`
 
 ## Summary
 
-- Audited runs: 36
-- Verdicts: PASS=36, WARN=0, FAIL=0
-- Pair count shapes `(genuine, impostor, total)`: [(12000, 1428000, 1440000)]
-- Minimum empirical FAR step values: ['7.00280112045e-07']
-- EER convention: sklearn ROC with brentq/interp1d interpolation when possible; fallback is nearest |FPR-FNR|.
-- EER interpolation statuses: ['brentq_interp1d']
-- TAR@FAR convention in `scripts/eval_embedding.py`: choose the ROC point with nearest empirical FPR to the target FAR, not necessarily the largest FPR less than or equal to the target.
+| Dataset | Runs | Evidence rows | Conservative failures | Nearest-FPR rows above target | Max abs delta TAR vs reported (pp) | Pair count shapes | min FAR step values |
+|---|---:|---:|---:|---:|---:|---|---|
+| Tongji | 36 | 72 | 0 | 26 | 0.0333333 | [(12000, 1428000, 1440000)] | ['7.00280112045e-07'] |
+| IITD | 6 | 12 | 0 | 9 | 0.137741 | [(714, 64974, 65688), (726, 66066, 66792), (753, 68523, 69276)] | ['1.45936400916e-05', '1.51363787727e-05', '1.53907716933e-05'] |
+| Combined | 42 | 84 | 0 | 35 | 0.137741 | [(714, 64974, 65688), (726, 66066, 66792), (753, 68523, 69276), (12000, 1428000, 1440000)] | ['7.00280112045e-07', '1.45936400916e-05', '1.51363787727e-05', '1.53907716933e-05'] |
 
-## Protocol note for paper
+## Definition-of-done checks
 
-Verification thresholds are swept over observed cosine scores using `sklearn.metrics.roc_curve`. A pair is accepted when its cosine score is greater than or equal to the threshold. EER is computed by interpolating the ROC curve with `brentq`/`interp1d` when possible, with a nearest `|FPR-FNR|` fallback. TAR@FAR is reported at the ROC point whose empirical FPR is nearest to the target FAR (`10^{-2}` or `10^{-3}`). The audit reports genuine/impostor comparison counts, minimum empirical FAR step, and the threshold selected for each seed-direction-method run.
+- Conservative empirical FAR never exceeds target FAR: `True`
+- Strict Tongji evidence rows: `72`
+- IITD evidence rows: `12`
 
-## Per-run threshold audit
+## Per-run conservative TAR@FAR=1e-3 evidence
 
-| Method | Direction | Seed | Genuine | Impostor | min FAR step | EER | TAR@1e-2 nearest FPR | TAR@1e-3 nearest FPR | Verdict |
-|---|---|---:|---:|---:|---:|---:|---:|---:|---|
-| B0 | S1->S2 | 42 | 12000 | 1428000 | 7.0028e-07 | 0.0644468 | 0.0100028 | 0.001 | PASS |
-| B0 | S1->S2 | 2026 | 12000 | 1428000 | 7.0028e-07 | 0.0477493 | 0.01 | 0.001 | PASS |
-| B0 | S1->S2 | 2705 | 12000 | 1428000 | 7.0028e-07 | 0.0403333 | 0.0100133 | 0.001 | PASS |
-| B0 | S2->S1 | 42 | 12000 | 1428000 | 7.0028e-07 | 0.0499167 | 0.0099958 | 0.0010007 | PASS |
-| B0 | S2->S1 | 2026 | 12000 | 1428000 | 7.0028e-07 | 0.0420287 | 0.0100035 | 0.0009993 | PASS |
-| B0 | S2->S1 | 2705 | 12000 | 1428000 | 7.0028e-07 | 0.0466134 | 0.00998739 | 0.0009993 | PASS |
-| B1 | S1->S2 | 42 | 12000 | 1428000 | 7.0028e-07 | 0.05675 | 0.0099881 | 0.001 | PASS |
-| B1 | S1->S2 | 2026 | 12000 | 1428000 | 7.0028e-07 | 0.0391106 | 0.0099958 | 0.001 | PASS |
-| B1 | S1->S2 | 2705 | 12000 | 1428000 | 7.0028e-07 | 0.0390091 | 0.01 | 0.001 | PASS |
-| B1 | S2->S1 | 42 | 12000 | 1428000 | 7.0028e-07 | 0.0382731 | 0.0099909 | 0.0009993 | PASS |
-| B1 | S2->S1 | 2026 | 12000 | 1428000 | 7.0028e-07 | 0.04325 | 0.0100105 | 0.0010007 | PASS |
-| B1 | S2->S1 | 2705 | 12000 | 1428000 | 7.0028e-07 | 0.0388985 | 0.0100014 | 0.0010014 | PASS |
-| B4 | S1->S2 | 42 | 12000 | 1428000 | 7.0028e-07 | 0.05375 | 0.0099944 | 0.001 | PASS |
-| B4 | S1->S2 | 2026 | 12000 | 1428000 | 7.0028e-07 | 0.0537066 | 0.0100042 | 0.0010007 | PASS |
-| B4 | S1->S2 | 2705 | 12000 | 1428000 | 7.0028e-07 | 0.0405 | 0.0100021 | 0.001 | PASS |
-| B4 | S2->S1 | 42 | 12000 | 1428000 | 7.0028e-07 | 0.0463326 | 0.0099937 | 0.000998599 | PASS |
-| B4 | S2->S1 | 2026 | 12000 | 1428000 | 7.0028e-07 | 0.0563739 | 0.0099902 | 0.0010028 | PASS |
-| B4 | S2->S1 | 2705 | 12000 | 1428000 | 7.0028e-07 | 0.0525 | 0.0100028 | 0.0010007 | PASS |
-| B5 | S1->S2 | 42 | 12000 | 1428000 | 7.0028e-07 | 0.0513137 | 0.01 | 0.0009993 | PASS |
-| B5 | S1->S2 | 2026 | 12000 | 1428000 | 7.0028e-07 | 0.0430224 | 0.0099979 | 0.0010021 | PASS |
-| B5 | S1->S2 | 2705 | 12000 | 1428000 | 7.0028e-07 | 0.039 | 0.0099888 | 0.001 | PASS |
-| B5 | S2->S1 | 42 | 12000 | 1428000 | 7.0028e-07 | 0.0455 | 0.0100049 | 0.001 | PASS |
-| B5 | S2->S1 | 2026 | 12000 | 1428000 | 7.0028e-07 | 0.0529083 | 0.0099986 | 0.001 | PASS |
-| B5 | S2->S1 | 2705 | 12000 | 1428000 | 7.0028e-07 | 0.05175 | 0.010007 | 0.001 | PASS |
-| B6 | S1->S2 | 42 | 12000 | 1428000 | 7.0028e-07 | 0.05725 | 0.0100112 | 0.001 | PASS |
-| B6 | S1->S2 | 2026 | 12000 | 1428000 | 7.0028e-07 | 0.0491772 | 0.0099923 | 0.001 | PASS |
-| B6 | S1->S2 | 2705 | 12000 | 1428000 | 7.0028e-07 | 0.054 | 0.0099972 | 0.0010014 | PASS |
-| B6 | S2->S1 | 42 | 12000 | 1428000 | 7.0028e-07 | 0.05625 | 0.0099986 | 0.001 | PASS |
-| B6 | S2->S1 | 2026 | 12000 | 1428000 | 7.0028e-07 | 0.0454167 | 0.0099986 | 0.0010014 | PASS |
-| B6 | S2->S1 | 2705 | 12000 | 1428000 | 7.0028e-07 | 0.0540833 | 0.0099965 | 0.000998599 | PASS |
-| B7 | S1->S2 | 42 | 12000 | 1428000 | 7.0028e-07 | 0.0515833 | 0.0100084 | 0.0009993 | PASS |
-| B7 | S1->S2 | 2026 | 12000 | 1428000 | 7.0028e-07 | 0.04725 | 0.0100084 | 0.0010007 | PASS |
-| B7 | S1->S2 | 2705 | 12000 | 1428000 | 7.0028e-07 | 0.061 | 0.0100014 | 0.0010007 | PASS |
-| B7 | S2->S1 | 42 | 12000 | 1428000 | 7.0028e-07 | 0.0456695 | 0.0099958 | 0.0009993 | PASS |
-| B7 | S2->S1 | 2026 | 12000 | 1428000 | 7.0028e-07 | 0.0393683 | 0.0099979 | 0.000997899 | PASS |
-| B7 | S2->S1 | 2705 | 12000 | 1428000 | 7.0028e-07 | 0.0474167 | 0.0099958 | 0.0010007 | PASS |
+| Dataset | Method | Direction | Seed | Target FAR | Selected empirical FAR | TAR | Nearest FPR | Nearest above target? | Delta vs reported (pp) |
+|---|---|---|---:|---:|---:|---:|---:|---|---:|
+| Tongji | B0 | S1->S2 | 42 | 0.001 | 0.001 | 0.65566667 | 0.001 | False | 0.00833334 |
+| Tongji | B0 | S1->S2 | 2026 | 0.001 | 0.001 | 0.71308333 | 0.001 | False | 0.00833333 |
+| Tongji | B0 | S1->S2 | 2705 | 0.001 | 0.001 | 0.78733333 | 0.001 | False | 0.00833333 |
+| Tongji | B0 | S2->S1 | 42 | 0.001 | 0.00099859944 | 0.71516667 | 0.0010007003 | True | -3.33333e-09 |
+| Tongji | B0 | S2->S1 | 2026 | 0.001 | 0.00099929972 | 0.71141667 | 0.00099929972 | False | 0.0166667 |
+| Tongji | B0 | S2->S1 | 2705 | 0.001 | 0.00099929972 | 0.70883333 | 0.00099929972 | False | 0.00833333 |
+| Tongji | B1 | S1->S2 | 42 | 0.001 | 0.001 | 0.59883333 | 0.001 | False | 0.0166667 |
+| Tongji | B1 | S1->S2 | 2026 | 0.001 | 0.001 | 0.681 | 0.001 | False | 0.00833333 |
+| Tongji | B1 | S1->S2 | 2705 | 0.001 | 0.001 | 0.75625 | 0.001 | False | 0.0166667 |
+| Tongji | B1 | S2->S1 | 42 | 0.001 | 0.00099929972 | 0.762 | 0.00099929972 | False | 0.00833333 |
+| Tongji | B1 | S2->S1 | 2026 | 0.001 | 0.0009964986 | 0.70283333 | 0.0010007003 | True | 3.33333e-09 |
+| Tongji | B1 | S2->S1 | 2705 | 0.001 | 0.00099789916 | 0.80533333 | 0.0010014006 | True | 3.33333e-09 |
+| Tongji | B4 | S1->S2 | 42 | 0.001 | 0.001 | 0.68775 | 0.001 | False | 0.00833333 |
+| Tongji | B4 | S1->S2 | 2026 | 0.001 | 0.00099509804 | 0.71091667 | 0.0010007003 | True | -3.33333e-09 |
+| Tongji | B4 | S1->S2 | 2705 | 0.001 | 0.001 | 0.76875 | 0.001 | False | 0.025 |
+| Tongji | B4 | S2->S1 | 42 | 0.001 | 0.00099859944 | 0.70291667 | 0.00099859944 | False | 0.00833334 |
+| Tongji | B4 | S2->S1 | 2026 | 0.001 | 0.00099719888 | 0.69283333 | 0.0010028011 | True | 3.33333e-09 |
+| Tongji | B4 | S2->S1 | 2705 | 0.001 | 0.00099719888 | 0.68483333 | 0.0010007003 | True | 3.33333e-09 |
+| Tongji | B5 | S1->S2 | 42 | 0.001 | 0.00099929972 | 0.71575 | 0.00099929972 | False | 0.00833333 |
+| Tongji | B5 | S1->S2 | 2026 | 0.001 | 0.00099789916 | 0.74183333 | 0.0010021008 | True | 3.33333e-09 |
+| Tongji | B5 | S1->S2 | 2705 | 0.001 | 0.001 | 0.79316667 | 0.001 | False | 0.00833334 |
+| Tongji | B5 | S2->S1 | 42 | 0.001 | 0.001 | 0.75366667 | 0.001 | False | 0.00833334 |
+| Tongji | B5 | S2->S1 | 2026 | 0.001 | 0.001 | 0.6715 | 0.001 | False | 0.00833333 |
+| Tongji | B5 | S2->S1 | 2705 | 0.001 | 0.001 | 0.68316667 | 0.001 | False | 0.00833334 |
+| Tongji | B6 | S1->S2 | 42 | 0.001 | 0.001 | 0.65883333 | 0.001 | False | 0.025 |
+| Tongji | B6 | S1->S2 | 2026 | 0.001 | 0.001 | 0.74316667 | 0.001 | False | 0.025 |
+| Tongji | B6 | S1->S2 | 2705 | 0.001 | 0.00099789916 | 0.67 | 0.0010014006 | True | 0 |
+| Tongji | B6 | S2->S1 | 42 | 0.001 | 0.001 | 0.67966667 | 0.001 | False | 0.0166667 |
+| Tongji | B6 | S2->S1 | 2026 | 0.001 | 0.0009964986 | 0.758 | 0.0010014006 | True | 0 |
+| Tongji | B6 | S2->S1 | 2705 | 0.001 | 0.00099859944 | 0.67275 | 0.00099859944 | False | 0.00833333 |
+| Tongji | B7 | S1->S2 | 42 | 0.001 | 0.00099929972 | 0.67783333 | 0.00099929972 | False | 0.0333333 |
+| Tongji | B7 | S1->S2 | 2026 | 0.001 | 0.00099859944 | 0.75791667 | 0.0010007003 | True | -3.33333e-09 |
+| Tongji | B7 | S1->S2 | 2705 | 0.001 | 0.00099859944 | 0.60891667 | 0.0010007003 | True | -3.33333e-09 |
+| Tongji | B7 | S2->S1 | 42 | 0.001 | 0.00099929972 | 0.72075 | 0.00099929972 | False | 0.00833333 |
+| Tongji | B7 | S2->S1 | 2026 | 0.001 | 0.00099789916 | 0.7955 | 0.00099789916 | False | 0.00833333 |
+| Tongji | B7 | S2->S1 | 2705 | 0.001 | 0.00099859944 | 0.70366667 | 0.0010007003 | True | -3.33333e-09 |
+| IITD | B1 | within | 42 | 0.001 | 0.00096961862 | 0.78571429 | 0.0010157909 | True | 0 |
+| IITD | B1 | within | 2026 | 0.001 | 0.00096318025 | 0.87383798 | 0.0010069612 | True | 0 |
+| IITD | B1 | within | 2705 | 0.001 | 0.00095359186 | 0.92561983 | 0.0010292738 | True | 0 |
+| IITD | B6 | within | 42 | 0.001 | 0.00093883707 | 0.82492997 | 0.0010311817 | True | 0 |
+| IITD | B6 | within | 2026 | 0.001 | 0.00094858661 | 0.84063745 | 0.0010069612 | True | 0 |
+| IITD | B6 | within | 2705 | 0.001 | 0.00089304635 | 0.89807163 | 0.0010444101 | True | 0 |
+
+## Paper wording
+
+TAR@FAR is computed using a conservative empirical-FAR rule: among ROC points whose empirical FAR does not exceed the target, the reported TAR is the maximum observed TPR. The threshold audit exports the selected threshold, empirical FAR, TAR, genuine/impostor counts, and minimum FAR step for every method--dataset--direction--seed run.

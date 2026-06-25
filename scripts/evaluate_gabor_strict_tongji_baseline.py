@@ -1,8 +1,9 @@
-﻿from __future__ import annotations
+from __future__ import annotations
 
 import argparse
 import json
 import math
+import sys
 from pathlib import Path
 
 import cv2
@@ -11,6 +12,11 @@ import pandas as pd
 from scipy.interpolate import interp1d
 from scipy.optimize import brentq
 from sklearn.metrics import f1_score, roc_curve
+
+ROOT = Path(".").resolve()
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
 from palmrec.evaluation.metrics import tar_at_far_conservative
 
 
