@@ -1,18 +1,13 @@
 # STATUS
 
-- **Current Step**: Step 4 - Checkpoint Validation Policy and Configs (`04_VALIDATION_POLICY_AND_CONFIGS.md`)
+- **Current Step**: Step 5 - Design Execution Plan for Experiment Matrix (`05_EXPERIMENT_MATRIX_AND_RUN_PLAN.md`)
 - **Modified Files**:
-  - `scripts/audit_checkpoint_selection.py` (updated: processes both Tongji and IITD runs)
-  - `docs/audits/checkpoint_selection_audit.csv` (created/updated)
-  - `docs/audits/checkpoint_selection_audit.md` (created/updated)
-  - `docs/audits/hyperparameter_provenance.md` (created)
-  - `docs/agent_logs/validation_checkpoint_locations.txt` (created)
-  - `paper/sections/04_experiments.tex` (modified: added same-session validation policy text)
-  - `configs/**/*.yaml` (48 subject-disjoint configurations patched with protocol, loss, and checkpoint settings)
+  - `configs/rankb_final/` (created and populated with 48 paper-friendly YAML configuration files)
+  - `docs/results/rankb_run_manifest.csv` (created: records the 48 study runs with split hashes, configs, and output dirs)
+  - `docs/agent_logs/excluded_runs.md` (created: reports zero exclusions)
   - `docs/agent_logs/STATUS.md` (modified)
 - **Commands Run**:
-  - `python scripts/audit_checkpoint_selection.py`
-  - `python -c "import pandas as pd; p='docs/audits/checkpoint_selection_audit.csv'; df=pd.read_csv(p); assert (~df['uses_test_gallery_probe'].astype(bool)).all(); assert (df['verdict'] == 'PASS').all(); print(df[['method','dataset','direction','seed','selected_epoch','selection_metric']].head().to_string(index=False))"`
+  - `python scripts/build_rankb_run_manifest.py`
 - **Pass/Fail Status**: PASS
 - **Unresolved Issues**: None
-- **Next Action**: Execute Step 5 - Design Execution Plan for Experiment Matrix (`05_EXPERIMENT_MATRIX_RUN_PLAN.md`)
+- **Next Action**: Execute Step 6 - Result Collection and Statistics Tables (`06_RESULT_COLLECTION_STATISTICS_TABLES.md`)
