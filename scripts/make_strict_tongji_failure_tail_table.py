@@ -1,4 +1,4 @@
-﻿from pathlib import Path
+from pathlib import Path
 import math
 import numpy as np
 import pandas as pd
@@ -66,6 +66,13 @@ def signed_pp(x, digits=2):
     return f"{float(x):+.{digits}f}"
 
 
+MAP_METHOD_ID = {
+    "B1": "M1",
+    "B5": "M4",
+    "B6": "M6",
+}
+
+
 def direction_tex(direction):
     if direction == "S1->S2":
         return r"S1$\rightarrow$S2"
@@ -75,7 +82,10 @@ def direction_tex(direction):
 
 
 def comparison_tex(comparison):
-    return comparison.replace(" minus ", r"$-$")
+    comp = comparison
+    for b_id, m_id in MAP_METHOD_ID.items():
+        comp = comp.replace(b_id, m_id)
+    return comp.replace(" minus ", r"$-$")
 
 
 def interpretation(comparison, direction):
@@ -216,10 +226,10 @@ def main():
         tex.append(
             f"{comparison_tex(r['comparison'])} & "
             f"{direction_tex(r['direction'])} & "
-            f"{signed(r['delta_genuine_mean'])} & "
-            f"{signed(r['delta_impostor_q999'])} & "
-            f"{signed(r['delta_dprime'])} & "
-            f"{signed_pp(r['delta_tar_far_1e_3_pp'])} pp & "
+            f"${signed(r['delta_genuine_mean'])}$ & "
+            f"${signed(r['delta_impostor_q999'])}$ & "
+            f"${signed(r['delta_dprime'])}$ & "
+            f"${signed_pp(r['delta_tar_far_1e_3_pp'])}$ pp & "
             f"{r['interpretation']} \\\\"
         )
     tex.append(r"\bottomrule")

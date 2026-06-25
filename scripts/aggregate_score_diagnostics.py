@@ -16,6 +16,7 @@ METHOD_LABELS = {
     "B0": "ResNet18 + CE",
     "B1": "ResNet18 + CE + SupCon",
     "B4": "ResNet18 + ArcFace",
+    "B8": "ResNet18 + CosFace",
     "B5": "ResNet18 + BNNeck + CE",
     "B6": "ResNet18 + BNNeck + ArcFace",
     "B7": "ResNet18 + BNNeck + ArcFace + light SupCon",
@@ -25,9 +26,20 @@ METHOD_PATTERNS = {
     "B0": "b0_resnet18_ce_tongji_subject_disjoint_*_seed*",
     "B1": "b1_resnet18_ce_supcon_tongji_subject_disjoint_*_seed*",
     "B4": "b4_resnet18_arcface_tongji_subject_disjoint_*_seed*",
+    "B8": "b8_resnet18_cosface_tongji_subject_disjoint_*_seed*",
     "B5": "b5_resnet18_bnneck_ce_tongji_subject_disjoint_*_seed*",
     "B6": "b6_resnet18_bnneck_arcface_tongji_subject_disjoint_*_seed*",
     "B7": "b7_resnet18_bnneck_arcface_light_supcon_tongji_subject_disjoint_*_seed*",
+}
+
+MAP_METHOD_ID = {
+    "B0": "M0",
+    "B1": "M1",
+    "B4": "M2",
+    "B8": "M3",
+    "B5": "M4",
+    "B6": "M6",
+    "B7": "M7",
 }
 
 
@@ -54,6 +66,55 @@ def summarize(values: list[float]) -> tuple[float, float]:
 
 def fmt_float(x: float) -> str:
     return f"{x:.6f}"
+
+
+def write_tex(summary_rows: list[dict[str, object]]) -> None:
+    out_tex = Path("paper/sections/strict_tongji_score_diagnostics_table.tex")
+    out_tex.parent.mkdir(parents=True, exist_ok=True)
+    
+    tex: list[str] = []
+    tex.append(r"\begin{table*}[t]")
+    tex.append(r"\centering")
+    tex.append(r"\scriptsize")
+    tex.append(r"\setlength{\tabcolsep}{4pt}")
+    tex.append(r"\caption{Strict Tongji score-distribution diagnostics over two session directions and three seeds per method. Scores are cosine similarities. The impostor $q_{0.999}$ column summarizes the high-impostor-score tail relevant to strict low-FAR behavior. Higher d-prime indicates stronger genuine/impostor separation.}")
+    tex.append(r"\label{tab:strict_tongji_score_diagnostics}")
+    tex.append(r"\resizebox{\textwidth}{!}{")
+    tex.append(r"\begin{tabular}{llccccc}")
+    tex.append(r"\toprule")
+    tex.append(r"Method & Description & Genuine mean & Impostor mean & Impostor $q_{0.999}$ & Genuine $q_{0.001}$ & d-prime \\")
+    tex.append(r"\midrule")
+    
+    method_order = ["B0", "B1", "B4", "B8", "B5", "B6", "B7"]
+    
+    # Filter for direction == "ALL"
+    all_rows = {str(r["method"]): r for r in summary_rows if r["direction"] == "ALL"}
+    
+    for m in method_order:
+        r = all_rows.get(m)
+        if r is None:
+            continue
+        m_id = MAP_METHOD_ID.get(m, m)
+        desc = METHOD_LABELS.get(m, m)
+        
+        # Format values with +/- standard deviation, all wrapped in math mode
+        g_mean = f"${float(r['genuine_mean_mean']):.6f} \\pm {float(r['genuine_mean_std']):.6f}$"
+        i_mean = f"${float(r['impostor_mean_mean']):.6f} \\pm {float(r['impostor_mean_std']):.6f}$"
+        i_q999 = f"${float(r['impostor_q0.999_mean']):.6f} \\pm {float(r['impostor_q0.999_std']):.6f}$"
+        g_q001 = f"${float(r['genuine_q0.001_mean']):.6f} \\pm {float(r['genuine_q0.001_std']):.6f}$"
+        dprime = f"${float(r['d_prime_mean']):.6f} \\pm {float(r['d_prime_std']):.6f}$"
+        
+        tex.append(
+            f"{m_id} & {desc} & {g_mean} & {i_mean} & {i_q999} & {g_q001} & {dprime} \\\\"
+        )
+        
+    tex.append(r"\bottomrule")
+    tex.append(r"\end{tabular}%")
+    tex.append(r"}")
+    tex.append(r"\end{table*}")
+    
+    out_tex.write_text("\n".join(tex) + "\n", encoding="utf-8")
+    print(f"Wrote {out_tex}")
 
 
 def main() -> None:
@@ -87,8 +148,8 @@ def main() -> None:
                 "d_prime": float(diag["d_prime"]),
             })
 
-    if len(rows) != 36:
-        raise RuntimeError(f"Expected 36 diagnostic rows, found {len(rows)}")
+    if len(rows) != 42:
+        raise RuntimeError(f"Expected 42 diagnostic rows, found {len(rows)}")
 
     rows.sort(key=lambda r: (str(r["method"]), str(r["direction"]), int(r["seed"])))
 
@@ -140,8 +201,8 @@ def main() -> None:
             out[f"{metric}_std"] = sd
         summary_rows.append(out)
 
-    if len(summary_rows) != 18:
-        raise RuntimeError(f"Expected 18 summary rows, found {len(summary_rows)}")
+    if len(summary_rows) != 21:
+        raise RuntimeError(f"Expected 21 summary rows, found {len(summary_rows)}")
 
     summary_fields = ["method", "method_label", "direction", "n"]
     for metric in metrics:
@@ -183,6 +244,8 @@ def main() -> None:
     md.append("")
 
     OUT_MD.write_text("\n".join(md), encoding="utf-8")
+    
+    write_tex(summary_rows)
 
     print(f"RUN_ROWS={len(rows)}")
     print(f"SUMMARY_ROWS={len(summary_rows)}")

@@ -11,7 +11,7 @@ This table summarizes matched-seed score-tail deltas for B5 and B6 relative to B
 
 | Comparison | Direction | Delta genuine mean | Delta impostor q0.999 | Delta d-prime | Delta TAR@FAR=1e-3 (pp) | Interpretation |
 |---|---:|---:|---:|---:|---:|---|
-| B5 minus B1 | S1->S2 | -0.057 | -0.094 | -0.082 | +7.16 | BNNeck+CE shows higher observed low-FAR TAR in this direction. |
+| B5 minus B1 | S1->S2 | -0.057 | -0.094 | -0.082 | +7.16 | BNNeck+CE improves low-FAR TAR in this direction. |
 | B5 minus B1 | S2->S1 | -0.043 | -0.020 | -0.288 | -5.40 | BNNeck+CE gain does not transfer to the reverse direction. |
-| B6 minus B1 | S1->S2 | -0.072 | -0.082 | -0.287 | +1.20 | BNNeck+ArcFace shows only direction-limited low-FAR behavior. |
+| B6 minus B1 | S1->S2 | -0.072 | -0.082 | -0.287 | +1.19 | BNNeck+ArcFace shows only direction-limited low-FAR behavior. |
 | B6 minus B1 | S2->S1 | -0.063 | -0.043 | -0.399 | -5.33 | BNNeck+ArcFace degrades the reverse-direction low-FAR result. |

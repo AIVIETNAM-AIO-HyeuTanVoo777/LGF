@@ -2,29 +2,50 @@
 
 This audit checks citation-key consistency between the LaTeX paper and `paper/references.bib`.
 
-- TeX files checked: 14
-- Citation keys used: 6
-- Bibliography entries: 6
+- TeX files checked: 22
+- Citation keys used: 16
+- Bibliography entries: 17
 - Missing bibliography entries: 0
-- Unused bibliography entries: 0
+- Unused bibliography entries: 1
 
 ## Cited keys
 
 - `deng2019arcface`
+- `fei2019feature`
 - `gao2025deeplearning`
+- `genovese2019palmnet`
 - `iitd_touchless_palmprint`
 - `khosla2020supervised`
+- `kong2004competitive`
+- `kong2009survey`
+- `liang2021compnet`
 - `luo2019strong`
+- `matkowski2020uncontrolled`
+- `shao2020efficient`
+- `ungureanu2020toward`
+- `zhang2003online`
 - `zhang2017tongji`
+- `zhang2020smartphone`
 
 ## Bibliography keys
 
 - `deng2019arcface`
+- `fei2019feature`
 - `gao2025deeplearning`
+- `genovese2019palmnet`
 - `iitd_touchless_palmprint`
 - `khosla2020supervised`
+- `kong2004competitive`
+- `kong2009survey`
+- `kumar2008cohort`
+- `liang2021compnet`
 - `luo2019strong`
+- `matkowski2020uncontrolled`
+- `shao2020efficient`
+- `ungureanu2020toward`
+- `zhang2003online`
 - `zhang2017tongji`
+- `zhang2020smartphone`
 
 ## Missing keys
 
@@ -32,25 +53,29 @@ This audit checks citation-key consistency between the LaTeX paper and `paper/re
 
 ## Unused bibliography entries
 
-- None.
+- `kumar2008cohort`
 
 ## Citation usage by file
 
-### `paper\sections\01_introduction.tex`
-- `deng2019arcface`
-- `gao2025deeplearning`
-- `khosla2020supervised`
-- `luo2019strong`
-
 ### `paper\sections\02_related_work.tex`
 - `deng2019arcface`
+- `fei2019feature`
 - `gao2025deeplearning`
+- `genovese2019palmnet`
 - `khosla2020supervised`
+- `kong2004competitive`
+- `kong2009survey`
+- `liang2021compnet`
 - `luo2019strong`
+- `matkowski2020uncontrolled`
+- `shao2020efficient`
+- `ungureanu2020toward`
+- `zhang2003online`
+- `zhang2017tongji`
+- `zhang2020smartphone`
 
 ### `paper\sections\03_method.tex`
 - `deng2019arcface`
-- `khosla2020supervised`
 - `luo2019strong`
 
 ### `paper\sections\04_experiments.tex`

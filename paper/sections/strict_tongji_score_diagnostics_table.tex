@@ -2,19 +2,20 @@
 \centering
 \scriptsize
 \setlength{\tabcolsep}{4pt}
-\caption{Strict Tongji score-distribution diagnostics over two session directions and three seeds per method. Scores are cosine similarities. The impostor q0.999 column summarizes the high-impostor-score tail relevant to strict low-FAR behavior. Higher d-prime indicates stronger genuine/impostor separation.}
+\caption{Strict Tongji score-distribution diagnostics over two session directions and three seeds per method. Scores are cosine similarities. The impostor $q_{0.999}$ column summarizes the high-impostor-score tail relevant to strict low-FAR behavior. Higher d-prime indicates stronger genuine/impostor separation.}
 \label{tab:strict_tongji_score_diagnostics}
 \resizebox{\textwidth}{!}{
 \begin{tabular}{llccccc}
 \toprule
-Method & Description & Genuine mean & Impostor mean & Impostor q0.999 & Genuine q0.001 & d-prime \\
+Method & Description & Genuine mean & Impostor mean & Impostor $q_{0.999}$ & Genuine $q_{0.001}$ & d-prime \\
 \midrule
-B0 & ResNet18 + CE & 0.499218 $\pm$ 0.009679 & 0.031390 $\pm$ 0.005784 & 0.405444 $\pm$ 0.016796 & 0.026418 $\pm$ 0.032645 & 3.411386 $\pm$ 0.144206 \\
-B1 & ResNet18 + CE + SupCon & 0.548214 $\pm$ 0.014095 & 0.029694 $\pm$ 0.003511 & 0.459162 $\pm$ 0.049781 & 0.038909 $\pm$ 0.027529 & 3.666429 $\pm$ 0.123709 \\
-B4 & ResNet18 + ArcFace & 0.485175 $\pm$ 0.004275 & 0.037654 $\pm$ 0.006492 & 0.397037 $\pm$ 0.016058 & 0.001651 $\pm$ 0.016433 & 3.336682 $\pm$ 0.086688 \\
-B5 & ResNet18 + BNNeck + CE & 0.498042 $\pm$ 0.006120 & 0.020625 $\pm$ 0.003111 & 0.402241 $\pm$ 0.021684 & -0.001106 $\pm$ 0.020209 & 3.481496 $\pm$ 0.112779 \\
-B6 & ResNet18 + BNNeck + ArcFace & 0.481032 $\pm$ 0.008767 & 0.026407 $\pm$ 0.005444 & 0.396793 $\pm$ 0.024949 & -0.004941 $\pm$ 0.020623 & 3.323267 $\pm$ 0.091907 \\
-B7 & ResNet18 + BNNeck + ArcFace + light SupCon & 0.486603 $\pm$ 0.007490 & 0.027715 $\pm$ 0.005477 & 0.395453 $\pm$ 0.035908 & 0.008150 $\pm$ 0.036505 & 3.385006 $\pm$ 0.133792 \\
+M0 & ResNet18 + CE & $0.499218 \pm 0.009679$ & $0.031390 \pm 0.005784$ & $0.405444 \pm 0.016796$ & $0.026418 \pm 0.032645$ & $3.411386 \pm 0.144206$ \\
+M1 & ResNet18 + CE + SupCon & $0.548214 \pm 0.014095$ & $0.029694 \pm 0.003511$ & $0.459162 \pm 0.049781$ & $0.038909 \pm 0.027529$ & $3.666429 \pm 0.123709$ \\
+M2 & ResNet18 + ArcFace & $0.485175 \pm 0.004275$ & $0.037654 \pm 0.006492$ & $0.397037 \pm 0.016058$ & $0.001651 \pm 0.016433$ & $3.336682 \pm 0.086688$ \\
+M3 & ResNet18 + CosFace & $0.482434 \pm 0.004736$ & $0.031066 \pm 0.002515$ & $0.384589 \pm 0.015487$ & $-0.034422 \pm 0.057893$ & $3.367192 \pm 0.054026$ \\
+M4 & ResNet18 + BNNeck + CE & $0.498042 \pm 0.006120$ & $0.020625 \pm 0.003111$ & $0.402241 \pm 0.021684$ & $-0.001106 \pm 0.020209$ & $3.481496 \pm 0.112779$ \\
+M6 & ResNet18 + BNNeck + ArcFace & $0.481032 \pm 0.008767$ & $0.026407 \pm 0.005444$ & $0.396793 \pm 0.024949$ & $-0.004941 \pm 0.020623$ & $3.323267 \pm 0.091907$ \\
+M7 & ResNet18 + BNNeck + ArcFace + light SupCon & $0.486603 \pm 0.007490$ & $0.027715 \pm 0.005477$ & $0.395453 \pm 0.035908$ & $0.008150 \pm 0.036505$ & $3.385006 \pm 0.133792$ \\
 \bottomrule
 \end{tabular}%
 }

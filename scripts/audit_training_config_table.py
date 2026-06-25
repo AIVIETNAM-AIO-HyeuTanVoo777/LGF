@@ -204,13 +204,23 @@ def write_tex(rows: List[Dict[str, Any]]) -> None:
     tex.append(r"Method & Model & Loss & Eval emb. & $\lambda_{\mathrm{supcon}}$ & ArcFace $(s,m)$ & Epochs & LR & Sampler \\")
     tex.append(r"\midrule")
 
+    MAP_METHOD_ID = {
+        "B0": "M0",
+        "B1": "M1",
+        "B4": "M2",
+        "B5": "M4",
+        "B6": "M6",
+        "B7": "M7",
+    }
+
     for r in rows:
         arcface = "-"
         if r["arcface_scale"] or r["arcface_margin"]:
             arcface = f"({r['arcface_scale']},{r['arcface_margin']})"
         sampler = f"{r['sampler_num_identities']}x{r['sampler_num_instances']}"
+        method_id = MAP_METHOD_ID.get(r['method'], r['method'])
         tex.append(
-            f"{r['method']} {r['method_label']} & "
+            f"{method_id} {r['method_label']} & "
             f"{r['model_name']} & "
             f"{r['loss']} & "
             f"{r['eval_embedding']} & "

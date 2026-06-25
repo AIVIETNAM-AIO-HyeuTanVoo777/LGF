@@ -13,15 +13,31 @@ def load_csv(path):
     with open(path, "r", encoding="utf-8") as f:
         return list(csv.DictReader(f))
 
+def latex_escape_text(s):
+    s = str(s)
+    replacements = {
+        '\\': r'\textbackslash{}',
+        '&': r'\&',
+        '%': r'\%',
+        '$': r'\$',
+        '#': r'\#',
+        '_': r'\_',
+        '{': r'\{',
+        '}': r'\}',
+        '~': r'\textasciitilde{}',
+        '^': r'\textasciicircum{}',
+    }
+    return ''.join(replacements.get(ch, ch) for ch in s)
+
 def format_stat(mean_val, std_val, is_eer=False):
     # Metrics are in range [0, 1] in raw results, convert to percent
     m = mean_val * 100.0
     s = std_val * 100.0
-    return f"{m:.2f} \\pm {s:.2f}"
+    return f"${m:.2f} \\pm {s:.2f}$"
 
 def format_delta(mean_val, std_val):
     # Deltas are already in percentage points in the CSV
-    return f"{mean_val:+.2f} \\pm {std_val:.2f}"
+    return f"${mean_val:+.2f} \\pm {std_val:.2f}$"
 
 def main():
     args = parse_args()
@@ -74,7 +90,7 @@ def main():
         f.write("\\resizebox{\\textwidth}{!}{\n")
         f.write("\\begin{tabular}{llcccccc}\n")
         f.write("\\toprule\n")
-        f.write("Method & Description & Rank-1 & Rank-5 & Macro-F1 & EER & TAR@$10^{-2}$ & TAR@$10^{-3}$ \\\\\n")
+        f.write("Method & Description & Rank-1 (\\%) & Rank-5 (\\%) & Macro-F1 (\\%) & EER (\\%) & TAR@FAR=$10^{-2}$ & TAR@FAR=$10^{-3}$ \\\\\n")
         f.write("\\midrule\n")
         
         # Write Gabor first or as part of the list?
@@ -91,7 +107,9 @@ def main():
             tar2s = [float(r["tar_far_1e_2"]) for r in runs]
             tar3s = [float(r["tar_far_1e_3"]) for r in runs]
             
-            f.write(f"{m_id} & {method_desc[m_id]} & ")
+            escaped_m_id = latex_escape_text(m_id)
+            escaped_desc = latex_escape_text(method_desc[m_id])
+            f.write(f"{escaped_m_id} & {escaped_desc} & ")
             f.write(f"{format_stat(np.mean(r1s), np.std(r1s, ddof=1))} & ")
             f.write(f"{format_stat(np.mean(r5s), np.std(r5s, ddof=1))} & ")
             f.write(f"{format_stat(np.mean(f1s), np.std(f1s, ddof=1))} & ")
@@ -116,7 +134,7 @@ def main():
         f.write("\\resizebox{\\textwidth}{!}{\n")
         f.write("\\begin{tabular}{llccccccc}\n")
         f.write("\\toprule\n")
-        f.write("Method & Description & Direction & Rank-1 & Rank-5 & Macro-F1 & EER & TAR@$10^{-2}$ & TAR@$10^{-3}$ \\\\\n")
+        f.write("Method & Description & Direction & Rank-1 (\\%) & Rank-5 (\\%) & Macro-F1 (\\%) & EER (\\%) & TAR@FAR=$10^{-2}$ & TAR@FAR=$10^{-3}$ \\\\\n")
         
         for m_id in method_order:
             runs = method_groups[m_id]
@@ -138,7 +156,9 @@ def main():
                 # Format direction for LaTeX table
                 dir_lbl = "S1$\\rightarrow$S2" if direction == "S1->S2" else "S2$\\rightarrow$S1"
                 
-                f.write(f"{m_id} & {method_desc[m_id]} & {dir_lbl} & ")
+                escaped_m_id = latex_escape_text(m_id)
+                escaped_desc = latex_escape_text(method_desc[m_id])
+                f.write(f"{escaped_m_id} & {escaped_desc} & {dir_lbl} & ")
                 f.write(f"{format_stat(np.mean(r1s), np.std(r1s, ddof=1))} & ")
                 f.write(f"{format_stat(np.mean(r5s), np.std(r5s, ddof=1))} & ")
                 f.write(f"{format_stat(np.mean(f1s), np.std(f1s, ddof=1))} & ")
@@ -175,12 +195,13 @@ def main():
                 last_comp = comp
                 
             comp_lbl = comp.replace("_minus_", " $-$ ")
-            f.write(f"{comp_lbl} & {r['metric']} & ")
-            f.write(f"{float(r['mean_delta_pp']):+.2f} & ")
-            f.write(f"{float(r['sd_delta_pp']):.2f} & ")
-            f.write(f"{float(r['bootstrap_ci95_low_pp']):+.2f} & ")
-            f.write(f"{float(r['bootstrap_ci95_high_pp']):+.2f} & ")
-            f.write(f"{float(r['exact_sign_flip_p_two_sided']):.5f} \\\\\n")
+            escaped_metric = latex_escape_text(r['metric'])
+            f.write(f"{comp_lbl} & {escaped_metric} & ")
+            f.write(f"${float(r['mean_delta_pp']):+.2f}$ & ")
+            f.write(f"${float(r['sd_delta_pp']):.2f}$ & ")
+            f.write(f"${float(r['bootstrap_ci95_low_pp']):+.2f}$ & ")
+            f.write(f"${float(r['bootstrap_ci95_high_pp']):+.2f}$ & ")
+            f.write(f"${float(r['exact_sign_flip_p_two_sided']):.5f}$ \\\\\n")
             
         f.write("\\bottomrule\n")
         f.write("\\end{tabular}%\n")
@@ -206,7 +227,7 @@ def main():
         f.write("\\label{tab:iitd_subject_disjoint}\n")
         f.write("\\begin{tabular}{llcccccc}\n")
         f.write("\\toprule\n")
-        f.write("Method & Description & Rank-1 & Rank-5 & Macro-F1 & EER & TAR@$10^{-2}$ & TAR@$10^{-3}$ \\\\\n")
+        f.write("Method & Description & Rank-1 (\\%) & Rank-5 (\\%) & Macro-F1 (\\%) & EER (\\%) & TAR@FAR=$10^{-2}$ & TAR@FAR=$10^{-3}$ \\\\\n")
         f.write("\\midrule\n")
         
         for m_id in ["M1", "M6"]:
@@ -220,7 +241,9 @@ def main():
             tar2s = [float(r["tar_far_1e_2"]) for r in runs]
             tar3s = [float(r["tar_far_1e_3"]) for r in runs]
             
-            f.write(f"{m_id} & {method_desc[m_id]} & ")
+            escaped_m_id = latex_escape_text(m_id)
+            escaped_desc = latex_escape_text(method_desc[m_id])
+            f.write(f"{escaped_m_id} & {escaped_desc} & ")
             f.write(f"{format_stat(np.mean(r1s), np.std(r1s, ddof=1))} & ")
             f.write(f"{format_stat(np.mean(r5s), np.std(r5s, ddof=1))} & ")
             f.write(f"{format_stat(np.mean(f1s), np.std(f1s, ddof=1))} & ")
@@ -243,7 +266,7 @@ def main():
         f.write("\\label{tab:palmprint_specific_baseline}\n")
         f.write("\\begin{tabular}{llcccccc}\n")
         f.write("\\toprule\n")
-        f.write("Method & Description & Rank-1 & Rank-5 & Macro-F1 & EER & TAR@$10^{-2}$ & TAR@$10^{-3}$ \\\\\n")
+        f.write("Method & Description & Rank-1 (\\%) & Rank-5 (\\%) & Macro-F1 (\\%) & EER (\\%) & TAR@FAR=$10^{-2}$ & TAR@FAR=$10^{-3}$ \\\\\n")
         f.write("\\midrule\n")
         
         runs = gabor_list
