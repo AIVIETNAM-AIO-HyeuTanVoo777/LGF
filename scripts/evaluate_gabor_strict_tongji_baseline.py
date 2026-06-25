@@ -11,6 +11,7 @@ import pandas as pd
 from scipy.interpolate import interp1d
 from scipy.optimize import brentq
 from sklearn.metrics import f1_score, roc_curve
+from palmrec.evaluation.metrics import tar_at_far_conservative
 
 
 SPLIT_DIR = Path("data/splits")
@@ -169,7 +170,7 @@ def transform_features(feats: np.ndarray, mean: np.ndarray, std: np.ndarray) -> 
 
 
 def compute_eer_and_tar(scores: np.ndarray, labels: np.ndarray) -> tuple[float, float, float]:
-    fpr, tpr, _ = roc_curve(labels, scores)
+    fpr, tpr, thresholds = roc_curve(labels, scores)
     fnr = 1.0 - tpr
 
     nearest_idx = int(np.nanargmin(np.abs(fpr - fnr)))
@@ -181,10 +182,10 @@ def compute_eer_and_tar(scores: np.ndarray, labels: np.ndarray) -> tuple[float, 
     except Exception:
         pass
 
-    idx_1e2 = int(np.nanargmin(np.abs(fpr - 1e-2)))
-    idx_1e3 = int(np.nanargmin(np.abs(fpr - 1e-3)))
-    tar_1e2 = float(tpr[idx_1e2])
-    tar_1e3 = float(tpr[idx_1e3])
+    tar_1e2_info = tar_at_far_conservative(fpr, tpr, thresholds, 1e-2)
+    tar_1e3_info = tar_at_far_conservative(fpr, tpr, thresholds, 1e-3)
+    tar_1e2 = tar_1e2_info["tar"]
+    tar_1e3 = tar_1e3_info["tar"]
     return eer, tar_1e2, tar_1e3
 
 

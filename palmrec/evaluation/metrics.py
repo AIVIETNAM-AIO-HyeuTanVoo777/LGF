@@ -61,6 +61,56 @@ def calculate_eer(
             
     return float(eer), float(eer_threshold)
 
+
+def tar_at_far_conservative(
+    fpr: np.ndarray,
+    tpr: np.ndarray,
+    thresholds: np.ndarray,
+    target_far: float,
+) -> Dict[str, float]:
+    """Return TAR at a target FAR using a conservative empirical-FAR rule.
+
+    The selected ROC point must satisfy empirical FPR <= target_far.
+    Among valid points, the function returns the point with the highest TPR.
+    """
+    fpr = np.asarray(fpr, dtype=float)
+    tpr = np.asarray(tpr, dtype=float)
+    thresholds = np.asarray(thresholds, dtype=float)
+
+    if fpr.ndim != 1 or tpr.ndim != 1 or thresholds.ndim != 1:
+        raise ValueError(
+            "fpr, tpr, and thresholds must be one-dimensional arrays; "
+            f"got shapes {fpr.shape}, {tpr.shape}, {thresholds.shape}"
+        )
+
+    if not (len(fpr) == len(tpr) == len(thresholds)):
+        raise ValueError(
+            "fpr, tpr, and thresholds must have identical lengths; "
+            f"got {len(fpr)}, {len(tpr)}, {len(thresholds)}"
+        )
+
+    if target_far < 0.0 or target_far > 1.0:
+        raise ValueError(f"target_far must be in [0, 1], got {target_far}")
+
+    valid = fpr <= target_far
+    if not valid.any():
+        return {
+            "tar": 0.0,
+            "threshold": float("inf"),
+            "empirical_far": 0.0,
+            "target_far": float(target_far),
+        }
+
+    idx_valid = np.where(valid)[0]
+    best_local = idx_valid[np.argmax(tpr[idx_valid])]
+
+    return {
+        "tar": float(tpr[best_local]),
+        "threshold": float(thresholds[best_local]),
+        "empirical_far": float(fpr[best_local]),
+        "target_far": float(target_far),
+    }
+
 def get_confusion_matrix_df(
     y_true: List[str],
     y_pred: List[str],

@@ -7,6 +7,7 @@ import pandas as pd
 import torch
 from torch.utils.data import DataLoader
 from sklearn.metrics import f1_score, roc_curve
+from palmrec.evaluation.metrics import tar_at_far_conservative
 from scipy.optimize import brentq
 from scipy.interpolate import interp1d
 
@@ -239,9 +240,11 @@ def main():
         except Exception:
             pass
             
-        # TAR @ FAR
-        tar_1e2 = tpr[np.argmin(np.abs(fpr - 0.01))]
-        tar_1e3 = tpr[np.argmin(np.abs(fpr - 0.001))]
+        # Conservative TAR @ FAR: selected empirical FPR never exceeds the target FAR.
+        tar_1e2_info = tar_at_far_conservative(fpr, tpr, thresholds, 1e-2)
+        tar_1e3_info = tar_at_far_conservative(fpr, tpr, thresholds, 1e-3)
+        tar_1e2 = tar_1e2_info["tar"]
+        tar_1e3 = tar_1e3_info["tar"]
         
         # Downsample ROC curve to save space
         if len(fpr) > 10000:
