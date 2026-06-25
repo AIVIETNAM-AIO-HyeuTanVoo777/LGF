@@ -26,17 +26,17 @@ Representative palmprint studies differ substantially in acquisition setup, ROI 
 \centering
 \caption{Protocol positioning relative to representative palmprint recognition studies. This table is for protocol positioning and contextualization, not a direct numerical leaderboard comparison.}
 \label{tab:literature_protocol_positioning}
-\small
+\scriptsize
 \setlength{\tabcolsep}{3pt}
-\begin{tabular}{p{0.15\textwidth}p{0.18\textwidth}p{0.22\textwidth}p{0.10\textwidth}p{0.13\textwidth}p{0.17\textwidth}}
+\begin{tabular}{p{0.15\textwidth}p{0.18\textwidth}p{0.21\textwidth}p{0.09\textwidth}p{0.12\textwidth}p{0.17\textwidth}}
 \toprule
-Study & Representation & Dataset(s) & Contactless & Cross-session & Directly comparable? \\
+Study & Representation & Dataset(s) & Contactless & Cross-session & Protocol note \\
 \midrule
 Zhang et al.~\cite{zhang2017tongji} & CR CompCode & Tongji & Yes & Yes & Partially; protocol differs \\
-PalmNet~\cite{genovese2019palmnet} & Gabor-PCA CNN & Multiple touchless sets & Yes & Not normalized here & No \\
-CompNet~\cite{liang2021compnet} & Learnable Gabor CNN & Multiple palmprint sets & Yes & Not normalized here & No \\
-Matkowski et al.~\cite{matkowski2020uncontrolled} & Alignment + feature network & IITD, CASIA, PolyU, NTU & Yes & Mixed & No \\
-Smartphone verification~\cite{zhang2020smartphone} & DCNN verification pipeline & Smartphone palmprint data & Yes & Yes & No \\
+PalmNet~\cite{genovese2019palmnet} & Gabor-PCA CNN & Multiple touchless sets & Yes & Not normalized here & Not directly comparable \\
+CompNet~\cite{liang2021compnet} & Learnable Gabor CNN & Multiple palmprint sets & Yes & Not normalized here & Not directly comparable \\
+Matkowski et al.~\cite{matkowski2020uncontrolled} & Alignment + feature network & IITD, CASIA, PolyU, NTU & Yes & Mixed & Not directly comparable \\
+Smartphone verif.~\cite{zhang2020smartphone} & DCNN verification pipeline & Smartphone palmprint data & Yes & Yes & Not directly comparable \\
 Ours & BNNeck/ArcFace matrix + Gabor ref. & Tongji + IITD & Yes & Tongji yes & Current protocol \\
 \bottomrule
 \end{tabular}

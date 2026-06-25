@@ -1,6 +1,6 @@
 \section{Discussion}
 
-The palm-class-disjoint results change the interpretation of the BNNeck + ArcFace variant. In the original seen-identity Tongji protocol, M6 appears favorable. However, when development and test identities are made palm-class-disjoint, M6 does not outperform the M1 CE + SupCon baseline overall. This difference shows that the evaluation protocol is a first-order determinant of the empirical conclusion.
+The palm-class-disjoint results change the interpretation of the BNNeck + ArcFace variant. In the original seen-identity Tongji protocol, M6 appears favorable. However, when development and held-out evaluation palm classes are disjoint, M6 does not outperform the M1 CE + SupCon baseline overall. This difference shows that the evaluation protocol is a first-order determinant of the empirical conclusion.
 
 The main failure mode is not uniform across session directions. M6 has a limited gain at the strict TAR@FAR=$10^{-3}$ operating point in the S1$\rightarrow$S2 direction, but it trails M1 on most other S1$\rightarrow$S2 metrics and underperforms M1 across all reported metrics in S2$\rightarrow$S1. This indicates that angular-margin supervision and BNNeck can shape useful embedding geometry in some settings, but that the effect does not translate reliably to held-out palm classes under both session directions.
 
